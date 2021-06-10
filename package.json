@@ -1,0 +1,32 @@
+{
+  "name": "course-cube-server",
+  "version": "1.0.0",
+  "description": "Course Cube Server",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon src/index.js",
+    "start:ci": "node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/msahu2595/course-cube-server.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/msahu2595/course-cube-server/issues"
+  },
+  "homepage": "https://github.com/msahu2595/course-cube-server#readme",
+  "dependencies": {
+    "apollo-datasource-mongodb": "^0.4.1",
+    "apollo-server": "^2.25.0",
+    "dotenv": "^10.0.0",
+    "graphql": "^15.5.0",
+    "mongoose": "^5.12.13"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
