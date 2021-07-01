@@ -3,6 +3,7 @@ Course Cube Server Repository
 
 # Mutations
 
+```
 mutation accountCreate(
   $firstName: String!
   $lastName: String!
@@ -32,3 +33,4 @@ mutation accountCreate(
     }
   }
 }
+```
