@@ -8,8 +8,6 @@ const resolvers = require("./resolvers");
 const schemaDirectives = require("./schemaDirectives");
 const dataSources = require("./dataSources");
 
-// const isEmail = require("isemail");
-
 // Listener Emitted when Mongoose successfully makes its initial connection to the MongoDB server, or when Mongoose reconnects after losing connectivity.
 mongoose.connection.on("connected", () => {
   console.log(
@@ -76,15 +74,17 @@ const server = new ApolloServer({
 // Start our server if we're not in a test env.
 // if we're in a test env, we'll manually start it in a test
 if (process.env.NODE_ENV !== "test") {
-  server.listen({
-    port: process.env.PORT,
-  }).then(({ url }) => {
-    console.log(`
+  server
+    .listen({
+      port: process.env.PORT,
+    })
+    .then(({ url }) => {
+      console.log(`
       Server is running!
       Listening on port ${process.env.PORT}, 🚀 Server ready at ${url}
       Query at https://studio.apollographql.com/dev
     `);
-  });
+    });
 }
 
 // export all the important pieces for integration/e2e tests to use
