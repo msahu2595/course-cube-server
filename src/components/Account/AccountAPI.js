@@ -5,8 +5,14 @@ class AccountAPI extends MongoDataSource {
     return this.findOneById(_id);
   }
 
-  createAccount(email, password) {
-    return this.model.create({ email, password });
+  createAccount(firstName, lastName, email, password, acceptTnC) {
+    return this.model.create({
+      firstName,
+      lastName,
+      email,
+      password,
+      acceptTnC,
+    });
   }
 }
 
