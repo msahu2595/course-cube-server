@@ -15,18 +15,18 @@ const AccountSchema = gql`
     accountCreate(
       firstName: String!
       lastName: String!
-      email: String!
-      password: String!
+      email: EmailAddress!
+      password: Password!
       acceptTnC: Boolean!
     ): AccountMutationResponse
   }
 
   type Account {
     _id: ID!
-    firstName: String!
-    lastName: String!
-    email: String! @upper
-    password: String!
+    firstName: String! @upper
+    lastName: String! @upper
+    email: EmailAddress!
+    password: Void
     acceptTnC: Boolean!
     createdAt: String!
     updatedAt: String!
