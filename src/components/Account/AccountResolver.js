@@ -1,6 +1,12 @@
 const { UserInputError } = require("apollo-server");
 
 const AccountResolver = {
+  MutationResponse: {
+    // eslint-disable-next-line no-unused-vars
+    __resolveType(mutationResponse, context, info) {
+      return null;
+    },
+  },
   Query: {
     account: async (_, { _id }, { dataSources: { accountAPI } }) => {
       const data = await accountAPI.getAccount(_id);
