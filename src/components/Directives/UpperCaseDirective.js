@@ -1,5 +1,6 @@
 const { SchemaDirectiveVisitor } = require("apollo-server");
 const { defaultFieldResolver } = require("graphql");
+const capitalize = require("lodash/capitalize");
 
 // Subclass definition for @upper directive logic
 class UpperCaseDirective extends SchemaDirectiveVisitor {
@@ -8,7 +9,8 @@ class UpperCaseDirective extends SchemaDirectiveVisitor {
     field.resolve = async function (...args) {
       const result = await resolve.apply(this, args);
       if (typeof result === "string") {
-        return result.toUpperCase();
+        // return result.toUpperCase();
+        return capitalize(result);
       }
       return result;
     };

@@ -36,7 +36,7 @@ mongoose.connection.on("error", (error) => {
 })();
 
 // the function that sets up the global context for each resolver, using the req
-const context = async (props) => {
+const context = async () => {
   // // simple auth check on every request
   // const auth = (req.headers && req.headers.authorization) || "";
   // const email = Buffer.from(auth, "base64").toString("ascii");
@@ -49,12 +49,15 @@ const context = async (props) => {
 
   // return { user };
   return {
-    user: {
-      _id: "60c2618c173bd23a1c9b2472",
+    account: {
+      _id: "615486d230598647f01f0648",
+      firstName: "Manish",
+      lastName: "Sahu",
       email: "msahu2595@gmail.com",
-      password: "password",
-      createdAt: "1623351692324",
-      updatedAt: "1623351692324",
+      password: null,
+      acceptTnC: true,
+      createdAt: "1632929490888",
+      updatedAt: "1632929490888",
     },
   };
 };
@@ -82,7 +85,6 @@ if (process.env.NODE_ENV !== "test") {
       console.log(`
       Server is running!
       Listening on port ${process.env.PORT}, 🚀 Server ready at ${url}
-      Query at https://studio.apollographql.com/dev
     `);
     });
 }
