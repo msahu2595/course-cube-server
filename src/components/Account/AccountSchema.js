@@ -1,14 +1,22 @@
 const { gql } = require("apollo-server");
 
 const AccountSchema = gql`
-  interface MutationResponse {
+  interface ListResponse {
+    code: String!
+    success: Boolean!
+    message: String!
+    limit: Int!
+    offset: Int!
+  }
+
+  interface Response {
     code: String!
     success: Boolean!
     message: String!
   }
 
   type Query {
-    account(_id: ID!): Account
+    account(accountId: ID): AccountResponse
   }
 
   type Mutation {
@@ -18,21 +26,23 @@ const AccountSchema = gql`
       email: EmailAddress!
       password: Password!
       acceptTnC: Boolean!
-    ): AccountMutationResponse
+    ): AccountResponse
   }
 
   type Account {
     _id: ID!
-    firstName: String! @upper
-    lastName: String! @upper
+    firstName: String! @capitalize
+    lastName: String! @capitalize
     email: EmailAddress!
     password: Void
+    followers: Int
+    followings: Int
     acceptTnC: Boolean!
     createdAt: String!
     updatedAt: String!
   }
 
-  type AccountMutationResponse implements MutationResponse {
+  type AccountResponse implements Response {
     code: String!
     success: Boolean!
     message: String!

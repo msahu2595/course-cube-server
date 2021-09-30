@@ -32,6 +32,20 @@ const AccountSchema = new Schema(
   { timestamps: true, runValidators: true, runSettersOnQuery: true }
 );
 
+AccountSchema.virtual("followers", {
+  ref: "follows", // The model to use
+  localField: "_id", // Find people where `localField`
+  foreignField: "following", // is equal to `foreignField`
+  count: true, // And only get the number of docs
+});
+
+AccountSchema.virtual("followings", {
+  ref: "follows", // The model to use
+  localField: "_id", // Find people where `localField`
+  foreignField: "follower", // is equal to `foreignField`
+  count: true, // And only get the number of docs
+});
+
 const AccountModel = model("accounts", AccountSchema);
 
 module.exports = AccountModel;

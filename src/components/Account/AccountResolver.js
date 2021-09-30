@@ -1,15 +1,19 @@
 const { UserInputError } = require("apollo-server");
 
 const AccountResolver = {
-  MutationResponse: {
-    // eslint-disable-next-line no-unused-vars
-    __resolveType(mutationResponse, context, info) {
+  ListResponse: {
+    __resolveType() {
+      return null;
+    },
+  },
+  Response: {
+    __resolveType() {
       return null;
     },
   },
   Query: {
-    account: async (_, { _id }, { dataSources: { accountAPI } }) => {
-      const data = await accountAPI.getAccount(_id);
+    account: async (_, { accountId }, { dataSources: { accountAPI } }) => {
+      const account = await accountAPI.getAccount(accountId);
       //   try {
       //     if (context.account._id.toString() !== accountId)
       //       throw new ApolloError("Invalid Context");
@@ -28,8 +32,18 @@ const AccountResolver = {
       //     logger.error(error);
       //     throw new ApolloError(error.message, error.extensions.code);
       //   }
-      console.log({ data });
-      return data;
+      console.log({
+        code: "200",
+        success: true,
+        message: "",
+        account,
+      });
+      return {
+        code: "200",
+        success: true,
+        message: "",
+        account,
+      };
     },
   },
   Mutation: {

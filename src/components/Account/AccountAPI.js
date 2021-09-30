@@ -1,8 +1,12 @@
 const { MongoDataSource } = require("apollo-datasource-mongodb");
 
 class AccountAPI extends MongoDataSource {
-  getAccount(_id) {
-    return this.findOneById(_id);
+  getAccount(accountId) {
+    return this.model
+      .findById(accountId || this.context.account._id)
+      .populate("followers")
+      .populate("followings")
+      .exec();
   }
 
   createAccount(firstName, lastName, email, password, acceptTnC) {

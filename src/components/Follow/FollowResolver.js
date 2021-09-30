@@ -1,7 +1,48 @@
 const { UserInputError } = require("apollo-server");
 
 const FollowResolver = {
-  Query: {},
+  Query: {
+    followerList: async (
+      _,
+      { limit = 1, offset = 0, accountId },
+      { dataSources: { followAPI } }
+    ) => {
+      try {
+        const followers = await followAPI.followerList(accountId);
+        console.log(followers);
+        return {
+          code: 200,
+          success: true,
+          message: "Successfully get your followers.",
+          limit,
+          offset,
+          followers,
+        };
+      } catch (error) {
+        throw new UserInputError(error.message || "Invalid argument value");
+      }
+    },
+    followingList: async (
+      _,
+      { limit = 1, offset = 0, accountId },
+      { dataSources: { followAPI } }
+    ) => {
+      try {
+        const followings = await followAPI.followingList(accountId);
+        console.log(followings);
+        return {
+          code: 200,
+          success: true,
+          message: "Successfully get your followings.",
+          limit,
+          offset,
+          followings,
+        };
+      } catch (error) {
+        throw new UserInputError(error.message || "Invalid argument value");
+      }
+    },
+  },
   Mutation: {
     follow: async (
       _,
