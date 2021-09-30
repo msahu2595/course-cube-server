@@ -1,12 +1,9 @@
 const { gql } = require("apollo-server");
 
 const FollowSchema = gql`
-  # extend type Query {
-  #   account(_id: ID!): Account
-  # }
-
   extend type Mutation {
     follow(followingId: ID!): FollowMutationResponse
+    unFollow(followingId: ID!): FollowMutationResponse
   }
 
   type Follow {
