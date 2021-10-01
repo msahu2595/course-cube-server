@@ -4,42 +4,41 @@ const FollowResolver = {
   Query: {
     followerList: async (
       _,
-      { limit = 1, offset = 0, accountId },
+      { limit = 1, offset = 0, userId },
       { dataSources: { followAPI } }
     ) => {
       try {
-        const followers = await followAPI.followerList(accountId);
-        console.log(followers);
+        const payload = await followAPI.followerList(userId);
+        console.log(payload);
         return {
           code: 200,
           success: true,
           message: "Successfully get your followers.",
           limit,
           offset,
-          followers,
+          payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message || "Invalid argument value");
+        throw new UserInputError(error.message, error.extensions.code);
       }
     },
     followingList: async (
       _,
-      { limit = 1, offset = 0, accountId },
+      { limit = 1, offset = 0, userId },
       { dataSources: { followAPI } }
     ) => {
       try {
-        const followings = await followAPI.followingList(accountId);
-        console.log(followings);
+        const payload = await followAPI.followingList(userId);
         return {
           code: 200,
           success: true,
           message: "Successfully get your followings.",
           limit,
           offset,
-          followings,
+          payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message || "Invalid argument value");
+        throw new UserInputError(error.message, error.extensions.code);
       }
     },
   },
@@ -47,57 +46,41 @@ const FollowResolver = {
     follow: async (
       _,
       { followingId },
-      { dataSources: { followAPI }, account: { _id: followerId } }
+      { dataSources: { followAPI }, user: { _id: followerId } }
     ) => {
       try {
         if (followerId === followingId) {
-          throw new Error("You can't follow or un-follow yourself.");
+          throw new UserInputError("You can't follow or un-follow yourself.");
         }
-        const follow = await followAPI.follow(followingId);
-        console.log({
-          code: "200",
-          success: true,
-          message: "You are successfully followed.",
-          follow,
-        });
+        const payload = await followAPI.follow(followingId);
         return {
           code: "200",
           success: true,
           message: "You are successfully followed.",
-          follow,
+          payload,
         };
       } catch (error) {
-        // logger.error(error);
-        console.log(error);
-        throw new UserInputError("Invalid argument value");
+        throw new Error(error.message, error.extensions.code);
       }
     },
     unFollow: async (
       _,
       { followingId },
-      { dataSources: { followAPI }, account: { _id: followerId } }
+      { dataSources: { followAPI }, user: { _id: followerId } }
     ) => {
       try {
         if (followerId === followingId) {
-          throw new Error("You can't follow or un-follow yourself.");
+          throw new UserInputError("You can't follow or un-follow yourself.");
         }
-        const follow = await followAPI.unFollow(followingId);
-        console.log({
-          code: "200",
-          success: true,
-          message: "You are successfully un-followed.",
-          follow,
-        });
+        const payload = await followAPI.unFollow(followingId);
         return {
           code: "200",
           success: true,
           message: "You are successfully un-followed.",
-          follow,
+          payload,
         };
       } catch (error) {
-        // logger.error(error);
-        console.log(error);
-        throw new UserInputError(error.message || "Invalid argument value");
+        throw new Error(error.message, error.extensions.code);
       }
     },
   },

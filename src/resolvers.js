@@ -1,11 +1,11 @@
 const { resolvers: scalarResolvers } = require("graphql-scalars");
 const PasswordResolver = require("./components/Scalars/PasswordResolver");
-const AccountResolver = require("./components/Account/AccountResolver");
+const UserResolver = require("./components/User/UserResolver");
 const FollowResolver = require("./components/Follow/FollowResolver");
 
 module.exports = [
   scalarResolvers,
   PasswordResolver,
-  AccountResolver,
+  UserResolver,
   FollowResolver,
 ];

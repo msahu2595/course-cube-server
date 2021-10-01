@@ -1,12 +1,12 @@
-// Account API
-const AccountAPI = require("./components/Account/AccountAPI");
-const AccountModel = require("./components/Account/AccountModel");
+// User API
+const UserAPI = require("./components/User/UserAPI");
+const UserModel = require("./components/User/UserModel");
 // Follow API
 const FollowAPI = require("./components/Follow/FollowAPI");
 const FollowModel = require("./components/Follow/FollowModel");
 
 const dataSources = () => ({
-  accountAPI: new AccountAPI(AccountModel),
+  userAPI: new UserAPI(UserModel),
   followAPI: new FollowAPI(FollowModel),
 });
 

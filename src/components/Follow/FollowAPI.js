@@ -1,16 +1,16 @@
 const { MongoDataSource } = require("apollo-datasource-mongodb");
 
 class FollowAPI extends MongoDataSource {
-  followerList(accountId) {
+  followerList(userId) {
     return this.model
-      .find({ following: accountId || this.context.account._id })
+      .find({ following: userId || this.context.user._id })
       .populate("follower")
       .exec();
   }
 
-  followingList(accountId) {
+  followingList(userId) {
     return this.model
-      .find({ follower: accountId || this.context.account._id })
+      .find({ follower: userId || this.context.user._id })
       .populate("following")
       .exec();
   }
@@ -18,7 +18,7 @@ class FollowAPI extends MongoDataSource {
   follow(followingId) {
     return this.model.findOneAndUpdate(
       {
-        follower: this.context.account._id,
+        follower: this.context.user._id,
         following: followingId,
       },
       { active: true },
@@ -29,7 +29,7 @@ class FollowAPI extends MongoDataSource {
   unFollow(followingId) {
     return this.model.findOneAndUpdate(
       {
-        follower: this.context.account._id,
+        follower: this.context.user._id,
         following: followingId,
       },
       { active: false },

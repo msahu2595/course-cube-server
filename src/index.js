@@ -49,8 +49,8 @@ const context = async () => {
 
   // return { user };
   return {
-    account: {
-      _id: "615486d230598647f01f0648",
+    user: {
+      _id: "6156fda710996d3397629c2d",
       firstName: "Manish",
       lastName: "Sahu",
       email: "msahu2595@gmail.com",

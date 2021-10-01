@@ -1,7 +1,7 @@
-const AccountModel = require("./components/Account/AccountModel");
+const UserModel = require("./components/User/UserModel");
 const FollowModel = require("./components/Follow/FollowModel");
 
 module.exports = {
-  AccountModel,
+  UserModel,
   FollowModel,
 };

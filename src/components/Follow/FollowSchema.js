@@ -2,8 +2,8 @@ const { gql } = require("apollo-server");
 
 const FollowSchema = gql`
   extend type Query {
-    followerList(limit: Int, offset: Int, accountId: ID): FollowerListResponse
-    followingList(limit: Int, offset: Int, accountId: ID): FollowingListResponse
+    followerList(limit: Int, offset: Int, userId: ID): FollowerListResponse
+    followingList(limit: Int, offset: Int, userId: ID): FollowingListResponse
   }
 
   extend type Mutation {
@@ -13,8 +13,8 @@ const FollowSchema = gql`
 
   type Follow {
     _id: ID!
-    follower: Account
-    following: Account
+    follower: User
+    following: User
     active: Boolean!
     createdAt: String!
     updatedAt: String!
@@ -26,7 +26,7 @@ const FollowSchema = gql`
     message: String!
     limit: Int!
     offset: Int!
-    followers: [Follow]
+    payload: [Follow]
   }
 
   type FollowingListResponse implements ListResponse {
@@ -35,14 +35,14 @@ const FollowSchema = gql`
     message: String!
     limit: Int!
     offset: Int!
-    followings: [Follow]
+    payload: [Follow]
   }
 
   type FollowResponse implements Response {
     code: String!
     success: Boolean!
     message: String!
-    follow: Follow
+    payload: Follow
   }
 `;
 
