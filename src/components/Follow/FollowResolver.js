@@ -4,11 +4,15 @@ const FollowResolver = {
   Query: {
     followerList: async (
       _,
-      { limit = 1, offset = 0, userId },
+      { offset = 0, limit = 10, userId },
       { dataSources: { followAPI } }
     ) => {
       try {
-        const payload = await followAPI.followerList(userId);
+        const payload = await followAPI.followerList({
+          offset,
+          limit,
+          userId,
+        });
         console.log(payload);
         return {
           code: 200,
@@ -24,11 +28,15 @@ const FollowResolver = {
     },
     followingList: async (
       _,
-      { limit = 1, offset = 0, userId },
+      { offset = 0, limit = 10, userId },
       { dataSources: { followAPI } }
     ) => {
       try {
-        const payload = await followAPI.followingList(userId);
+        const payload = await followAPI.followingList({
+          offset,
+          limit,
+          userId,
+        });
         return {
           code: 200,
           success: true,
@@ -46,13 +54,25 @@ const FollowResolver = {
     follow: async (
       _,
       { followingId },
-      { dataSources: { followAPI }, user: { _id: followerId } }
+      {
+        dataSources: { followAPI, userNotificationAPI },
+        user: { _id: followerId },
+      }
     ) => {
       try {
         if (followerId === followingId) {
           throw new UserInputError("You can't follow or un-follow yourself.");
         }
-        const payload = await followAPI.follow(followingId);
+        const payload = await followAPI.follow({ followingId });
+        const { following } = payload;
+        userNotificationAPI.createUserNotification({
+          userId: followingId,
+          image: following?.image,
+          title: `${following?.firstName} followed you`,
+          message: "You can also follow him.",
+          route: "UserProfileScreen",
+          params: { userId: followingId },
+        });
         return {
           code: "200",
           success: true,
@@ -72,7 +92,7 @@ const FollowResolver = {
         if (followerId === followingId) {
           throw new UserInputError("You can't follow or un-follow yourself.");
         }
-        const payload = await followAPI.unFollow(followingId);
+        const payload = await followAPI.unFollow({ followingId });
         return {
           code: "200",
           success: true,

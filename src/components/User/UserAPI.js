@@ -1,7 +1,7 @@
 const { MongoDataSource } = require("apollo-datasource-mongodb");
 
 class UserAPI extends MongoDataSource {
-  user(userId) {
+  user({ userId }) {
     return this.model
       .findById(userId || this.context.user._id)
       .populate("followers")
@@ -9,12 +9,12 @@ class UserAPI extends MongoDataSource {
       .exec();
   }
 
-  logIn(email, password, firstName, lastName, acceptTnC) {
+  logIn({ email, password, image, firstName, lastName, acceptTnC }) {
     return this.model.findOneAndUpdate(
       {
         email,
       },
-      { password, firstName, lastName, acceptTnC },
+      { password, image, firstName, lastName, acceptTnC },
       { upsert: true, new: true }
     );
   }

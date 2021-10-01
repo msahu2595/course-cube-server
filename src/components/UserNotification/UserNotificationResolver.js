@@ -1,20 +1,17 @@
 const { UserInputError } = require("apollo-server");
 
 const UserResolver = {
-  ListResponse: {
-    __resolveType() {
-      return null;
-    },
-  },
-  Response: {
-    __resolveType() {
-      return null;
-    },
-  },
   Query: {
-    user: async (_, { userId }, { dataSources: { userAPI } }) => {
+    userNotifications: async (
+      _,
+      { offset = 0, limit = 10 },
+      { dataSources: { userNotificationAPI } }
+    ) => {
       try {
-        const payload = await userAPI.user({ userId });
+        const payload = await userNotificationAPI.userNotifications({
+          offset,
+          limit,
+        });
         return {
           code: "200",
           success: true,
@@ -27,24 +24,19 @@ const UserResolver = {
     },
   },
   Mutation: {
-    logIn: async (
+    readUserNotification: async (
       _,
-      { email, password, image, firstName, lastName, acceptTnC },
-      { dataSources: { userAPI } }
+      { userNotificationId },
+      { dataSources: { userNotificationAPI } }
     ) => {
       try {
-        const payload = await userAPI.logIn({
-          email,
-          password,
-          image,
-          firstName,
-          lastName,
-          acceptTnC,
+        const payload = await userNotificationAPI.readUserNotification({
+          userNotificationId,
         });
         return {
           code: "200",
           success: true,
-          message: "You are successfully registered.",
+          message: "",
           payload,
         };
       } catch (error) {

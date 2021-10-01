@@ -33,6 +33,7 @@ const UserSchema = gql`
     _id: ID!
     email: EmailAddress!
     password: Void
+    image: URL
     firstName: String! @capitalize
     lastName: String! @capitalize
     acceptTnC: Boolean!

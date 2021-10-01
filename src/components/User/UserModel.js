@@ -11,6 +11,10 @@ const UserSchema = new Schema(
       maxlength: 40,
     },
     password: { type: String, required: true },
+    image: {
+      type: String,
+      trim: true,
+    },
     firstName: {
       type: String,
       required: true,
