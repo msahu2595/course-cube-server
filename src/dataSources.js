@@ -9,11 +9,19 @@ const {
   UserNotificationAPI,
   UserNotificationModel,
 } = require("./components/UserNotification");
+// Community Notification API
+const {
+  CommunityNotificationAPI,
+  CommunityNotificationModel,
+} = require("./components/CommunityNotification");
 
 const dataSources = () => ({
   userAPI: new UserAPI(UserModel),
   followAPI: new FollowAPI(FollowModel),
   userNotificationAPI: new UserNotificationAPI(UserNotificationModel),
+  communityNotificationAPI: new CommunityNotificationAPI(
+    CommunityNotificationModel
+  ),
 });
 
 module.exports = dataSources;
