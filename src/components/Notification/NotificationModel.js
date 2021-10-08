@@ -1,6 +1,6 @@
 const { Schema, model } = require("mongoose");
 
-const CommunityNotificationSchema = new Schema(
+const NotificationSchema = new Schema(
   {
     userId: {
       type: Schema.Types.ObjectId,
@@ -22,6 +22,12 @@ const CommunityNotificationSchema = new Schema(
       lowercase: true,
       maxlength: 160,
     },
+    type: {
+      type: String,
+      required: true,
+      enum: ["GENERAL", "COMMUNITY"],
+      default: "GENERAL",
+    },
     route: { type: String, trim: true, maxlength: 80 },
     params: { type: Schema.Types.Mixed },
     alert: { type: String, trim: true, lowercase: true, maxlength: 80 },
@@ -30,9 +36,6 @@ const CommunityNotificationSchema = new Schema(
   { timestamps: true, runValidators: true, runSettersOnQuery: true }
 );
 
-const CommunityNotificationModel = model(
-  "CommunityNotification",
-  CommunityNotificationSchema
-);
+const NotificationModel = model("Notification", NotificationSchema);
 
-module.exports = CommunityNotificationModel;
+module.exports = NotificationModel;

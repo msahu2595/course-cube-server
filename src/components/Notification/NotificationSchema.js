@@ -1,20 +1,21 @@
 const { gql } = require("apollo-server");
 
-const UserNotificationSchema = gql`
+const NotificationSchema = gql`
   extend type Query {
-    userNotifications(offset: Int, limit: Int): UserNotificationListResponse
+    notifications(offset: Int, limit: Int): NotificationListResponse
   }
 
   extend type Mutation {
-    readUserNotification(userNotificationId: ID!): UserNotificationResponse
+    readNotification(notificationId: ID!): NotificationResponse
   }
 
-  type UserNotification {
+  type Notification {
     _id: ID!
     userId: ID!
     image: URL
     title: String
     message: String
+    type: NotificationType
     route: String
     params: JSONObject
     alert: String
@@ -23,21 +24,26 @@ const UserNotificationSchema = gql`
     updatedAt: String!
   }
 
-  type UserNotificationListResponse implements ListResponse {
+  enum NotificationType {
+    GENERAL
+    COMMUNITY
+  }
+
+  type NotificationListResponse implements ListResponse {
     code: String!
     success: Boolean!
     message: String!
     limit: Int!
     offset: Int!
-    payload: [UserNotification]
+    payload: [Notification]
   }
 
-  type UserNotificationResponse implements Response {
+  type NotificationResponse implements Response {
     code: String!
     success: Boolean!
     message: String!
-    payload: UserNotification
+    payload: Notification
   }
 `;
 
-module.exports = UserNotificationSchema;
+module.exports = NotificationSchema;

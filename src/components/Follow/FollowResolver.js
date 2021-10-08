@@ -54,10 +54,7 @@ const FollowResolver = {
     follow: async (
       _,
       { followingId },
-      {
-        dataSources: { followAPI, userNotificationAPI },
-        user: { _id: followerId },
-      }
+      { dataSources: { followAPI, notificationAPI }, user: { _id: followerId } }
     ) => {
       try {
         if (followerId === followingId) {
@@ -65,7 +62,7 @@ const FollowResolver = {
         }
         const payload = await followAPI.follow({ followingId });
         const { following } = payload;
-        userNotificationAPI.createUserNotification({
+        notificationAPI.createNotification({
           userId: followingId,
           image: following?.image,
           title: `${following?.firstName} followed you`,

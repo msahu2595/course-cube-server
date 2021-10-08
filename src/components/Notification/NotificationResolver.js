@@ -1,14 +1,14 @@
 const { UserInputError } = require("apollo-server");
 
-const CommunityResolver = {
+const NotificationResolver = {
   Query: {
-    communityNotifications: async (
+    notifications: async (
       _,
       { offset = 0, limit = 10 },
-      { dataSources: { communityNotificationAPI } }
+      { dataSources: { notificationAPI } }
     ) => {
       try {
-        const payload = await communityNotificationAPI.communityNotifications({
+        const payload = await notificationAPI.notifications({
           offset,
           limit,
         });
@@ -24,16 +24,16 @@ const CommunityResolver = {
     },
   },
   Mutation: {
-    readCommunityNotification: async (
+    readNotification: async (
       _,
-      { communityNotificationId },
-      { dataSources: { communityNotificationAPI } }
+      { notificationId },
+      { dataSources: { notificationAPI } }
     ) => {
       try {
-        const payload =
-          await communityNotificationAPI.readCommunityNotification({
-            communityNotificationId,
-          });
+        const payload = await notificationAPI.readNotification({
+          notificationId,
+        });
+        console.log(payload);
         return {
           code: "200",
           success: true,
@@ -47,4 +47,4 @@ const CommunityResolver = {
   },
 };
 
-module.exports = CommunityResolver;
+module.exports = NotificationResolver;

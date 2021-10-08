@@ -1,13 +1,9 @@
 const UserModel = require("./components/User/UserModel");
 const FollowModel = require("./components/Follow/FollowModel");
-const { UserNotificationModel } = require("./components/UserNotification");
-const {
-  CommunityNotificationModel,
-} = require("./components/CommunityNotification");
+const { NotificationModel } = require("./components/Notification");
 
 module.exports = {
   UserModel,
   FollowModel,
-  UserNotificationModel,
-  CommunityNotificationModel,
+  NotificationModel,
 };

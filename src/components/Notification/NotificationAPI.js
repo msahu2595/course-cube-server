@@ -1,7 +1,7 @@
 const { MongoDataSource } = require("apollo-datasource-mongodb");
 
-class CommunityNotificationAPI extends MongoDataSource {
-  communityNotifications({ offset, limit }) {
+class NotificationAPI extends MongoDataSource {
+  notifications({ offset, limit }) {
     return this.model
       .find({ userId: this.context.user._id })
       .skip(offset)
@@ -9,30 +9,23 @@ class CommunityNotificationAPI extends MongoDataSource {
       .exec();
   }
 
-  createCommunityNotification({
-    userId,
-    image,
-    title,
-    message,
-    route,
-    params,
-    alert,
-  }) {
+  createNotification({ userId, image, title, message, type, route, params, alert }) {
     return this.model.create({
       userId,
       image,
       title,
       message,
+      type,
       route,
       params,
       alert,
     });
   }
 
-  readCommunityNotification({ communityNotificationId }) {
+  readNotification({ notificationId }) {
     return this.model.findOneAndUpdate(
       {
-        _id: communityNotificationId,
+        _id: notificationId,
       },
       { read: true },
       { new: true }
@@ -40,4 +33,4 @@ class CommunityNotificationAPI extends MongoDataSource {
   }
 }
 
-module.exports = CommunityNotificationAPI;
+module.exports = NotificationAPI;
