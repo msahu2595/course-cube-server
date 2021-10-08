@@ -1,0 +1,45 @@
+mutation createQuestion {
+  createQuestion(
+    questionInput: {
+      title: "What is my name ?"
+      description: "I am not able to find my name on aadhar card."
+    }
+  ) {
+    code
+    success
+    message
+    payload {
+      _id
+      user {
+        _id
+        email
+        password
+        firstName
+        lastName
+        followers
+        followings
+        acceptTnC
+        role
+        createdAt
+        updatedAt
+      }
+      title
+      description
+      image
+      options
+      tags
+      link
+      route
+      params
+      votes
+      answers
+      attempts
+      message
+      verified
+      edited
+      enable
+      createdAt
+      updatedAt
+    }
+  }
+}

@@ -4,7 +4,9 @@ const UserModel = require("./components/User/UserModel");
 // Follow API
 const FollowAPI = require("./components/Follow/FollowAPI");
 const FollowModel = require("./components/Follow/FollowModel");
-// User Notification API
+// Question API
+const { QuestionAPI, QuestionModel } = require("./components/Question");
+// Notification API
 const {
   NotificationAPI,
   NotificationModel,
@@ -13,6 +15,7 @@ const {
 const dataSources = () => ({
   userAPI: new UserAPI(UserModel),
   followAPI: new FollowAPI(FollowModel),
+  questionAPI: new QuestionAPI(QuestionModel),
   notificationAPI: new NotificationAPI(NotificationModel),
 });
 

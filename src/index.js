@@ -51,17 +51,17 @@ const context = async ({ req }) => {
   // return { user };
   return {
     user: {
-      _id: "6156fe7310996d339762b4aa",
-      email: "bhavi.gajpal@gmail.com",
+      _id: "615711eb10996d33976503a1",
+      email: "madankarvikram@gmail.com",
       password: null,
-      firstName: "Bhavesh",
-      lastName: "Gajpal",
-      followers: 1,
+      firstName: "Vikram",
+      lastName: "Madankar",
+      followers: 2,
       followings: 0,
       acceptTnC: true,
       role: "ADMIN",
-      createdAt: "1633091187724",
-      updatedAt: "1633091667069",
+      createdAt: "1633096172339",
+      updatedAt: "1633706369240",
     },
   };
 };
