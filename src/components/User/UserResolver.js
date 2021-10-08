@@ -41,10 +41,35 @@ const UserResolver = {
           lastName,
           acceptTnC,
         });
+        console.log({ payload });
         return {
           code: "200",
           success: true,
           message: "You are successfully registered.",
+          payload,
+        };
+      } catch (error) {
+        throw new UserInputError(error.message, error.extensions.code);
+      }
+    },
+    assignRole: async (
+      _,
+      { userId, role },
+      { dataSources: { userAPI }, user: { role: contextUserRole } }
+    ) => {
+      try {
+        if (contextUserRole !== "ADMIN") {
+          throw new UserInputError("You are not authorized.");
+        }
+        const payload = await userAPI.assignRole({
+          userId,
+          role,
+        });
+        console.log({ payload });
+        return {
+          code: "200",
+          success: true,
+          message: `Your role changed to "${role}".`,
           payload,
         };
       } catch (error) {

@@ -27,6 +27,7 @@ const UserSchema = gql`
       password: Password!
       acceptTnC: Boolean!
     ): UserResponse
+    assignRole(userId: ID!, role: Role!): UserResponse
   }
 
   type User {
@@ -37,10 +38,16 @@ const UserSchema = gql`
     firstName: String! @capitalize
     lastName: String! @capitalize
     acceptTnC: Boolean!
+    role: Role
     followers: Int
     followings: Int
     createdAt: String!
     updatedAt: String!
+  }
+
+  enum Role {
+    USER
+    ADMIN
   }
 
   type UserResponse implements Response {

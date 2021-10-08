@@ -32,6 +32,12 @@ const UserSchema = new Schema(
       maxlength: 40,
     },
     acceptTnC: { type: Boolean, required: true },
+    role: {
+      type: String,
+      required: true,
+      enum: ["USER", "ADMIN"],
+      default: "USER",
+    },
   },
   { timestamps: true, runValidators: true, runSettersOnQuery: true }
 );

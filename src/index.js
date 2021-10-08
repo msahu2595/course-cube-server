@@ -36,7 +36,8 @@ mongoose.connection.on("error", (error) => {
 })();
 
 // the function that sets up the global context for each resolver, using the req
-const context = async () => {
+// eslint-disable-next-line no-unused-vars
+const context = async ({ req }) => {
   // // simple auth check on every request
   // const auth = (req.headers && req.headers.authorization) || "";
   // const email = Buffer.from(auth, "base64").toString("ascii");
@@ -50,14 +51,17 @@ const context = async () => {
   // return { user };
   return {
     user: {
-      _id: "615711eb10996d33976503a1",
-      firstName: "Manish",
-      lastName: "Sahu",
-      email: "msahu2595@gmail.com",
+      _id: "6156fe7310996d339762b4aa",
+      email: "bhavi.gajpal@gmail.com",
       password: null,
+      firstName: "Bhavesh",
+      lastName: "Gajpal",
+      followers: 1,
+      followings: 0,
       acceptTnC: true,
-      createdAt: "1632929490888",
-      updatedAt: "1632929490888",
+      role: "ADMIN",
+      createdAt: "1633091187724",
+      updatedAt: "1633091667069",
     },
   };
 };

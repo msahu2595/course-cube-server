@@ -1,5 +1,5 @@
 module.exports = {
-    service: {
-        name: 'course-cube-graphql',
-    },
+  service: {
+    localSchemaFile: "./src/schema.js",
+  },
 };
