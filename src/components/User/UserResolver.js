@@ -1,4 +1,5 @@
 const { UserInputError } = require("apollo-server");
+// const getVideoUrl = require("../../libs/getVideoUrl");
 
 const UserResolver = {
   ListResponse: {
@@ -15,10 +16,14 @@ const UserResolver = {
     user: async (_, { userId }, { dataSources: { userAPI } }) => {
       try {
         const payload = await userAPI.user({ userId });
+        // const { stdout } = await getVideoUrl({
+        //   url: "https://www.youtube.com/watch?v=mV8ZB7w1KQM",
+        // });
+        // console.log({ stdout });
         return {
           code: "200",
           success: true,
-          message: "",
+          message: "Successful",
           payload,
         };
       } catch (error) {
