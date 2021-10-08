@@ -16,6 +16,7 @@ const QuestionResolver = {
           payload,
         };
       } catch (error) {
+        console.log(error);
         throw new UserInputError(error.message, error.extensions.code);
       }
     },

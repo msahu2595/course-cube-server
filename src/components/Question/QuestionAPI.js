@@ -6,41 +6,47 @@ class QuestionAPI extends MongoDataSource {
     if (search) {
       filter["$text"] = { $search: search };
     }
-    return this.model
-      .find(filter)
-      .skip(offset)
-      .limit(limit)
-      .populate("user")
-      .populate("votes")
-      .populate("answers")
-      .populate("attempts")
-      .exec();
+    return (
+      this.model
+        .find(filter)
+        .skip(offset)
+        .limit(limit)
+        .populate("user")
+        // .populate("votes")
+        // .populate("answers")
+        // .populate("attempts")
+        .exec()
+    );
   }
 
   userQuestions({ offset, limit, userId }) {
-    return this.model
-      .find({
-        verified: true,
-        enable: true,
-        userId: userId || this.context.user._id,
-      })
-      .skip(offset)
-      .limit(limit)
-      .populate("user")
-      .populate("votes")
-      .populate("answers")
-      .populate("attempts")
-      .exec();
+    return (
+      this.model
+        .find({
+          verified: true,
+          enable: true,
+          user: userId || this.context.user._id,
+        })
+        .skip(offset)
+        .limit(limit)
+        .populate("user")
+        // .populate("votes")
+        // .populate("answers")
+        // .populate("attempts")
+        .exec()
+    );
   }
 
   question({ questionId }) {
-    return this.model
-      .findById(questionId)
-      .populate("user")
-      .populate("votes")
-      .populate("answers")
-      .populate("attempts")
-      .exec();
+    return (
+      this.model
+        .findById(questionId)
+        .populate("user")
+        // .populate("votes")
+        // .populate("answers")
+        // .populate("attempts")
+        .exec()
+    );
   }
 
   createQuestion({
