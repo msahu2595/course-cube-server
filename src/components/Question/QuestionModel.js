@@ -33,9 +33,13 @@ const QuestionSchema = new Schema(
         lowercase: true,
         trim: true,
         minlength: 1,
-        maxlength: 150,
+        maxlength: 80,
       },
     ],
+    answerIndex: {
+      type: Number,
+      enum: [1, 2, 3, 4, 5],
+    },
     tags: [
       {
         type: String,

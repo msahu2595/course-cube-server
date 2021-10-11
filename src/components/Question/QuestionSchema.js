@@ -25,6 +25,7 @@ const QuestionSchema = gql`
     description: String!
     image: URL
     options: [String!]
+    answerIndex: PositiveInt
     tags: [String!]
     link: URL
     route: String
@@ -44,6 +45,7 @@ const QuestionSchema = gql`
     description: String!
     image: URL
     options: [String!]
+    answerIndex: PositiveInt
     tags: [String!]
     link: URL
     route: String
