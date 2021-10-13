@@ -2,17 +2,23 @@ const { UserInputError } = require("apollo-server");
 
 const AnswerResolver = {
   Query: {
-    questions: async (
+    answers: async (
       _,
-      { offset = 0, limit = 10, search },
-      { dataSources: { questionAPI } }
+      { offset = 0, limit = 10, questionId },
+      { dataSources: { answerAPI } }
     ) => {
       try {
-        const payload = await questionAPI.questions({ offset, limit, search });
+        const payload = await answerAPI.answers({
+          offset,
+          limit,
+          questionId,
+        });
         return {
-          code: "200",
+          code: 200,
           success: true,
           message: "",
+          limit,
+          offset,
           payload,
         };
       } catch (error) {
@@ -20,30 +26,32 @@ const AnswerResolver = {
         throw new UserInputError(error.message, error.extensions.code);
       }
     },
-    userQuestions: async (
+    userAnswers: async (
       _,
-      { offset = 0, limit = 10, userId },
-      { dataSources: { questionAPI } }
+      { offset = 0, limit = 10, filter },
+      { dataSources: { answerAPI } }
     ) => {
       try {
-        const payload = await questionAPI.userQuestions({
+        const payload = await answerAPI.userAnswers({
           offset,
           limit,
-          userId,
+          ...filter,
         });
         return {
-          code: "200",
+          code: 200,
           success: true,
           message: "",
+          limit,
+          offset,
           payload,
         };
       } catch (error) {
         throw new UserInputError(error.message, error.extensions.code);
       }
     },
-    question: async (_, { questionId }, { dataSources: { questionAPI } }) => {
+    answer: async (_, { answerId }, { dataSources: { answerAPI } }) => {
       try {
-        const payload = await questionAPI.question({ questionId });
+        const payload = await answerAPI.answer({ answerId });
         return {
           code: "200",
           success: true,
@@ -56,17 +64,20 @@ const AnswerResolver = {
     },
   },
   Mutation: {
-    createQuestion: async (
+    createAnswer: async (
       _,
-      { questionInput },
-      { dataSources: { questionAPI } }
+      { questionId, answerInput },
+      { dataSources: { answerAPI } }
     ) => {
       try {
-        const payload = await questionAPI.createQuestion(questionInput);
+        const payload = await answerAPI.createAnswer({
+          questionId,
+          ...answerInput,
+        });
         return {
           code: "200",
           success: true,
-          message: "Question created successfully.",
+          message: "Answer created successfully.",
           payload,
         };
       } catch (error) {
@@ -74,60 +85,56 @@ const AnswerResolver = {
         throw new UserInputError(error.message, error.extensions.code);
       }
     },
-    editQuestion: async (
+    editAnswer: async (
       _,
-      { questionId, questionInput },
-      { dataSources: { questionAPI } }
+      { answerId, answerInput },
+      { dataSources: { answerAPI } }
     ) => {
       try {
-        const payload = await questionAPI.editQuestion({
-          questionId,
-          ...questionInput,
+        const payload = await answerAPI.editAnswer({
+          answerId,
+          ...answerInput,
         });
         return {
           code: "200",
           success: true,
-          message: "Question edited successfully.",
+          message: "Answer edited successfully.",
           payload,
         };
       } catch (error) {
         throw new UserInputError(error.message, error.extensions.code);
       }
     },
-    verifyQuestion: async (
+    verifyAnswer: async (
       _,
-      { questionId, questionInput },
-      { dataSources: { questionAPI }, user: { role } }
+      { answerId, answerInput },
+      { dataSources: { answerAPI }, user: { role } }
     ) => {
       try {
         if (role !== "ADMIN") {
           throw new UserInputError("You are not authorized.");
         }
-        const payload = await questionAPI.verifyQuestion({
-          questionId,
-          ...questionInput,
+        const payload = await answerAPI.verifyAnswer({
+          answerId,
+          ...answerInput,
         });
         return {
           code: "200",
           success: true,
-          message: "Question verified successfully.",
+          message: "Answer verified successfully.",
           payload,
         };
       } catch (error) {
         throw new UserInputError(error.message, error.extensions.code);
       }
     },
-    deleteQuestion: async (
-      _,
-      { questionId },
-      { dataSources: { questionAPI } }
-    ) => {
+    deleteAnswer: async (_, { answerId }, { dataSources: { answerAPI } }) => {
       try {
-        const payload = await questionAPI.deleteQuestion({ questionId });
+        const payload = await answerAPI.deleteAnswer({ answerId });
         return {
           code: "200",
           success: true,
-          message: "Question deleted successfully.",
+          message: "Answer deleted successfully.",
           payload,
         };
       } catch (error) {

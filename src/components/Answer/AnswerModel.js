@@ -7,15 +7,12 @@ const AnswerSchema = new Schema(
       required: true,
       ref: "User",
     },
-    title: {
-      type: String,
+    question: {
+      type: Schema.Types.ObjectId,
       required: true,
-      lowercase: true,
-      trim: true,
-      minlength: 16,
-      maxlength: 150,
+      ref: "Question",
     },
-    description: {
+    answer: {
       type: String,
       required: true,
       lowercase: true,
@@ -27,28 +24,6 @@ const AnswerSchema = new Schema(
       type: String,
       trim: true,
     },
-    options: [
-      {
-        type: String,
-        lowercase: true,
-        trim: true,
-        minlength: 1,
-        maxlength: 80,
-      },
-    ],
-    answerIndex: {
-      type: Number,
-      enum: [1, 2, 3, 4, 5],
-    },
-    tags: [
-      {
-        type: String,
-        lowercase: true,
-        trim: true,
-        minlength: 2,
-        maxlength: 40,
-      },
-    ],
     link: {
       type: String,
       trim: true,

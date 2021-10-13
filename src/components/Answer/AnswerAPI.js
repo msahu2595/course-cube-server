@@ -1,73 +1,46 @@
 const { MongoDataSource } = require("apollo-datasource-mongodb");
 
 class AnswerAPI extends MongoDataSource {
-  questions({ offset, limit, search }) {
-    const filter = { verified: true, enable: true };
-    if (search) {
-      filter["$text"] = { $search: search };
-    }
-    return (
-      this.model
-        .find(filter)
-        .skip(offset)
-        .limit(limit)
-        .populate("user")
-        .populate("votes")
-        // .populate("answers")
-        // .populate("attempts")
-        .exec()
-    );
+  answers({ offset, limit, questionId }) {
+    return this.model
+      .find({ verified: true, enable: true, question: questionId })
+      .skip(offset)
+      .limit(limit)
+      .populate("user")
+      .populate("votes")
+      .exec();
   }
 
-  userQuestions({ offset, limit, userId }) {
-    return (
-      this.model
-        .find({
-          verified: true,
-          enable: true,
-          user: userId || this.context.user._id,
-        })
-        .skip(offset)
-        .limit(limit)
-        .populate("user")
-        .populate("votes")
-        // .populate("answers")
-        // .populate("attempts")
-        .exec()
-    );
+  userAnswers({ offset, limit, userId, verified, enable }) {
+    return this.model
+    .find({
+        user: userId || this.context.user._id,
+        verified: verified || true,
+        enable: enable || true,
+      })
+      .skip(offset)
+      .limit(limit)
+      .populate("user")
+      .populate("question")
+      .populate("votes")
+      .exec();
   }
 
-  question({ questionId }) {
-    return (
-      this.model
-        .findById(questionId)
-        .populate("user")
-        .populate("votes")
-        // .populate("answers")
-        // .populate("attempts")
-        .exec()
-    );
+  answer({ answerId }) {
+    return this.model
+      .findById(answerId)
+      .populate("user")
+      .populate("question")
+      .populate("votes")
+      .exec();
   }
 
-  createQuestion({
-    title,
-    description,
-    image,
-    options,
-    answerIndex,
-    tags,
-    link,
-    route,
-    params,
-  }) {
+  createAnswer({ questionId, answer, image, link, route, params }) {
     const question = new this.model({
       user: this.context.user._id,
-      title,
-      description,
+      question: questionId,
+      answer,
       image,
-      options,
-      answerIndex,
-      tags,
       link,
       route,
       params,
@@ -75,31 +48,16 @@ class AnswerAPI extends MongoDataSource {
     return question.save().then((res) => res.populate("user").execPopulate());
   }
 
-  editQuestion({
-    questionId,
-    title,
-    description,
-    image,
-    options,
-    answerIndex,
-    tags,
-    link,
-    route,
-    params,
-  }) {
+  editAnswer({ answerId, answer, image, link, route, params }) {
     return this.model
       .findOneAndUpdate(
         {
-          _id: questionId,
+          _id: answerId,
           user: this.context.user._id,
         },
         {
-          title,
-          description,
+          answer,
           image,
-          options,
-          answerIndex,
-          tags,
           link,
           route,
           params,
@@ -111,24 +69,24 @@ class AnswerAPI extends MongoDataSource {
       .exec();
   }
 
-  verifyQuestion({ questionId, tags, message, verified }) {
+  verifyAnswer({ answerId, message, verified }) {
     return this.model
       .findOneAndUpdate(
         {
-          _id: questionId,
+          _id: answerId,
         },
-        { tags, message, verified },
+        { message, verified },
         { new: true }
       )
       .populate("user")
       .exec();
   }
 
-  deleteQuestion({ questionId }) {
+  deleteAnswer({ answerId }) {
     return this.model
       .findOneAndUpdate(
         {
-          _id: questionId,
+          _id: answerId,
           user: this.context.user._id,
         },
         { enable: false },

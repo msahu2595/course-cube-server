@@ -2,57 +2,51 @@ const { gql } = require("apollo-server");
 
 const AnswerSchema = gql`
   extend type Query {
-    questions(offset: Int, limit: Int, search: String): QuestionListResponse
-    userQuestions(offset: Int, limit: Int, userId: ID): QuestionListResponse
-    question(questionId: ID!): QuestionResponse
+    answers(offset: Int, limit: Int, questionId: ID!): AnswerListResponse
+    userAnswers(
+      offset: Int
+      limit: Int
+      filter: UserAnswerFilter
+    ): AnswerListResponse
+    answer(answerId: ID!): AnswerResponse
   }
 
   extend type Mutation {
-    createQuestion(questionInput: QuestionInput): QuestionResponse
-    editQuestion(
-      questionId: ID!
-      questionInput: QuestionInput
-    ): QuestionResponse
-    verifyQuestion(
-      questionId: ID!
-      questionInput: VerifyQuestionInput
-    ): QuestionResponse
-    deleteQuestion(questionId: ID!): QuestionResponse
+    createAnswer(questionId: ID!, answerInput: AnswerInput): AnswerResponse
+    editAnswer(answerId: ID!, answerInput: AnswerInput): AnswerResponse
+    verifyAnswer(answerId: ID!, answerInput: VerifyAnswerInput): AnswerResponse
+    deleteAnswer(answerId: ID!): AnswerResponse
   }
 
-  input QuestionInput {
-    title: String!
-    description: String!
+  input UserAnswerFilter {
+    userId: ID
+    verified: Boolean
+    enable: Boolean
+  }
+
+  input AnswerInput {
+    answer: String!
     image: URL
-    options: [String!]
-    answerIndex: PositiveInt
-    tags: [String!]
     link: URL
     route: String
     params: JSONObject
   }
 
-  input VerifyQuestionInput {
-    tags: [String!]
+  input VerifyAnswerInput {
     message: String
     verified: Boolean!
   }
 
-  type Question {
+  type Answer {
     _id: ID!
     user: User
-    title: String!
-    description: String!
+    question: Question
+    answer: String!
     image: URL
-    options: [String!]
-    answerIndex: PositiveInt
-    tags: [String!]
     link: URL
     route: String
     params: JSONObject
     votes: Int
-    answers: Int
-    attempts: Int
     message: String
     verified: Boolean!
     edited: Boolean!
@@ -61,21 +55,20 @@ const AnswerSchema = gql`
     updatedAt: String!
   }
 
-  type QuestionListResponse implements ListResponse {
+  type AnswerListResponse implements ListResponse {
     code: String!
     success: Boolean!
     message: String!
     limit: Int!
     offset: Int!
-    search: String
-    payload: [Question!]
+    payload: [Answer!]
   }
 
-  type QuestionResponse implements Response {
+  type AnswerResponse implements Response {
     code: String!
     success: Boolean!
     message: String!
-    payload: Question
+    payload: Answer
   }
 `;
 
