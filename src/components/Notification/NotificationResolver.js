@@ -4,13 +4,14 @@ const NotificationResolver = {
   Query: {
     notifications: async (
       _,
-      { offset = 0, limit = 10 },
+      { offset = 0, limit = 10, type = "USER" },
       { dataSources: { notificationAPI } }
     ) => {
       try {
         const payload = await notificationAPI.notifications({
           offset,
           limit,
+          type,
         });
         return {
           code: "200",

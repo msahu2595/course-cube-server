@@ -2,7 +2,11 @@ const { gql } = require("apollo-server");
 
 const NotificationSchema = gql`
   extend type Query {
-    notifications(offset: Int, limit: Int): NotificationListResponse
+    notifications(
+      offset: Int
+      limit: Int
+      type: NotificationType
+    ): NotificationListResponse
   }
 
   extend type Mutation {
@@ -25,7 +29,8 @@ const NotificationSchema = gql`
   }
 
   enum NotificationType {
-    GENERAL
+    USER
+    ADMIN
     COMMUNITY
   }
 
