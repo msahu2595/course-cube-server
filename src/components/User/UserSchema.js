@@ -33,16 +33,39 @@ const UserSchema = gql`
   type User {
     _id: ID!
     email: EmailAddress!
-    password: Void
-    image: URL
     firstName: String! @capitalize
     lastName: String! @capitalize
+    mobile: PhoneNumber
+    gender: Gender
+    image: URL
+    password: Void
+    about: String
+    education: String
+    workAt: String
+    workAs: String
+    facebook: String
+    instagram: String
+    twitter: String
+    linkedin: String
+    pincode: PostalCode
+    country: String
+    state: String
+    city: String
+    area: String
+    street: String
+    landmark: String
     acceptTnC: Boolean!
     role: Role
     followers: Int
     followings: Int
-    createdAt: String!
-    updatedAt: String!
+    createdAt: DateTime!
+    updatedAt: DateTime!
+  }
+
+  enum Gender {
+    MALE
+    FEMALE
+    THIRD
   }
 
   enum Role {
