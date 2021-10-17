@@ -5,6 +5,8 @@ const FollowResolver = require("./components/Follow/FollowResolver");
 const { QuestionResolver } = require("./components/Question");
 const { AnswerResolver } = require("./components/Answer");
 const { VoteResolver } = require("./components/Vote");
+const { LikeResolver } = require("./components/Like");
+const { BookmarkResolver } = require("./components/Bookmark");
 const { NotificationResolver } = require("./components/Notification");
 
 module.exports = [
@@ -15,5 +17,7 @@ module.exports = [
   QuestionResolver,
   AnswerResolver,
   VoteResolver,
+  LikeResolver,
+  BookmarkResolver,
   NotificationResolver,
 ];

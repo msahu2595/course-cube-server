@@ -6,7 +6,7 @@ const AnswerSchema = gql`
     userAnswers(
       offset: Int
       limit: Int
-      filter: UserAnswerFilter
+      filter: UserAnswersFilter
     ): AnswerListResponse
     answer(answerId: ID!): AnswerResponse
   }
@@ -18,7 +18,7 @@ const AnswerSchema = gql`
     deleteAnswer(answerId: ID!): AnswerResponse
   }
 
-  input UserAnswerFilter {
+  input UserAnswersFilter {
     userId: ID
     verified: Boolean
     enable: Boolean

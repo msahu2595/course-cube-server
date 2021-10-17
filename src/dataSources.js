@@ -10,6 +10,10 @@ const { QuestionAPI, QuestionModel } = require("./components/Question");
 const { AnswerAPI, AnswerModel } = require("./components/Answer");
 // Vote API
 const { VoteAPI, VoteModel } = require("./components/Vote");
+// Like API
+const { LikeAPI, LikeModel } = require("./components/Like");
+// Bookmark API
+const { BookmarkAPI, BookmarkModel } = require("./components/Bookmark");
 // Notification API
 const {
   NotificationAPI,
@@ -22,6 +26,8 @@ const dataSources = () => ({
   questionAPI: new QuestionAPI(QuestionModel),
   answerAPI: new AnswerAPI(AnswerModel),
   voteAPI: new VoteAPI(VoteModel),
+  likeAPI: new LikeAPI(LikeModel),
+  bookmarkAPI: new BookmarkAPI(BookmarkModel),
   notificationAPI: new NotificationAPI(NotificationModel),
 });
 
