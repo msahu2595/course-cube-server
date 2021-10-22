@@ -4,6 +4,8 @@ const UserModel = require("./components/User/UserModel");
 // Follow API
 const FollowAPI = require("./components/Follow/FollowAPI");
 const FollowModel = require("./components/Follow/FollowModel");
+// Video API
+const { VideoAPI, VideoModel } = require("./components/Video");
 // Question API
 const { QuestionAPI, QuestionModel } = require("./components/Question");
 // Answer API
@@ -24,6 +26,7 @@ const dataSources = () => ({
   userAPI: new UserAPI(UserModel),
   followAPI: new FollowAPI(FollowModel),
   questionAPI: new QuestionAPI(QuestionModel),
+  videoAPI: new VideoAPI(VideoModel),
   answerAPI: new AnswerAPI(AnswerModel),
   voteAPI: new VoteAPI(VoteModel),
   likeAPI: new LikeAPI(LikeModel),

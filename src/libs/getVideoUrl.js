@@ -1,9 +1,17 @@
 const util = require("util");
 const exec = util.promisify(require("child_process").exec);
 
-async function getVideoUrl({ url, format = "18,22" }) {
-  const { stdout, stderr } = await exec(`youtube-dl -f ${format} -g ${url}`);
-  return { stdout, stderr };
+async function getVideoUrl(link) {
+  const { stdout, stderr } = await exec(
+    `youtube-dl --get-url --get-duration --get-format --format 18,22 ${link}`
+  );
+  const [url1, duration1, format1, url2, duration2, format2] =
+    stdout.split("\n");
+  const urls = [
+    { url: url1, duration: duration1, format: format1 },
+    { url: url2, duration: duration2, format: format2 },
+  ];
+  return { urls, stderr };
 }
 
 module.exports = getVideoUrl;

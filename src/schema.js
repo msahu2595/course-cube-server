@@ -3,6 +3,7 @@ const ScalarsSchema = require("./components/Scalars/ScalarsSchema");
 const DirectivesSchema = require("./components/Directives/DirectivesSchema");
 const UserSchema = require("./components/User/UserSchema");
 const FollowSchema = require("./components/Follow/FollowSchema");
+const { VideoSchema } = require("./components/Video");
 const { QuestionSchema } = require("./components/Question");
 const { AnswerSchema } = require("./components/Answer");
 const { VoteSchema } = require("./components/Vote");
@@ -16,6 +17,7 @@ module.exports = [
   DirectivesSchema,
   UserSchema,
   FollowSchema,
+  VideoSchema,
   QuestionSchema,
   AnswerSchema,
   VoteSchema,
