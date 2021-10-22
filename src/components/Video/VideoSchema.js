@@ -41,6 +41,7 @@ const VideoSchema = gql`
   extend type Mutation {
     addVideo(videoInput: VideoInput): VideoResponse
     editVideo(videoId: ID!, videoInput: VideoInput): VideoResponse
+    refreshVideo(videoId: ID!): VideoResponse
     deleteVideo(videoId: ID!): VideoResponse
   }
 
@@ -77,7 +78,7 @@ const VideoSchema = gql`
     language: LanguageType!
     index: String
     description: String!
-    link: URL!
+    link: Void
     visible: Boolean!
     enable: Boolean!
     urls: [VideoURL]

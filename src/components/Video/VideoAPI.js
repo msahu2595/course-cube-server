@@ -47,6 +47,18 @@ class VideoAPI extends MongoDataSource {
       .exec();
   }
 
+  refreshVideo({ videoId, urls }) {
+    return this.model
+      .findOneAndUpdate(
+        {
+          _id: videoId,
+        },
+        { urls },
+        { new: true }
+      )
+      .exec();
+  }
+
   deleteVideo({ videoId }) {
     return this.model
       .findOneAndUpdate(

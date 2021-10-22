@@ -96,6 +96,27 @@ const VideoResolver = {
         throw new UserInputError(error.message, error.extensions.code);
       }
     },
+    refreshVideo: async (_, { videoId }, { dataSources: { videoAPI } }) => {
+      try {
+        const video = await videoAPI.video({ videoId });
+        const { urls, stderr } = await getVideoUrl(video?.link);
+        if (stderr) {
+          throw new UserInputError(stderr, 422);
+        }
+        const payload = await videoAPI.refreshVideo({
+          videoId,
+          urls,
+        });
+        return {
+          code: "200",
+          success: true,
+          message: "Video refreshed successfully.",
+          payload,
+        };
+      } catch (error) {
+        throw new UserInputError(error.message, error.extensions.code);
+      }
+    },
     deleteVideo: async (_, { videoId }, { dataSources: { videoAPI } }) => {
       try {
         const payload = await videoAPI.deleteVideo({ videoId });
