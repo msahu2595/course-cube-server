@@ -83,7 +83,7 @@ const server = new ApolloServer({
 if (process.env.NODE_ENV !== "test") {
   server
     .listen({
-      port: process.env.PORT,
+      port: process.env.PORT || 4000,
     })
     .then(({ url }) => {
       console.log(`
