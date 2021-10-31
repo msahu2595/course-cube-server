@@ -1,6 +1,6 @@
 const { Schema, model } = require("mongoose");
 
-const VideoSchema = new Schema(
+const TestSchema = new Schema(
   {
     image: {
       required: true,
@@ -88,37 +88,44 @@ const VideoSchema = new Schema(
       maxlength: 1000,
     },
     visible: { type: Boolean, required: true, default: true },
-    link: {
-      required: true,
-      type: String,
-      trim: true,
-    },
-    urls: [
+    questions: [
       {
-        url: String,
-        duration: String,
-        format: String,
+        question: { type: String, required: true },
+        image: String,
+        passage: String,
+        options: [{ type: String, required: true }],
+        mark: { type: Number, required: true },
+        answerIndex: { type: Number, required: true },
+        enable: { type: Boolean, required: true, default: true },
       },
     ],
+    duration: {
+      type: Number,
+      required: true,
+    },
+    marks: {
+      type: Number,
+      required: true,
+    },
     enable: { type: Boolean, required: true, default: true },
   },
   { timestamps: true, runValidators: true, runSettersOnQuery: true }
 );
 
-VideoSchema.virtual("likes", {
+TestSchema.virtual("likes", {
   ref: "Like", // The model to use
   localField: "_id", // Find people where `localField`
   foreignField: "refId", // is equal to `foreignField`
   count: true, // And only get the number of docs
 });
 
-VideoSchema.virtual("watches", {
+TestSchema.virtual("attempts", {
   ref: "History", // The model to use
   localField: "_id", // Find people where `localField`
   foreignField: "refId", // is equal to `foreignField`
   count: true, // And only get the number of docs
 });
 
-const VideoModel = model("Video", VideoSchema);
+const TestModel = model("Test", TestSchema);
 
-module.exports = VideoModel;
+module.exports = TestModel;

@@ -4,6 +4,7 @@ const DirectivesSchema = require("./components/Directives/DirectivesSchema");
 const UserSchema = require("./components/User/UserSchema");
 const FollowSchema = require("./components/Follow/FollowSchema");
 const { VideoSchema } = require("./components/Video");
+const { TestSchema } = require("./components/Test");
 const { QuestionSchema } = require("./components/Question");
 const { AnswerSchema } = require("./components/Answer");
 const { VoteSchema } = require("./components/Vote");
@@ -18,6 +19,7 @@ module.exports = [
   UserSchema,
   FollowSchema,
   VideoSchema,
+  TestSchema,
   QuestionSchema,
   AnswerSchema,
   VoteSchema,

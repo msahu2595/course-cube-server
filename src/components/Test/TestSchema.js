@@ -1,51 +1,35 @@
 const { gql } = require("apollo-server");
 
-const VideoSchema = gql`
-  enum PurchaseType {
-    FREE
-    PAID
-  }
-
-  enum OfferType {
-    PERCENT
-    AMOUNT
-  }
-
-  enum LanguageType {
-    HI
-    EN
-  }
-
+const TestSchema = gql`
   extend type Query {
-    videos(
+    tests(
       offset: Int
       limit: Int
       search: String
-      filter: VideosFilterInput
-    ): VideoListResponse
-    video(videoId: ID!): VideoResponse
+      filter: TestsFilterInput
+    ): TestListResponse
+    test(testId: ID!): TestResponse
   }
 
-  input VideosFilterInput {
+  input TestsFilterInput {
     type: PurchaseType
     visible: Boolean
     enable: Boolean
   }
 
-  type VideosFilterType {
+  type TestsFilterType {
     type: PurchaseType
     visible: Boolean
     enable: Boolean
   }
 
   extend type Mutation {
-    addVideo(videoInput: VideoInput): VideoResponse
-    editVideo(videoId: ID!, videoInput: VideoInput): VideoResponse
-    refreshVideo(videoId: ID!): VideoResponse
-    deleteVideo(videoId: ID!): VideoResponse
+    addTest(testInput: TestInput): TestResponse
+    editTest(testId: ID!, testInput: TestInput): TestResponse
+    deleteTest(testId: ID!): TestResponse
   }
 
-  input VideoInput {
+  input TestInput {
     image: URL!
     subject: String!
     tags: [String!]!
@@ -60,10 +44,21 @@ const VideoSchema = gql`
     index: String
     description: String!
     visible: Boolean
-    link: URL!
+    questions: [TestQuestionInput!]!
+    duration: NonNegativeInt!
+    marks: NonNegativeInt!
   }
 
-  type Video {
+  input TestQuestionInput {
+    question: String!
+    image: URL
+    passage: String
+    options: [String!]!
+    mark: NonNegativeInt!
+    answerIndex: NonNegativeInt!
+  }
+
+  type Test {
     _id: ID!
     image: URL!
     subject: String!
@@ -79,39 +74,44 @@ const VideoSchema = gql`
     index: String
     description: String!
     visible: Boolean!
-    link: Void
-    urls: [VideoURL]
+    questions: [TestQuestion!]!
+    duration: NonNegativeInt!
+    marks: NonNegativeInt!
     likes: NonNegativeInt
-    watches: NonNegativeInt
+    attempts: NonNegativeInt
     enable: Boolean!
     createdAt: String!
     updatedAt: String!
   }
 
-  type VideoURL {
+  type TestQuestion {
     _id: ID!
-    url: URL
-    duration: String
-    format: String
+    question: String!
+    image: URL
+    passage: String
+    options: [String!]!
+    mark: NonNegativeInt!
+    answerIndex: NonNegativeInt!
+    enable: Boolean!
   }
 
-  type VideoListResponse implements ListResponse {
+  type TestListResponse implements ListResponse {
     code: String!
     success: Boolean!
     message: String!
     offset: Int!
     limit: Int!
     search: String
-    filter: VideosFilterType
-    payload: [Video]
+    filter: TestsFilterType
+    payload: [Test]
   }
 
-  type VideoResponse implements Response {
+  type TestResponse implements Response {
     code: String!
     success: Boolean!
     message: String!
-    payload: Video
+    payload: Test
   }
 `;
 
-module.exports = VideoSchema;
+module.exports = TestSchema;

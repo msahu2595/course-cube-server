@@ -1,7 +1,7 @@
 const { MongoDataSource } = require("apollo-datasource-mongodb");
 
-class VideoAPI extends MongoDataSource {
-  videos({ offset, limit, search, type, visible = true, enable = true }) {
+class TestAPI extends MongoDataSource {
+  tests({ offset, limit, search, type, visible = true, enable = true }) {
     const filter = { visible, enable };
     if (type) {
       filter["paid"] = type === "PAID" ? true : false;
@@ -15,55 +15,43 @@ class VideoAPI extends MongoDataSource {
         .skip(offset)
         .limit(limit)
         .populate("likes")
-        // .populate("watches")
+        // .populate("attempts")
         .exec()
     );
   }
 
-  video({ videoId }) {
+  test({ testId }) {
     return (
       this.model
-        .findById(videoId)
+        .findById(testId)
         .populate("likes")
-        // .populate("watches")
+        // .populate("attempts")
         .exec()
     );
   }
 
-  addVideo({ videoInput, urls }) {
-    const video = new this.model({ ...videoInput, urls });
-    return video.save();
+  addTest({ testInput }) {
+    const test = new this.model(testInput);
+    return test.save();
   }
 
-  editVideo({ videoId, videoInput, urls }) {
+  editTest({ testId, testInput }) {
     return this.model
       .findOneAndUpdate(
         {
-          _id: videoId,
+          _id: testId,
         },
-        { ...videoInput, urls },
+        testInput,
         { new: true }
       )
       .exec();
   }
 
-  refreshVideo({ videoId, urls }) {
+  deleteTest({ testId }) {
     return this.model
       .findOneAndUpdate(
         {
-          _id: videoId,
-        },
-        { urls },
-        { new: true }
-      )
-      .exec();
-  }
-
-  deleteVideo({ videoId }) {
-    return this.model
-      .findOneAndUpdate(
-        {
-          _id: videoId,
+          _id: testId,
         },
         { enable: false },
         { new: true }
@@ -72,4 +60,4 @@ class VideoAPI extends MongoDataSource {
   }
 }
 
-module.exports = VideoAPI;
+module.exports = TestAPI;
