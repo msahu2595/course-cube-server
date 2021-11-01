@@ -56,6 +56,13 @@ UserSchema.virtual("followings", {
   count: true, // And only get the number of docs
 });
 
+UserSchema.virtual("history", {
+  ref: "History", // The model to use
+  localField: "_id", // Find people where `localField`
+  foreignField: "user", // is equal to `foreignField`
+  count: true, // And only get the number of docs
+});
+
 UserSchema.virtual("videos", {
   ref: "History", // The model to use
   localField: "_id", // Find people where `localField`

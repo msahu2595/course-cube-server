@@ -4,40 +4,29 @@ const QuestionResolver = {
   Query: {
     questions: async (
       _,
-      { offset = 0, limit = 10, search },
+      { offset = 0, limit = 10, search, filter },
       { dataSources: { questionAPI } }
     ) => {
       try {
-        const payload = await questionAPI.questions({ offset, limit, search });
-        return {
-          code: "200",
-          success: true,
-          message: "",
-          payload,
-        };
-      } catch (error) {
-        console.log(error);
-        throw new UserInputError(error.message, error.extensions.code);
-      }
-    },
-    userQuestions: async (
-      _,
-      { offset = 0, limit = 10, userId },
-      { dataSources: { questionAPI } }
-    ) => {
-      try {
-        const payload = await questionAPI.userQuestions({
+        console.log("filter ==> ", filter);
+        const payload = await questionAPI.questions({
           offset,
           limit,
-          userId,
+          search,
+          ...filter,
         });
         return {
           code: "200",
           success: true,
-          message: "",
+          message: "Successful",
+          offset,
+          limit,
+          search,
+          filter,
           payload,
         };
       } catch (error) {
+        console.log(error);
         throw new UserInputError(error.message, error.extensions.code);
       }
     },
@@ -47,7 +36,7 @@ const QuestionResolver = {
         return {
           code: "200",
           success: true,
-          message: "",
+          message: "Successful",
           payload,
         };
       } catch (error) {

@@ -9,6 +9,17 @@ class UserAPI extends MongoDataSource {
       .exec();
   }
 
+  leaderboard({ offset, limit }) {
+    return this.model
+      .find()
+      .populate({ path: "followers" })
+      .populate({ path: "history" })
+      .sort({ followers: "asc", history: "desc" })
+      .skip(offset)
+      .limit(limit)
+      .exec();
+  }
+
   statistics({ userId }) {
     return this.model
       .findById(userId || this.context.user._id)

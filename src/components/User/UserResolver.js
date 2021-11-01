@@ -38,6 +38,25 @@ const UserResolver = {
         throw new UserInputError(error.message, error.extensions.code);
       }
     },
+    leaderboard: async (
+      _,
+      { offset = 0, limit = 10 },
+      { dataSources: { userAPI } }
+    ) => {
+      try {
+        const payload = await userAPI.leaderboard({ offset, limit });
+        return {
+          code: "200",
+          success: true,
+          message: "Successful",
+          offset,
+          limit,
+          payload,
+        };
+      } catch (error) {
+        throw new UserInputError(error.message, error.extensions.code);
+      }
+    },
   },
   Mutation: {
     logIn: async (

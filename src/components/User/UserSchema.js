@@ -18,6 +18,7 @@ const UserSchema = gql`
   type Query {
     user(userId: ID): UserResponse
     statistics(userId: ID): UserStatisticsResponse
+    leaderboard(limit: Int, offset: Int): UserListResponse
   }
 
   type Mutation {
@@ -59,6 +60,7 @@ const UserSchema = gql`
     role: Role
     followers: Int
     followings: Int
+    history: Int
     createdAt: DateTime!
     updatedAt: DateTime!
   }
@@ -80,6 +82,15 @@ const UserSchema = gql`
     tests: NonNegativeInt
     documents: NonNegativeInt
     questions: NonNegativeInt
+  }
+
+  type UserListResponse implements ListResponse {
+    code: String!
+    success: Boolean!
+    message: String!
+    limit: Int!
+    offset: Int!
+    payload: [User!]
   }
 
   type UserResponse implements Response {

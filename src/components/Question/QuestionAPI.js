@@ -1,29 +1,16 @@
 const { MongoDataSource } = require("apollo-datasource-mongodb");
 
 class QuestionAPI extends MongoDataSource {
-  questions({ offset, limit, search }) {
-    const filter = { verified: true, enable: true };
+  questions({ offset, limit, search, userId, verified = true, enable = true }) {
+    const filter = { verified, enable };
     if (search) {
       filter["$text"] = { $search: search };
     }
+    if (userId) {
+      filter["user"] = userId;
+    }
     return this.model
       .find(filter)
-      .skip(offset)
-      .limit(limit)
-      .populate("user")
-      .populate("votes")
-      .populate("answers")
-      .populate("views")
-      .exec();
-  }
-
-  userQuestions({ offset, limit, userId }) {
-    return this.model
-      .find({
-        verified: true,
-        enable: true,
-        user: userId || this.context.user._id,
-      })
       .skip(offset)
       .limit(limit)
       .populate("user")

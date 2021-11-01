@@ -2,9 +2,25 @@ const { gql } = require("apollo-server");
 
 const QuestionSchema = gql`
   extend type Query {
-    questions(offset: Int, limit: Int, search: String): QuestionListResponse
-    userQuestions(offset: Int, limit: Int, userId: ID): QuestionListResponse
+    questions(
+      offset: Int
+      limit: Int
+      search: String
+      filter: QuestionFilterInput
+    ): QuestionListResponse
     question(questionId: ID!): QuestionResponse
+  }
+
+  input QuestionFilterInput {
+    userId: ID
+    verified: Boolean
+    enable: Boolean
+  }
+
+  type QuestionFilter {
+    userId: ID
+    verified: Boolean
+    enable: Boolean
   }
 
   extend type Mutation {
@@ -68,6 +84,7 @@ const QuestionSchema = gql`
     limit: Int!
     offset: Int!
     search: String
+    filter: QuestionFilter
     payload: [Question!]
   }
 
