@@ -1,14 +1,14 @@
 const { UserInputError } = require("apollo-server");
 
-const BookmarkResolver = {
+const HistoryResolver = {
   Query: {
-    bookmarks: async (
+    history: async (
       _,
       { offset = 0, limit = 10, filter },
-      { dataSources: { bookmarkAPI } }
+      { dataSources: { historyAPI } }
     ) => {
       try {
-        const payload = await bookmarkAPI.bookmarks({
+        const payload = await historyAPI.history({
           offset,
           limit,
           ...filter,
@@ -16,7 +16,7 @@ const BookmarkResolver = {
         return {
           code: 200,
           success: true,
-          message: "Successfully get bookmarks.",
+          message: "Successfully get history.",
           limit,
           offset,
           filter,
@@ -26,13 +26,13 @@ const BookmarkResolver = {
         throw new UserInputError(error.message, error.extensions.code);
       }
     },
-    bookmarkedUsers: async (
+    historyUsers: async (
       _,
       { offset = 0, limit = 10, refId },
-      { dataSources: { bookmarkAPI } }
+      { dataSources: { historyAPI } }
     ) => {
       try {
-        const payload = await bookmarkAPI.bookmarkedUsers({
+        const payload = await historyAPI.historyUsers({
           offset,
           limit,
           refId,
@@ -40,7 +40,7 @@ const BookmarkResolver = {
         return {
           code: 200,
           success: true,
-          message: "Successfully get bookmarked users.",
+          message: "Successfully get history users.",
           limit,
           offset,
           refId,
@@ -52,26 +52,30 @@ const BookmarkResolver = {
     },
   },
   Mutation: {
-    bookmark: async (_, { refId, type }, { dataSources: { bookmarkAPI } }) => {
+    addHistory: async (_, { refId, type }, { dataSources: { historyAPI } }) => {
       try {
-        const payload = await bookmarkAPI.bookmark({ refId, type });
+        const payload = await historyAPI.addHistory({ refId, type });
         return {
           code: "200",
           success: true,
-          message: "You are successfully bookmarked.",
+          message: "You are successfully added history.",
           payload,
         };
       } catch (error) {
         throw new Error(error.message, error.extensions.code);
       }
     },
-    unBookmark: async (_, { bookmarkId }, { dataSources: { bookmarkAPI } }) => {
+    removeHistory: async (
+      _,
+      { historyId },
+      { dataSources: { historyAPI } }
+    ) => {
       try {
-        const payload = await bookmarkAPI.unBookmark({ bookmarkId });
+        const payload = await historyAPI.removeHistory({ historyId });
         return {
           code: "200",
           success: true,
-          message: "You are successfully un-bookmarked.",
+          message: "You are successfully removed history.",
           payload,
         };
       } catch (error) {
@@ -81,4 +85,4 @@ const BookmarkResolver = {
   },
 };
 
-module.exports = BookmarkResolver;
+module.exports = HistoryResolver;

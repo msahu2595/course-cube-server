@@ -8,6 +8,7 @@ const { TestSchema } = require("./components/Test");
 const { DocumentSchema } = require("./components/Document");
 const { QuestionSchema } = require("./components/Question");
 const { AnswerSchema } = require("./components/Answer");
+const { HistorySchema } = require("./components/History");
 const { VoteSchema } = require("./components/Vote");
 const { LikeSchema } = require("./components/Like");
 const { BookmarkSchema } = require("./components/Bookmark");
@@ -24,6 +25,7 @@ module.exports = [
   DocumentSchema,
   QuestionSchema,
   AnswerSchema,
+  HistorySchema,
   VoteSchema,
   LikeSchema,
   BookmarkSchema,

@@ -9,6 +9,28 @@ class UserAPI extends MongoDataSource {
       .exec();
   }
 
+  statistics({ userId }) {
+    return this.model
+      .findById(userId || this.context.user._id)
+      .populate({
+        path: "videos",
+        match: { type: "VIDEO" },
+      })
+      .populate({
+        path: "tests",
+        match: { type: "TEST" },
+      })
+      .populate({
+        path: "documents",
+        match: { type: "DOCUMENT" },
+      })
+      .populate({
+        path: "questions",
+        match: { type: "QUESTION" },
+      })
+      .exec();
+  }
+
   logIn({ email, password, image, firstName, lastName, acceptTnC }) {
     return this.model
       .findOneAndUpdate(

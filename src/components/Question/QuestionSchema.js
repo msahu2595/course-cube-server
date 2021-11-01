@@ -52,7 +52,7 @@ const QuestionSchema = gql`
     params: JSONObject
     votes: Int
     answers: Int
-    attempts: Int
+    views: Int
     message: String
     verified: Boolean!
     edited: Boolean!

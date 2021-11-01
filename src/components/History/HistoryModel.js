@@ -1,6 +1,6 @@
 const { Schema, model } = require("mongoose");
 
-const BookmarkSchema = new Schema(
+const HistorySchema = new Schema(
   {
     user: {
       required: true,
@@ -14,13 +14,13 @@ const BookmarkSchema = new Schema(
     type: {
       required: true,
       type: String,
-      enum: ["VIDEO", "TEST", "DOCUMENT", "QUESTION", "ANSWER"],
+      enum: ["VIDEO", "TEST", "DOCUMENT", "QUESTION"],
     },
-    active: { type: Boolean, required: true, default: true },
+    visible: { type: Boolean, required: true, default: true },
   },
   { timestamps: true, runValidators: true, runSettersOnQuery: true }
 );
 
-const BookmarkModel = model("Bookmark", BookmarkSchema);
+const HistoryModel = model("History", HistorySchema);
 
-module.exports = BookmarkModel;
+module.exports = HistoryModel;

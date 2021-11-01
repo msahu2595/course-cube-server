@@ -79,14 +79,14 @@ QuestionSchema.virtual("votes", {
 QuestionSchema.virtual("answers", {
   ref: "Answer", // The model to use
   localField: "_id", // Find people where `localField`
-  foreignField: "questionId", // is equal to `foreignField`
+  foreignField: "question", // is equal to `foreignField`
   count: true, // And only get the number of docs
 });
 
-QuestionSchema.virtual("attempts", {
-  ref: "Attempt", // The model to use
+QuestionSchema.virtual("views", {
+  ref: "History", // The model to use
   localField: "_id", // Find people where `localField`
-  foreignField: "questionId", // is equal to `foreignField`
+  foreignField: "refId", // is equal to `foreignField`
   count: true, // And only get the number of docs
 });
 

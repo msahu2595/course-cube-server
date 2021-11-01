@@ -56,6 +56,34 @@ UserSchema.virtual("followings", {
   count: true, // And only get the number of docs
 });
 
+UserSchema.virtual("videos", {
+  ref: "History", // The model to use
+  localField: "_id", // Find people where `localField`
+  foreignField: "user", // is equal to `foreignField`
+  count: true, // And only get the number of docs
+});
+
+UserSchema.virtual("tests", {
+  ref: "History", // The model to use
+  localField: "_id", // Find people where `localField`
+  foreignField: "user", // is equal to `foreignField`
+  count: true, // And only get the number of docs
+});
+
+UserSchema.virtual("documents", {
+  ref: "History", // The model to use
+  localField: "_id", // Find people where `localField`
+  foreignField: "user", // is equal to `foreignField`
+  count: true, // And only get the number of docs
+});
+
+UserSchema.virtual("questions", {
+  ref: "History", // The model to use
+  localField: "_id", // Find people where `localField`
+  foreignField: "user", // is equal to `foreignField`
+  count: true, // And only get the number of docs
+});
+
 const UserModel = model("User", UserSchema);
 
 module.exports = UserModel;

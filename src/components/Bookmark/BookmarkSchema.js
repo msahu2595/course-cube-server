@@ -1,18 +1,30 @@
 const { gql } = require("apollo-server");
 
 const BookmarkSchema = gql`
+  enum BookmarkType {
+    VIDEO
+    TEST
+    DOCUMENT
+    QUESTION
+    ANSWER
+  }
+
   extend type Query {
     bookmarks(
       limit: Int
       offset: Int
       filter: BookmarksFilterInput
     ): BookmarkListResponse
-    bookmarkedUsers(limit: Int, offset: Int, refId: ID!): BookmarkedUserListResponse
+    bookmarkedUsers(
+      limit: Int
+      offset: Int
+      refId: ID!
+    ): BookmarkedUserListResponse
   }
 
   extend type Mutation {
-    bookmark(refId: ID!): BookmarkResponse
-    unBookmark(refId: ID!): BookmarkResponse
+    bookmark(refId: ID!, type: BookmarkType!): BookmarkResponse
+    unBookmark(bookmarkId: ID!): BookmarkResponse
   }
 
   input BookmarksFilterInput {
@@ -25,18 +37,11 @@ const BookmarkSchema = gql`
     type: BookmarkType
   }
 
-  enum BookmarkType {
-    VIDEO
-    TEST
-    PDF
-    QUESTION
-    ANSWER
-  }
-
   type Bookmark {
     _id: ID!
     user: User
     refId: ID!
+    type: BookmarkType!
     active: Boolean!
     createdAt: String!
     updatedAt: String!

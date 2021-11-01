@@ -15,7 +15,7 @@ class VideoAPI extends MongoDataSource {
         .skip(offset)
         .limit(limit)
         .populate("likes")
-        // .populate("watches")
+        .populate("watches")
         .exec()
     );
   }
@@ -25,7 +25,7 @@ class VideoAPI extends MongoDataSource {
       this.model
         .findById(videoId)
         .populate("likes")
-        // .populate("watches")
+        .populate("watches")
         .exec()
     );
   }

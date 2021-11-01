@@ -8,7 +8,6 @@ const TestResolver = {
       { dataSources: { testAPI } }
     ) => {
       try {
-        console.log("filter", filter);
         const payload = await testAPI.tests({
           offset,
           limit,

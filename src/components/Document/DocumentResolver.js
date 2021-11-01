@@ -8,7 +8,6 @@ const DocumentResolver = {
       { dataSources: { documentAPI } }
     ) => {
       try {
-        console.log("filter", filter);
         const payload = await documentAPI.documents({
           offset,
           limit,

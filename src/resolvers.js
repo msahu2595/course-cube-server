@@ -7,6 +7,7 @@ const { TestResolver } = require("./components/Test");
 const { DocumentResolver } = require("./components/Document");
 const { QuestionResolver } = require("./components/Question");
 const { AnswerResolver } = require("./components/Answer");
+const { HistoryResolver } = require("./components/History");
 const { VoteResolver } = require("./components/Vote");
 const { LikeResolver } = require("./components/Like");
 const { BookmarkResolver } = require("./components/Bookmark");
@@ -22,6 +23,7 @@ module.exports = [
   FollowResolver,
   QuestionResolver,
   AnswerResolver,
+  HistoryResolver,
   VoteResolver,
   LikeResolver,
   BookmarkResolver,

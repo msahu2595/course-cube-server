@@ -17,6 +17,7 @@ const UserSchema = gql`
 
   type Query {
     user(userId: ID): UserResponse
+    statistics(userId: ID): UserStatisticsResponse
   }
 
   type Mutation {
@@ -73,11 +74,26 @@ const UserSchema = gql`
     ADMIN
   }
 
+  type UserStatistics {
+    _id: ID!
+    videos: NonNegativeInt
+    tests: NonNegativeInt
+    documents: NonNegativeInt
+    questions: NonNegativeInt
+  }
+
   type UserResponse implements Response {
     code: String!
     success: Boolean!
     message: String!
     payload: User
+  }
+
+  type UserStatisticsResponse implements Response {
+    code: String!
+    success: Boolean!
+    message: String!
+    payload: UserStatistics
   }
 `;
 

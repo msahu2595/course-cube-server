@@ -15,6 +15,8 @@ const { QuestionAPI, QuestionModel } = require("./components/Question");
 // Answer API
 const { AnswerAPI, AnswerModel } = require("./components/Answer");
 // Vote API
+const { HistoryAPI, HistoryModel } = require("./components/History");
+// Vote API
 const { VoteAPI, VoteModel } = require("./components/Vote");
 // Like API
 const { LikeAPI, LikeModel } = require("./components/Like");
@@ -34,6 +36,7 @@ const dataSources = () => ({
   testAPI: new TestAPI(TestModel),
   documentAPI: new DocumentAPI(DocumentModel),
   answerAPI: new AnswerAPI(AnswerModel),
+  historyAPI: new HistoryAPI(HistoryModel),
   voteAPI: new VoteAPI(VoteModel),
   likeAPI: new LikeAPI(LikeModel),
   bookmarkAPI: new BookmarkAPI(BookmarkModel),

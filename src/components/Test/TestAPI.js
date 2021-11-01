@@ -15,7 +15,7 @@ class TestAPI extends MongoDataSource {
         .skip(offset)
         .limit(limit)
         .populate("likes")
-        // .populate("attempts")
+        .populate("attempts")
         .exec()
     );
   }
@@ -25,7 +25,7 @@ class TestAPI extends MongoDataSource {
       this.model
         .findById(testId)
         .populate("likes")
-        // .populate("attempts")
+        .populate("attempts")
         .exec()
     );
   }

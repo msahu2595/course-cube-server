@@ -15,7 +15,7 @@ class DocumentAPI extends MongoDataSource {
         .skip(offset)
         .limit(limit)
         .populate("likes")
-        // .populate("reads")
+        .populate("reads")
         .exec()
     );
   }
@@ -25,7 +25,7 @@ class DocumentAPI extends MongoDataSource {
       this.model
         .findById(documentId)
         .populate("likes")
-        // .populate("reads")
+        .populate("reads")
         .exec()
     );
   }

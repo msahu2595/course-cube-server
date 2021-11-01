@@ -9,7 +9,6 @@ const VideoResolver = {
       { dataSources: { videoAPI } }
     ) => {
       try {
-        console.log("filter", filter);
         const payload = await videoAPI.videos({
           offset,
           limit,
