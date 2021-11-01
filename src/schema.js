@@ -5,6 +5,7 @@ const UserSchema = require("./components/User/UserSchema");
 const FollowSchema = require("./components/Follow/FollowSchema");
 const { VideoSchema } = require("./components/Video");
 const { TestSchema } = require("./components/Test");
+const { DocumentSchema } = require("./components/Document");
 const { QuestionSchema } = require("./components/Question");
 const { AnswerSchema } = require("./components/Answer");
 const { VoteSchema } = require("./components/Vote");
@@ -20,6 +21,7 @@ module.exports = [
   FollowSchema,
   VideoSchema,
   TestSchema,
+  DocumentSchema,
   QuestionSchema,
   AnswerSchema,
   VoteSchema,

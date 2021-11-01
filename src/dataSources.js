@@ -8,6 +8,8 @@ const FollowModel = require("./components/Follow/FollowModel");
 const { VideoAPI, VideoModel } = require("./components/Video");
 // Test API
 const { TestAPI, TestModel } = require("./components/Test");
+// Document API
+const { DocumentAPI, DocumentModel } = require("./components/Document");
 // Question API
 const { QuestionAPI, QuestionModel } = require("./components/Question");
 // Answer API
@@ -30,6 +32,7 @@ const dataSources = () => ({
   questionAPI: new QuestionAPI(QuestionModel),
   videoAPI: new VideoAPI(VideoModel),
   testAPI: new TestAPI(TestModel),
+  documentAPI: new DocumentAPI(DocumentModel),
   answerAPI: new AnswerAPI(AnswerModel),
   voteAPI: new VoteAPI(VoteModel),
   likeAPI: new LikeAPI(LikeModel),

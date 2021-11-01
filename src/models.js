@@ -2,6 +2,7 @@ const UserModel = require("./components/User/UserModel");
 const FollowModel = require("./components/Follow/FollowModel");
 const { VideoModel } = require("./components/Video");
 const { TestModel } = require("./components/Test");
+const { DocumentModel } = require("./components/Document");
 const { QuestionModel } = require("./components/Question");
 const { AnswerModel } = require("./components/Answer");
 const { VoteModel } = require("./components/Vote");
@@ -14,6 +15,7 @@ module.exports = {
   FollowModel,
   VideoModel,
   TestModel,
+  DocumentModel,
   QuestionModel,
   AnswerModel,
   VoteModel,

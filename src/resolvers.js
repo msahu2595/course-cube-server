@@ -4,6 +4,7 @@ const UserResolver = require("./components/User/UserResolver");
 const FollowResolver = require("./components/Follow/FollowResolver");
 const { VideoResolver } = require("./components/Video");
 const { TestResolver } = require("./components/Test");
+const { DocumentResolver } = require("./components/Document");
 const { QuestionResolver } = require("./components/Question");
 const { AnswerResolver } = require("./components/Answer");
 const { VoteResolver } = require("./components/Vote");
@@ -17,6 +18,7 @@ module.exports = [
   UserResolver,
   VideoResolver,
   TestResolver,
+  DocumentResolver,
   FollowResolver,
   QuestionResolver,
   AnswerResolver,
