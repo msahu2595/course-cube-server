@@ -87,19 +87,14 @@ const VideoSchema = new Schema(
       minlength: 2,
       maxlength: 1000,
     },
+    validity: { type: Number },
     visible: { type: Boolean, required: true, default: true },
     link: {
       required: true,
       type: String,
       trim: true,
     },
-    urls: [
-      {
-        url: String,
-        duration: String,
-        format: String,
-      },
-    ],
+    urls: { type: Schema.Types.Mixed },
     enable: { type: Boolean, required: true, default: true },
   },
   { timestamps: true, runValidators: true, runSettersOnQuery: true }

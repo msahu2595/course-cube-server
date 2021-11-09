@@ -43,6 +43,7 @@ const TestSchema = gql`
     language: LanguageType!
     index: String
     description: String!
+    validity: PositiveInt
     visible: Boolean
     questions: [TestQuestionInput!]!
     duration: NonNegativeInt!
@@ -73,6 +74,7 @@ const TestSchema = gql`
     language: LanguageType!
     index: String
     description: String!
+    validity: PositiveInt
     visible: Boolean!
     questions: [TestQuestion!]!
     duration: NonNegativeInt!

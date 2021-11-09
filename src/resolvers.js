@@ -2,6 +2,7 @@ const { resolvers: scalarResolvers } = require("graphql-scalars");
 const PasswordResolver = require("./components/Scalars/PasswordResolver");
 const UserResolver = require("./components/User/UserResolver");
 const FollowResolver = require("./components/Follow/FollowResolver");
+const { CourseResolver } = require("./components/Course");
 const { VideoResolver } = require("./components/Video");
 const { TestResolver } = require("./components/Test");
 const { DocumentResolver } = require("./components/Document");
@@ -17,6 +18,7 @@ module.exports = [
   scalarResolvers,
   PasswordResolver,
   UserResolver,
+  CourseResolver,
   VideoResolver,
   TestResolver,
   DocumentResolver,

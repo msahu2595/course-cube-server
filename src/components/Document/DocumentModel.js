@@ -87,6 +87,7 @@ const DocumentSchema = new Schema(
       minlength: 2,
       maxlength: 1000,
     },
+    validity: { type: Number },
     visible: { type: Boolean, required: true, default: true },
     link: {
       required: true,

@@ -1,38 +1,35 @@
 const { gql } = require("apollo-server");
 
-const DocumentSchema = gql`
+const CourseSchema = gql`
   extend type Query {
-    documents(
+    courses(
       offset: Int
       limit: Int
       search: String
-      filter: DocumentsFilterInput
-    ): DocumentListResponse
-    document(documentId: ID!): DocumentResponse
+      filter: CoursesFilterInput
+    ): CourseListResponse
+    course(courseId: ID!): CourseResponse
   }
 
-  input DocumentsFilterInput {
+  input CoursesFilterInput {
     type: PurchaseType
     visible: Boolean
     enable: Boolean
   }
 
-  type DocumentsFilterType {
+  type CoursesFilterType {
     type: PurchaseType
     visible: Boolean
     enable: Boolean
   }
 
   extend type Mutation {
-    addDocument(documentInput: DocumentInput): DocumentResponse
-    editDocument(
-      documentId: ID!
-      documentInput: DocumentInput
-    ): DocumentResponse
-    deleteDocument(documentId: ID!): DocumentResponse
+    addCourse(courseInput: CourseInput): CourseResponse
+    editCourse(courseId: ID!, courseInput: CourseInput): CourseResponse
+    deleteCourse(courseId: ID!): CourseResponse
   }
 
-  input DocumentInput {
+  input CourseInput {
     image: URL!
     subject: String!
     tags: [String!]!
@@ -48,11 +45,10 @@ const DocumentSchema = gql`
     description: String!
     validity: PositiveInt
     visible: Boolean
-    link: URL!
-    pages: NonNegativeInt!
+    syllabus: JSON!
   }
 
-  type Document {
+  type Course {
     _id: ID!
     image: URL!
     subject: String!
@@ -69,32 +65,31 @@ const DocumentSchema = gql`
     description: String!
     validity: PositiveInt
     visible: Boolean!
-    link: URL!
-    pages: NonNegativeInt!
+    syllabus: JSON!
     likes: NonNegativeInt
-    reads: NonNegativeInt
+    sales: NonNegativeInt
     enable: Boolean!
     createdAt: String!
     updatedAt: String!
   }
 
-  type DocumentListResponse implements ListResponse {
+  type CourseListResponse implements ListResponse {
     code: String!
     success: Boolean!
     message: String!
     offset: Int!
     limit: Int!
     search: String
-    filter: DocumentsFilterType
-    payload: [Document]
+    filter: CoursesFilterType
+    payload: [Course]
   }
 
-  type DocumentResponse implements Response {
+  type CourseResponse implements Response {
     code: String!
     success: Boolean!
     message: String!
-    payload: Document
+    payload: Course
   }
 `;
 
-module.exports = DocumentSchema;
+module.exports = CourseSchema;

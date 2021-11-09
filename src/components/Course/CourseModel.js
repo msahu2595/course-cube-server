@@ -1,6 +1,6 @@
 const { Schema, model } = require("mongoose");
 
-const TestSchema = new Schema(
+const CourseSchema = new Schema(
   {
     image: {
       required: true,
@@ -89,44 +89,26 @@ const TestSchema = new Schema(
     },
     validity: { type: Number },
     visible: { type: Boolean, required: true, default: true },
-    questions: [
-      {
-        question: { type: String, required: true },
-        image: String,
-        passage: String,
-        options: [{ type: String, required: true }],
-        mark: { type: Number, required: true },
-        answerIndex: { type: Number, required: true },
-        enable: { type: Boolean, required: true, default: true },
-      },
-    ],
-    duration: {
-      type: Number,
-      required: true,
-    },
-    marks: {
-      type: Number,
-      required: true,
-    },
+    syllabus: { type: Schema.Types.Mixed },
     enable: { type: Boolean, required: true, default: true },
   },
   { timestamps: true, runValidators: true, runSettersOnQuery: true }
 );
 
-TestSchema.virtual("likes", {
+CourseSchema.virtual("likes", {
   ref: "Like", // The model to use
   localField: "_id", // Find people where `localField`
   foreignField: "refId", // is equal to `foreignField`
   count: true, // And only get the number of docs
 });
 
-TestSchema.virtual("attempts", {
-  ref: "History", // The model to use
+CourseSchema.virtual("sales", {
+  ref: "Purchase", // The model to use
   localField: "_id", // Find people where `localField`
   foreignField: "refId", // is equal to `foreignField`
   count: true, // And only get the number of docs
 });
 
-const TestModel = model("Test", TestSchema);
+const CourseModel = model("Course", CourseSchema);
 
-module.exports = TestModel;
+module.exports = CourseModel;

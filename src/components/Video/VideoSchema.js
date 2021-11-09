@@ -59,6 +59,7 @@ const VideoSchema = gql`
     language: LanguageType!
     index: String
     description: String!
+    validity: PositiveInt
     visible: Boolean
     link: URL!
   }
@@ -78,6 +79,7 @@ const VideoSchema = gql`
     language: LanguageType!
     index: String
     description: String!
+    validity: PositiveInt
     visible: Boolean!
     link: Void
     urls: [VideoURL]
@@ -89,7 +91,6 @@ const VideoSchema = gql`
   }
 
   type VideoURL {
-    _id: ID!
     url: URL
     duration: String
     format: String
