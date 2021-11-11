@@ -70,7 +70,6 @@ const DocumentSchema = gql`
     description: String!
     validity: PositiveInt
     visible: Boolean!
-    visible: Boolean!
     link: URL!
     pages: NonNegativeInt!
     likes: NonNegativeInt

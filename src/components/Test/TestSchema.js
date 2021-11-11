@@ -77,7 +77,6 @@ const TestSchema = gql`
     description: String!
     validity: PositiveInt
     visible: Boolean!
-    visible: Boolean!
     questions: [TestQuestion!]!
     duration: NonNegativeInt!
     marks: NonNegativeInt!
