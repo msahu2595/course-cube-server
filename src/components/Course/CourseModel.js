@@ -88,6 +88,7 @@ const CourseSchema = new Schema(
       maxlength: 1000,
     },
     validity: { type: Number },
+    period: { type: String, enum: ["DAY", "WEEK", "MONTH", "YEAR"] },
     visible: { type: Boolean, required: true, default: true },
     syllabus: { type: Schema.Types.Mixed },
     enable: { type: Boolean, required: true, default: true },

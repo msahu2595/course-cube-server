@@ -44,6 +44,7 @@ const CourseSchema = gql`
     index: String
     description: String!
     validity: PositiveInt
+    period: Period
     visible: Boolean
     syllabus: JSON!
   }
@@ -64,6 +65,7 @@ const CourseSchema = gql`
     index: String
     description: String!
     validity: PositiveInt
+    period: Period
     visible: Boolean!
     syllabus: JSON!
     likes: NonNegativeInt

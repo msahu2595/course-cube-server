@@ -47,6 +47,7 @@ const DocumentSchema = gql`
     index: String
     description: String!
     validity: PositiveInt
+    period: Period
     visible: Boolean
     link: URL!
     pages: NonNegativeInt!
@@ -68,6 +69,7 @@ const DocumentSchema = gql`
     index: String
     description: String!
     validity: PositiveInt
+    visible: Boolean!
     visible: Boolean!
     link: URL!
     pages: NonNegativeInt!

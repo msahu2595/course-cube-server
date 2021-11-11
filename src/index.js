@@ -27,12 +27,7 @@ mongoose.connection.on("error", (error) => {
 
 // creates a mongoose connection once. NOT for every request with self executing function.
 (async () => {
-  await mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-    useCreateIndex: true,
-  });
+  await mongoose.connect(process.env.MONGO_URI);
 })();
 
 // the function that sets up the global context for each resolver, using the req

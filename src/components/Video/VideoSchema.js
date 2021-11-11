@@ -16,6 +16,13 @@ const VideoSchema = gql`
     EN
   }
 
+  enum Period {
+    DAY
+    WEEK
+    MONTH
+    YEAR
+  }
+
   extend type Query {
     videos(
       offset: Int
@@ -60,6 +67,7 @@ const VideoSchema = gql`
     index: String
     description: String!
     validity: PositiveInt
+    period: Period
     visible: Boolean
     link: URL!
   }
@@ -80,6 +88,7 @@ const VideoSchema = gql`
     index: String
     description: String!
     validity: PositiveInt
+    period: Period
     visible: Boolean!
     link: Void
     urls: [VideoURL]

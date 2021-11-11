@@ -44,6 +44,7 @@ const TestSchema = gql`
     index: String
     description: String!
     validity: PositiveInt
+    period: Period
     visible: Boolean
     questions: [TestQuestionInput!]!
     duration: NonNegativeInt!
@@ -75,6 +76,7 @@ const TestSchema = gql`
     index: String
     description: String!
     validity: PositiveInt
+    visible: Boolean!
     visible: Boolean!
     questions: [TestQuestion!]!
     duration: NonNegativeInt!
