@@ -9,25 +9,51 @@ class VideoAPI extends MongoDataSource {
     if (search) {
       filter["$text"] = { $search: search };
     }
-    return (
-      this.model
-        .find(filter)
-        .skip(offset)
-        .limit(limit)
-        .populate("likes")
-        .populate("watches")
-        .exec()
-    );
+    return this.model
+      .find(filter)
+      .skip(offset)
+      .limit(limit)
+      .populate([
+        {
+          path: "purchased",
+          match: { user: this.context.user._id },
+        },
+        "likes",
+        "watches",
+      ])
+      .exec();
   }
 
   video({ videoId }) {
-    return (
-      this.model
-        .findById(videoId)
-        .populate("likes")
-        .populate("watches")
-        .exec()
-    );
+    return this.model
+      .findById(videoId)
+      .populate([
+        {
+          path: "courses",
+          populate: [
+            {
+              path: "purchased",
+              match: { user: this.context.user._id },
+              model: "Purchase",
+            },
+            {
+              path: "likes",
+              model: "Like",
+            },
+            {
+              path: "sales",
+              model: "Purchase",
+            },
+          ],
+        },
+        {
+          path: "purchased",
+          match: { user: this.context.user._id },
+        },
+        "likes",
+        "watches",
+      ])
+      .exec();
   }
 
   addVideo({ videoInput, urls }) {

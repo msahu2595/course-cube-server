@@ -92,8 +92,11 @@ const VideoSchema = gql`
     visible: Boolean!
     link: Void
     urls: [VideoURL]
+    courses: [Course]
+    purchased: NonNegativeInt
     likes: NonNegativeInt
     watches: NonNegativeInt
+    access: Boolean!
     enable: Boolean!
     createdAt: String!
     updatedAt: String!

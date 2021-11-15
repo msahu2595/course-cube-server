@@ -4,6 +4,7 @@ const { CourseModel } = require("./components/Course");
 const { VideoModel } = require("./components/Video");
 const { TestModel } = require("./components/Test");
 const { DocumentModel } = require("./components/Document");
+const { PurchaseModel } = require("./components/Purchase");
 const { QuestionModel } = require("./components/Question");
 const { AnswerModel } = require("./components/Answer");
 const { HistoryModel } = require("./components/History");
@@ -19,6 +20,7 @@ module.exports = {
   VideoModel,
   TestModel,
   DocumentModel,
+  PurchaseModel,
   QuestionModel,
   AnswerModel,
   HistoryModel,
@@ -27,4 +29,3 @@ module.exports = {
   BookmarkModel,
   NotificationModel,
 };
-

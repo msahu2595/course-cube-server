@@ -14,15 +14,16 @@ class CourseAPI extends MongoDataSource {
       .skip(offset)
       .limit(limit)
       .populate("likes")
-      // .populate("sales")
+      .populate("sales")
       .exec();
   }
 
   course({ courseId }) {
     return this.model
       .findById(courseId)
+      .populate("purchased")
       .populate("likes")
-      // .populate("sales")
+      .populate("sales")
       .exec();
   }
 

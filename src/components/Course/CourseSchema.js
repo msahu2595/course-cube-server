@@ -68,6 +68,7 @@ const CourseSchema = gql`
     period: Period
     visible: Boolean!
     syllabus: JSON!
+    purchased: NonNegativeInt
     likes: NonNegativeInt
     sales: NonNegativeInt
     enable: Boolean!

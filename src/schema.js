@@ -7,6 +7,7 @@ const { CourseSchema } = require("./components/Course");
 const { VideoSchema } = require("./components/Video");
 const { TestSchema } = require("./components/Test");
 const { DocumentSchema } = require("./components/Document");
+const { PurchaseSchema } = require("./components/Purchase");
 const { QuestionSchema } = require("./components/Question");
 const { AnswerSchema } = require("./components/Answer");
 const { HistorySchema } = require("./components/History");
@@ -25,6 +26,7 @@ module.exports = [
   VideoSchema,
   TestSchema,
   DocumentSchema,
+  PurchaseSchema,
   QuestionSchema,
   AnswerSchema,
   HistorySchema,

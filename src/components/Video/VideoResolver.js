@@ -2,6 +2,21 @@ const { UserInputError } = require("apollo-server");
 const getVideoUrl = require("../../libs/getVideoUrl");
 
 const VideoResolver = {
+  Video: {
+    access: (video) => {
+      if (video.paid) {
+        const purchaseCounts = video.courses.reduce(
+          (purchaseCount, course) => purchaseCount + course.purchased,
+          video.purchased
+        );
+        if (!purchaseCounts) {
+          video.urls = null;
+          return false;
+        }
+      }
+      return true;
+    },
+  },
   Query: {
     videos: async (
       _,
