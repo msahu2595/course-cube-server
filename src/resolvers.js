@@ -6,6 +6,7 @@ const { CourseResolver } = require("./components/Course");
 const { VideoResolver } = require("./components/Video");
 const { TestResolver } = require("./components/Test");
 const { DocumentResolver } = require("./components/Document");
+const { HeadlineResolver } = require("./components/Headline");
 const { PurchaseResolver } = require("./components/Purchase");
 const { QuestionResolver } = require("./components/Question");
 const { AnswerResolver } = require("./components/Answer");
@@ -23,6 +24,7 @@ module.exports = [
   VideoResolver,
   TestResolver,
   DocumentResolver,
+  HeadlineResolver,
   PurchaseResolver,
   FollowResolver,
   QuestionResolver,

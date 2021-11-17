@@ -12,6 +12,8 @@ const { VideoAPI, VideoModel } = require("./components/Video");
 const { TestAPI, TestModel } = require("./components/Test");
 // Document API
 const { DocumentAPI, DocumentModel } = require("./components/Document");
+// Document API
+const { HeadlineAPI, HeadlineModel } = require("./components/Headline");
 // Purchase API
 const { PurchaseAPI, PurchaseModel } = require("./components/Purchase");
 // Question API
@@ -40,6 +42,7 @@ const dataSources = () => ({
   videoAPI: new VideoAPI(VideoModel),
   testAPI: new TestAPI(TestModel),
   documentAPI: new DocumentAPI(DocumentModel),
+  headlineAPI: new HeadlineAPI(HeadlineModel),
   purchaseAPI: new PurchaseAPI(PurchaseModel),
   answerAPI: new AnswerAPI(AnswerModel),
   historyAPI: new HistoryAPI(HistoryModel),

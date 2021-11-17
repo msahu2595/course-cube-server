@@ -47,10 +47,10 @@ const context = async ({ req }) => {
   return {
     user: {
       _id: "6156fda710996d3397629c2d",
-      email: "madankarvikram@gmail.com",
+      email: "any_one@gmail.com",
       password: null,
-      firstName: "Vikram",
-      lastName: "Madankar",
+      firstName: "Any",
+      lastName: "One",
       followers: 2,
       followings: 0,
       acceptTnC: true,

@@ -4,6 +4,7 @@ const { CourseModel } = require("./components/Course");
 const { VideoModel } = require("./components/Video");
 const { TestModel } = require("./components/Test");
 const { DocumentModel } = require("./components/Document");
+const { HeadlineModel } = require("./components/Headline");
 const { PurchaseModel } = require("./components/Purchase");
 const { QuestionModel } = require("./components/Question");
 const { AnswerModel } = require("./components/Answer");
@@ -20,6 +21,7 @@ module.exports = {
   VideoModel,
   TestModel,
   DocumentModel,
+  HeadlineModel,
   PurchaseModel,
   QuestionModel,
   AnswerModel,
