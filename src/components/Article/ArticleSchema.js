@@ -17,6 +17,7 @@ const ArticleSchema = gql`
     title: String!
     description: String!
     tags: [String!]
+    refs: [URL!]
   }
 
   type Article {
@@ -25,6 +26,7 @@ const ArticleSchema = gql`
     title: String!
     description: String!
     tags: [String!]
+    refs: [URL!]
     likes: NonNegativeInt
     enable: Boolean!
     createdAt: String!

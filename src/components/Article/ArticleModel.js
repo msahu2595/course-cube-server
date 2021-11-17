@@ -25,6 +25,13 @@ const ArticleSchema = new Schema(
         lowercase: true,
       },
     ],
+    refs: [
+      {
+        type: String,
+        trim: true,
+        lowercase: true,
+      },
+    ],
     enable: { type: Boolean, required: true, default: true },
   },
   { timestamps: true, runValidators: true, runSettersOnQuery: true }
