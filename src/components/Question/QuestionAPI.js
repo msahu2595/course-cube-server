@@ -14,7 +14,7 @@ class QuestionAPI extends MongoDataSource {
       .skip(offset)
       .limit(limit)
       .populate("user")
-      .populate("votes")
+      .populate("likes")
       .populate("answers")
       .populate("views")
       .exec();
@@ -24,7 +24,7 @@ class QuestionAPI extends MongoDataSource {
     return this.model
       .findById(questionId)
       .populate("user")
-      .populate("votes")
+      .populate("likes")
       .populate("answers")
       .populate("views")
       .exec();

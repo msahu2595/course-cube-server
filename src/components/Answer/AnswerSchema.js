@@ -46,7 +46,7 @@ const AnswerSchema = gql`
     link: URL
     route: String
     params: JSONObject
-    votes: Int
+    likes: Int
     message: String
     verified: Boolean!
     edited: Boolean!

@@ -7,7 +7,7 @@ class AnswerAPI extends MongoDataSource {
       .skip(offset)
       .limit(limit)
       .populate("user")
-      .populate("votes")
+      .populate("likes")
       .exec();
   }
 
@@ -22,7 +22,7 @@ class AnswerAPI extends MongoDataSource {
       .limit(limit)
       .populate("user")
       .populate("question")
-      .populate("votes")
+      .populate("likes")
       .exec();
   }
 
@@ -31,7 +31,7 @@ class AnswerAPI extends MongoDataSource {
       .findById(answerId)
       .populate("user")
       .populate("question")
-      .populate("votes")
+      .populate("likes")
       .exec();
   }
 

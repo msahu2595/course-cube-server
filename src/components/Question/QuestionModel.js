@@ -69,8 +69,8 @@ const QuestionSchema = new Schema(
   { timestamps: true, runValidators: true, runSettersOnQuery: true }
 );
 
-QuestionSchema.virtual("votes", {
-  ref: "Vote", // The model to use
+QuestionSchema.virtual("likes", {
+  ref: "Like", // The model to use
   localField: "_id", // Find people where `localField`
   foreignField: "refId", // is equal to `foreignField`
   count: true, // And only get the number of docs

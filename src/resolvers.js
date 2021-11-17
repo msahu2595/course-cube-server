@@ -7,11 +7,11 @@ const { VideoResolver } = require("./components/Video");
 const { TestResolver } = require("./components/Test");
 const { DocumentResolver } = require("./components/Document");
 const { HeadlineResolver } = require("./components/Headline");
+const { ArticleResolver } = require("./components/Article");
 const { PurchaseResolver } = require("./components/Purchase");
 const { QuestionResolver } = require("./components/Question");
 const { AnswerResolver } = require("./components/Answer");
 const { HistoryResolver } = require("./components/History");
-const { VoteResolver } = require("./components/Vote");
 const { LikeResolver } = require("./components/Like");
 const { BookmarkResolver } = require("./components/Bookmark");
 const { NotificationResolver } = require("./components/Notification");
@@ -25,12 +25,12 @@ module.exports = [
   TestResolver,
   DocumentResolver,
   HeadlineResolver,
+  ArticleResolver,
   PurchaseResolver,
   FollowResolver,
   QuestionResolver,
   AnswerResolver,
   HistoryResolver,
-  VoteResolver,
   LikeResolver,
   BookmarkResolver,
   NotificationResolver,

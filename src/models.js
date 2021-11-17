@@ -5,11 +5,11 @@ const { VideoModel } = require("./components/Video");
 const { TestModel } = require("./components/Test");
 const { DocumentModel } = require("./components/Document");
 const { HeadlineModel } = require("./components/Headline");
+const { ArticleModel } = require("./components/Article");
 const { PurchaseModel } = require("./components/Purchase");
 const { QuestionModel } = require("./components/Question");
 const { AnswerModel } = require("./components/Answer");
 const { HistoryModel } = require("./components/History");
-const { VoteModel } = require("./components/Vote");
 const { LikeModel } = require("./components/Like");
 const { BookmarkModel } = require("./components/Bookmark");
 const { NotificationModel } = require("./components/Notification");
@@ -22,11 +22,11 @@ module.exports = {
   TestModel,
   DocumentModel,
   HeadlineModel,
+  ArticleModel,
   PurchaseModel,
   QuestionModel,
   AnswerModel,
   HistoryModel,
-  VoteModel,
   LikeModel,
   BookmarkModel,
   NotificationModel,

@@ -12,8 +12,10 @@ const { VideoAPI, VideoModel } = require("./components/Video");
 const { TestAPI, TestModel } = require("./components/Test");
 // Document API
 const { DocumentAPI, DocumentModel } = require("./components/Document");
-// Document API
+// Headline API
 const { HeadlineAPI, HeadlineModel } = require("./components/Headline");
+// Article API
+const { ArticleAPI, ArticleModel } = require("./components/Article");
 // Purchase API
 const { PurchaseAPI, PurchaseModel } = require("./components/Purchase");
 // Question API
@@ -22,8 +24,6 @@ const { QuestionAPI, QuestionModel } = require("./components/Question");
 const { AnswerAPI, AnswerModel } = require("./components/Answer");
 // Vote API
 const { HistoryAPI, HistoryModel } = require("./components/History");
-// Vote API
-const { VoteAPI, VoteModel } = require("./components/Vote");
 // Like API
 const { LikeAPI, LikeModel } = require("./components/Like");
 // Bookmark API
@@ -43,10 +43,10 @@ const dataSources = () => ({
   testAPI: new TestAPI(TestModel),
   documentAPI: new DocumentAPI(DocumentModel),
   headlineAPI: new HeadlineAPI(HeadlineModel),
+  articleAPI: new ArticleAPI(ArticleModel),
   purchaseAPI: new PurchaseAPI(PurchaseModel),
   answerAPI: new AnswerAPI(AnswerModel),
   historyAPI: new HistoryAPI(HistoryModel),
-  voteAPI: new VoteAPI(VoteModel),
   likeAPI: new LikeAPI(LikeModel),
   bookmarkAPI: new BookmarkAPI(BookmarkModel),
   notificationAPI: new NotificationAPI(NotificationModel),

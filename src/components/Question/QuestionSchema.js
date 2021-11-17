@@ -66,7 +66,7 @@ const QuestionSchema = gql`
     link: URL
     route: String
     params: JSONObject
-    votes: Int
+    likes: Int
     answers: Int
     views: Int
     message: String
