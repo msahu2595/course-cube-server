@@ -22,25 +22,20 @@ const UserSchema = gql`
   }
 
   type Mutation {
-    logIn(
-      firstName: String!
-      lastName: String!
-      email: EmailAddress!
-      password: Password!
-      acceptTnC: Boolean!
-    ): UserResponse
+    googleLogIn(token: String!): UserResponse
+    # appleLogIn(token: String!): UserResponse
     assignRole(userId: ID!, role: Role!): UserResponse
   }
 
   type User {
     _id: ID!
     email: EmailAddress!
-    firstName: String! @capitalize
-    lastName: String! @capitalize
+    emailVerified: Boolean!
     mobile: PhoneNumber
+    mobileVerified: Boolean!
+    fullName: String @capitalize
+    picture: URL
     gender: Gender
-    image: URL
-    password: Void
     about: String
     education: String
     workAt: String
@@ -52,12 +47,13 @@ const UserSchema = gql`
     pincode: PostalCode
     country: String
     state: String
-    city: String
+    district: String
+    cityVillage: String
     area: String
     street: String
     landmark: String
     acceptTnC: Boolean!
-    role: Role
+    role: Role!
     followers: Int
     followings: Int
     history: Int

@@ -1,4 +1,5 @@
 const { UserInputError } = require("apollo-server");
+const verifyIdToken = require("../../libs/verifyIdToken");
 
 const UserResolver = {
   ListResponse: {
@@ -59,19 +60,19 @@ const UserResolver = {
     },
   },
   Mutation: {
-    logIn: async (
-      _,
-      { email, password, image, firstName, lastName, acceptTnC },
-      { dataSources: { userAPI } }
-    ) => {
+    googleLogIn: async (_, { token }, { dataSources: { userAPI } }) => {
       try {
+        const {
+          email,
+          email_verified: emailVerified,
+          name: fullName,
+          picture,
+        } = await verifyIdToken(token);
         const payload = await userAPI.logIn({
           email,
-          password,
-          image,
-          firstName,
-          lastName,
-          acceptTnC,
+          emailVerified,
+          fullName,
+          picture,
         });
         console.log({ payload });
         return {
@@ -81,6 +82,7 @@ const UserResolver = {
           payload,
         };
       } catch (error) {
+        console.log("error ==> ", error.message);
         throw new UserInputError(error.message, error.extensions.code);
       }
     },

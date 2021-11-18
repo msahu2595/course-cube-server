@@ -42,18 +42,23 @@ class UserAPI extends MongoDataSource {
       .exec();
   }
 
-  logIn({ email, password, image, firstName, lastName, acceptTnC }) {
-    return this.model
-      .findOneAndUpdate(
-        {
-          email,
-        },
-        { password, image, firstName, lastName, acceptTnC },
-        { upsert: true, new: true }
-      )
-      .populate("followers")
-      .populate("followings")
-      .exec();
+  async logIn({ email, emailVerified, fullName, picture }) {
+    console.log({ email, emailVerified, fullName, picture });
+    const payload = await this.findByFields({
+      email,
+    });
+    if (!payload.length) {
+      return this.model
+        .findOneAndUpdate(
+          {
+            email,
+          },
+          { emailVerified, fullName, picture },
+          { upsert: true, new: true }
+        )
+        .exec();
+    }
+    return payload[0];
   }
 
   assignRole({ userId, role }) {
@@ -65,8 +70,6 @@ class UserAPI extends MongoDataSource {
         { role },
         { new: true }
       )
-      .populate("followers")
-      .populate("followings")
       .exec();
   }
 }
