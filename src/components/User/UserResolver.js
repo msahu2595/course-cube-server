@@ -1,5 +1,6 @@
 const { UserInputError } = require("apollo-server");
 const verifyIdToken = require("../../libs/verifyIdToken");
+const { createAccessToken } = require("../../libs/manageToken");
 
 const UserResolver = {
   ListResponse: {
@@ -13,7 +14,8 @@ const UserResolver = {
     },
   },
   Query: {
-    user: async (_, { userId }, { dataSources: { userAPI } }) => {
+    user: async (_, { userId }, { user, dataSources: { userAPI } }) => {
+      if (!user) throw new Error("Authentication token required.");
       try {
         const payload = await userAPI.user({ userId });
         return {
@@ -74,11 +76,12 @@ const UserResolver = {
           fullName,
           picture,
         });
-        console.log({ payload });
+        const accessToken = createAccessToken(payload.toJSON());
         return {
           code: "200",
           success: true,
           message: "You are successfully registered.",
+          token: accessToken,
           payload,
         };
       } catch (error) {

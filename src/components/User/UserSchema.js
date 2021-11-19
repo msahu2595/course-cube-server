@@ -93,6 +93,7 @@ const UserSchema = gql`
     code: String!
     success: Boolean!
     message: String!
+    token: String
     payload: User
   }
 
