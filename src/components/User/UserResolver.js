@@ -1,6 +1,9 @@
 const { UserInputError } = require("apollo-server");
 const verifyIdToken = require("../../libs/verifyIdToken");
-const { createAccessToken } = require("../../libs/manageToken");
+const {
+  createAccessToken,
+  createRefreshToken,
+} = require("../../libs/manageToken");
 
 const UserResolver = {
   ListResponse: {
@@ -14,7 +17,7 @@ const UserResolver = {
     },
   },
   Query: {
-    user: async (_, { userId }, { user, dataSources: { userAPI } }) => {
+    user: async (_, { userId }, { user, token, dataSources: { userAPI } }) => {
       if (!user) throw new Error("Authentication token required.");
       try {
         const payload = await userAPI.user({ userId });
@@ -22,6 +25,7 @@ const UserResolver = {
           code: "200",
           success: true,
           message: "Successful",
+          token,
           payload,
         };
       } catch (error) {
@@ -62,7 +66,7 @@ const UserResolver = {
     },
   },
   Mutation: {
-    googleLogIn: async (_, { token }, { dataSources: { userAPI } }) => {
+    googleLogIn: async (_, { token }, { redis, dataSources: { userAPI } }) => {
       try {
         const {
           email,
@@ -77,11 +81,14 @@ const UserResolver = {
           picture,
         });
         const accessToken = createAccessToken(payload.toJSON());
+        const refreshToken = createRefreshToken(payload.toJSON());
+        redis.set(payload._id, refreshToken, "ex", 604800000);
         return {
           code: "200",
           success: true,
           message: "You are successfully registered.",
           token: accessToken,
+          refresh: refreshToken,
           payload,
         };
       } catch (error) {
@@ -102,12 +109,25 @@ const UserResolver = {
           userId,
           role,
         });
-        console.log({ payload });
         return {
           code: "200",
           success: true,
           message: `Your role changed to "${role}".`,
           payload,
+        };
+      } catch (error) {
+        throw new UserInputError(error.message, error.extensions.code);
+      }
+    },
+    logout: async (_, __, { user, redis }) => {
+      try {
+        const res = await redis.del(user._id);
+        return {
+          code: "200",
+          success: true,
+          message: res
+            ? "You are successfully logged out."
+            : "You are already logged out.",
         };
       } catch (error) {
         throw new UserInputError(error.message, error.extensions.code);

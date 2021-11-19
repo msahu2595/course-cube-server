@@ -1,5 +1,6 @@
 require("dotenv").config();
 
+const Redis = require("ioredis");
 const mongoose = require("mongoose");
 const { ApolloServer } = require("apollo-server");
 
@@ -8,7 +9,17 @@ const resolvers = require("./resolvers");
 const schemaDirectives = require("./schemaDirectives");
 const dataSources = require("./dataSources");
 
-const { verifyAccessToken } = require("./libs/manageToken");
+const {
+  verifyAccessToken,
+  verifyRefreshToken,
+  createAccessToken,
+} = require("./libs/manageToken");
+
+const redis = new Redis({
+  host: process.env.REDIS_HOST, // Redis host
+  port: process.env.REDIS_PORT, // Redis port
+  password: process.env.REDIS_PASSWORD,
+});
 
 // Listener Emitted when Mongoose successfully makes its initial connection to the MongoDB server, or when Mongoose reconnects after losing connectivity.
 mongoose.connection.on("connected", () => {
@@ -35,12 +46,28 @@ mongoose.connection.on("error", (error) => {
 // the function that sets up the global context for each resolver, using the req
 // eslint-disable-next-line no-unused-vars
 const context = async ({ req }) => {
-  // simple auth check on every request
-  const auth = req.headers["authorization"];
-  const token = auth && auth.split(" ")[1];
-  if (token == null) return { user: null };
-  const user = verifyAccessToken(token);
-  return { user };
+  try {
+    // simple auth check on every request
+    const auth = req.headers["authorization"];
+    const refreshToken = req.headers["refresh-token"];
+    const accessToken = auth && auth.split(" ")[1];
+    if (accessToken == null) return { user: null, redis };
+    const user = verifyAccessToken(accessToken);
+    if (!user) {
+      // eslint-disable-next-line no-unused-vars
+      const { iat, ...verifiedUser } = verifyRefreshToken(refreshToken);
+      const savedRefreshedToken = await redis.get(verifiedUser._id);
+      if (savedRefreshedToken === refreshToken) {
+        const newAccessToken = createAccessToken(verifiedUser);
+        return { user: verifiedUser, token: newAccessToken, redis };
+      }
+      throw new Error("Refresh token expired.");
+    }
+    return { user, token: accessToken, redis };
+  } catch (error) {
+    console.log(error);
+    throw new Error(error.message || "You have to logged in again.");
+  }
 };
 
 // Set up Apollo Server

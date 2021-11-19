@@ -25,6 +25,7 @@ const UserSchema = gql`
     googleLogIn(token: String!): UserResponse
     # appleLogIn(token: String!): UserResponse
     assignRole(userId: ID!, role: Role!): UserResponse
+    logout: UserResponse
   }
 
   type User {
@@ -94,6 +95,7 @@ const UserSchema = gql`
     success: Boolean!
     message: String!
     token: String
+    refresh: String
     payload: User
   }
 
