@@ -63,13 +63,13 @@ const VideoResolver = {
   Mutation: {
     addVideo: async (_, { videoInput }, { dataSources: { videoAPI } }) => {
       try {
-        const { urls, stderr } = await getVideoUrl(videoInput?.link);
-        if (stderr) {
-          throw new UserInputError(
-            "Your link is not valid, please check & try again.",
-            422
-          );
-        }
+        const output = await getVideoUrl(videoInput?.link);
+        const [url1, duration1, format1, url2, duration2, format2] =
+          output.split("\n");
+        const urls = [
+          { url: url1, duration: duration1, format: format1 },
+          { url: url2, duration: duration2, format: format2 },
+        ];
         const payload = await videoAPI.addVideo({ videoInput, urls });
         return {
           code: "200",
@@ -88,13 +88,13 @@ const VideoResolver = {
       { dataSources: { videoAPI } }
     ) => {
       try {
-        const { urls, stderr } = await getVideoUrl(videoInput?.link);
-        if (stderr) {
-          throw new UserInputError(
-            "Your link is not valid, please check & try again.",
-            422
-          );
-        }
+        const output = await getVideoUrl(videoInput?.link);
+        const [url1, duration1, format1, url2, duration2, format2] =
+          output.split("\n");
+        const urls = [
+          { url: url1, duration: duration1, format: format1 },
+          { url: url2, duration: duration2, format: format2 },
+        ];
         const payload = await videoAPI.editVideo({
           videoId,
           videoInput,
@@ -113,10 +113,13 @@ const VideoResolver = {
     refreshVideo: async (_, { videoId }, { dataSources: { videoAPI } }) => {
       try {
         const video = await videoAPI.video({ videoId });
-        const { urls, stderr } = await getVideoUrl(video?.link);
-        if (stderr) {
-          throw new UserInputError(stderr, 422);
-        }
+        const output = await getVideoUrl(video?.link);
+        const [url1, duration1, format1, url2, duration2, format2] =
+          output.split("\n");
+        const urls = [
+          { url: url1, duration: duration1, format: format1 },
+          { url: url2, duration: duration2, format: format2 },
+        ];
         const payload = await videoAPI.refreshVideo({
           videoId,
           urls,
