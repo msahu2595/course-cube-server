@@ -87,6 +87,7 @@ const PurchaseSchema = gql`
     code: String!
     success: Boolean!
     message: String!
+    token: String
     limit: Int!
     offset: Int!
     filter: PurchasesFilterType
@@ -97,6 +98,7 @@ const PurchaseSchema = gql`
     code: String!
     success: Boolean!
     message: String!
+    token: String
     limit: Int!
     offset: Int!
     refId: ID!
@@ -107,6 +109,7 @@ const PurchaseSchema = gql`
     code: String!
     success: Boolean!
     message: String!
+    token: String
     payload: Purchase
   }
 `;

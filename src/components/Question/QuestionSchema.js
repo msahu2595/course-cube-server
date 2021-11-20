@@ -81,6 +81,7 @@ const QuestionSchema = gql`
     code: String!
     success: Boolean!
     message: String!
+    token: String
     limit: Int!
     offset: Int!
     search: String
@@ -92,6 +93,7 @@ const QuestionSchema = gql`
     code: String!
     success: Boolean!
     message: String!
+    token: String
     payload: Question
   }
 `;

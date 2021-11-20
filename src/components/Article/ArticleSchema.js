@@ -37,6 +37,7 @@ const ArticleSchema = gql`
     code: String!
     success: Boolean!
     message: String!
+    token: String
     offset: Int!
     limit: Int!
     payload: [Article]
@@ -46,6 +47,7 @@ const ArticleSchema = gql`
     code: String!
     success: Boolean!
     message: String!
+    token: String
     payload: Article
   }
 `;

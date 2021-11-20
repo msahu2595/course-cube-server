@@ -46,6 +46,7 @@ const HistorySchema = gql`
     code: String!
     success: Boolean!
     message: String!
+    token: String
     limit: Int!
     offset: Int!
     filter: HistoryFilterType
@@ -56,6 +57,7 @@ const HistorySchema = gql`
     code: String!
     success: Boolean!
     message: String!
+    token: String
     limit: Int!
     offset: Int!
     refId: ID!
@@ -66,6 +68,7 @@ const HistorySchema = gql`
     code: String!
     success: Boolean!
     message: String!
+    token: String
     payload: History
   }
 `;

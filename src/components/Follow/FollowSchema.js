@@ -24,6 +24,7 @@ const FollowSchema = gql`
     code: String!
     success: Boolean!
     message: String!
+    token: String
     limit: Int!
     offset: Int!
     payload: [Follow]
@@ -33,6 +34,7 @@ const FollowSchema = gql`
     code: String!
     success: Boolean!
     message: String!
+    token: String
     limit: Int!
     offset: Int!
     payload: [Follow]
@@ -42,6 +44,7 @@ const FollowSchema = gql`
     code: String!
     success: Boolean!
     message: String!
+    token: String
     payload: Follow
   }
 `;

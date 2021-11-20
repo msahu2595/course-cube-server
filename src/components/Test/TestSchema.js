@@ -102,6 +102,7 @@ const TestSchema = gql`
     code: String!
     success: Boolean!
     message: String!
+    token: String
     offset: Int!
     limit: Int!
     search: String
@@ -113,6 +114,7 @@ const TestSchema = gql`
     code: String!
     success: Boolean!
     message: String!
+    token: String
     payload: Test
   }
 `;

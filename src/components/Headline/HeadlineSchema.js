@@ -38,6 +38,7 @@ const HeadlineSchema = gql`
     code: String!
     success: Boolean!
     message: String!
+    token: String
     offset: Int!
     limit: Int!
     payload: [Headline]
@@ -47,6 +48,7 @@ const HeadlineSchema = gql`
     code: String!
     success: Boolean!
     message: String!
+    token: String
     payload: Headline
   }
 `;
