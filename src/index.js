@@ -63,7 +63,7 @@ const context = async ({ req }) => {
       }
       throw new Error("Refresh token expired.");
     }
-    return { user, token: accessToken, redis };
+    return { user, redis };
   } catch (error) {
     console.log(error);
     throw new Error(error.message || "You have to logged in again.");

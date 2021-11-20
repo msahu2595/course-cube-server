@@ -17,7 +17,7 @@ const UserResolver = {
     },
   },
   Query: {
-    user: async (_, { userId }, { user, token, dataSources: { userAPI } }) => {
+    user: async (_, { userId }, { dataSources: { userAPI }, user, token }) => {
       if (!user) throw new Error("Authentication token required.");
       try {
         const payload = await userAPI.user({ userId });
@@ -32,13 +32,19 @@ const UserResolver = {
         throw new UserInputError(error.message, error.extensions.code);
       }
     },
-    statistics: async (_, { userId }, { dataSources: { userAPI } }) => {
+    statistics: async (
+      _,
+      { userId },
+      { dataSources: { userAPI }, user, token }
+    ) => {
+      if (!user) throw new Error("Authentication token required.");
       try {
         const payload = await userAPI.statistics({ userId });
         return {
           code: "200",
           success: true,
           message: "Successful",
+          token,
           payload,
         };
       } catch (error) {
@@ -48,14 +54,16 @@ const UserResolver = {
     leaderboard: async (
       _,
       { offset = 0, limit = 10 },
-      { dataSources: { userAPI } }
+      { dataSources: { userAPI }, user, token }
     ) => {
+      if (!user) throw new Error("Authentication token required.");
       try {
         const payload = await userAPI.leaderboard({ offset, limit });
         return {
           code: "200",
           success: true,
           message: "Successful",
+          token,
           offset,
           limit,
           payload,
@@ -66,19 +74,28 @@ const UserResolver = {
     },
   },
   Mutation: {
-    googleLogIn: async (_, { token }, { redis, dataSources: { userAPI } }) => {
+    googleLogIn: async (
+      _,
+      { idToken, acceptTnC, FCMToken },
+      { redis, dataSources: { userAPI } }
+    ) => {
       try {
+        if (!acceptTnC)
+          throw new UserInputError("Please accept terms & conditions.");
         const {
           email,
           email_verified: emailVerified,
           name: fullName,
           picture,
-        } = await verifyIdToken(token);
+        } = await verifyIdToken(idToken);
         const payload = await userAPI.logIn({
           email,
           emailVerified,
           fullName,
           picture,
+          acceptTnC,
+          FCMToken,
+          platform: "android",
         });
         const accessToken = createAccessToken(payload.toJSON());
         const refreshToken = createRefreshToken(payload.toJSON());
@@ -96,15 +113,39 @@ const UserResolver = {
         throw new UserInputError(error.message, error.extensions.code);
       }
     },
+    editProfile: async (
+      _,
+      { userInput },
+      { dataSources: { userAPI }, user }
+    ) => {
+      if (!user) throw new Error("Authentication token required.");
+      try {
+        const payload = await userAPI.editProfile({
+          userInput,
+        });
+        const accessToken = createAccessToken(payload.toJSON());
+        const refreshToken = createRefreshToken(payload.toJSON());
+        return {
+          code: "200",
+          success: true,
+          message: "Your profile edited successfully.",
+          token: accessToken,
+          refresh: refreshToken,
+          payload,
+        };
+      } catch (error) {
+        throw new UserInputError(error.message, error.extensions.code);
+      }
+    },
     assignRole: async (
       _,
       { userId, role },
-      { dataSources: { userAPI }, user: { role: contextUserRole } }
+      { dataSources: { userAPI }, user, token }
     ) => {
+      if (user?.role !== "ADMIN") {
+        throw new UserInputError("You are not authorized.");
+      }
       try {
-        if (contextUserRole !== "ADMIN") {
-          throw new UserInputError("You are not authorized.");
-        }
         const payload = await userAPI.assignRole({
           userId,
           role,
@@ -113,6 +154,7 @@ const UserResolver = {
           code: "200",
           success: true,
           message: `Your role changed to "${role}".`,
+          token,
           payload,
         };
       } catch (error) {

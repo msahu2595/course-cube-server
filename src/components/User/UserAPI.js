@@ -42,8 +42,15 @@ class UserAPI extends MongoDataSource {
       .exec();
   }
 
-  async logIn({ email, emailVerified, fullName, picture }) {
-    console.log({ email, emailVerified, fullName, picture });
+  async logIn({
+    email,
+    emailVerified,
+    fullName,
+    picture,
+    acceptTnC,
+    FCMToken,
+    platform,
+  }) {
     const payload = await this.findByFields({
       email,
     });
@@ -53,12 +60,31 @@ class UserAPI extends MongoDataSource {
           {
             email,
           },
-          { emailVerified, fullName, picture },
+          {
+            emailVerified,
+            fullName,
+            picture,
+            acceptTnC,
+            FCMToken,
+            platform,
+          },
           { upsert: true, new: true }
         )
         .exec();
     }
     return payload[0];
+  }
+
+  editProfile({ userInput }) {
+    return this.model
+      .findOneAndUpdate(
+        {
+          _id: this.context.user._id,
+        },
+        userInput,
+        { new: true }
+      )
+      .exec();
   }
 
   assignRole({ userId, role }) {

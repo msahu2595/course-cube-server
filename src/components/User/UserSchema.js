@@ -5,6 +5,7 @@ const UserSchema = gql`
     code: String!
     success: Boolean!
     message: String!
+    token: String
     limit: Int!
     offset: Int!
   }
@@ -13,6 +14,7 @@ const UserSchema = gql`
     code: String!
     success: Boolean!
     message: String!
+    token: String
   }
 
   type Query {
@@ -22,18 +24,46 @@ const UserSchema = gql`
   }
 
   type Mutation {
-    googleLogIn(token: String!): UserResponse
-    # appleLogIn(token: String!): UserResponse
+    googleLogIn(
+      idToken: String!
+      acceptTnC: Boolean!
+      FCMToken: String
+    ): UserResponse
+    # appleLogIn(idToken: String!, acceptTnC: Boolean!, FCMToken: String): UserResponse
+    editProfile(userInput: UserInput!): UserResponse
     assignRole(userId: ID!, role: Role!): UserResponse
     logout: UserResponse
+  }
+
+  input UserInput {
+    phoneNumber: PhoneNumber
+    fullName: String
+    picture: URL
+    gender: Gender
+    about: String
+    education: String
+    workAt: String
+    workAs: String
+    facebook: String
+    instagram: String
+    twitter: String
+    linkedin: String
+    pincode: PostalCode
+    country: String
+    state: String
+    district: String
+    cityVillage: String
+    area: String
+    street: String
+    landmark: String
+    FCMToken: String
   }
 
   type User {
     _id: ID!
     email: EmailAddress!
     emailVerified: Boolean!
-    mobile: PhoneNumber
-    mobileVerified: Boolean!
+    phoneNumber: PhoneNumber
     fullName: String @capitalize
     picture: URL
     gender: Gender
@@ -53,6 +83,8 @@ const UserSchema = gql`
     area: String
     street: String
     landmark: String
+    FCMToken: String
+    platform: Platform
     acceptTnC: Boolean!
     role: Role!
     followers: Int
@@ -73,6 +105,11 @@ const UserSchema = gql`
     ADMIN
   }
 
+  enum Platform {
+    android
+    ios
+  }
+
   type UserStatistics {
     _id: ID!
     videos: NonNegativeInt
@@ -85,6 +122,7 @@ const UserSchema = gql`
     code: String!
     success: Boolean!
     message: String!
+    token: String
     limit: Int!
     offset: Int!
     payload: [User!]
@@ -103,6 +141,7 @@ const UserSchema = gql`
     code: String!
     success: Boolean!
     message: String!
+    token: String
     payload: UserStatistics
   }
 `;
