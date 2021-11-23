@@ -25,11 +25,10 @@ const ArticleSchema = new Schema(
         lowercase: true,
       },
     ],
-    refs: [
+    sources: [
       {
         type: String,
         trim: true,
-        lowercase: true,
       },
     ],
     enable: { type: Boolean, required: true, default: true },
