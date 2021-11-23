@@ -1,6 +1,6 @@
 const { gql } = require("apollo-server");
 
-const CourseSchema = gql`
+const VideoSchema = gql`
   enum PurchaseType {
     FREE
     PAID
@@ -24,34 +24,35 @@ const CourseSchema = gql`
   }
 
   extend type Query {
-    courses(
+    videos(
       offset: Int
       limit: Int
       search: String
-      filter: CoursesFilterInput
-    ): CourseListResponse
-    course(courseId: ID!): CourseResponse
+      filter: VideosFilterInput
+    ): VideoListResponse
+    video(videoId: ID!): VideoResponse
   }
 
-  input CoursesFilterInput {
+  input VideosFilterInput {
     type: PurchaseType
     visible: Boolean
     enable: Boolean
   }
 
-  type CoursesFilterType {
+  type VideosFilterType {
     type: PurchaseType
     visible: Boolean
     enable: Boolean
   }
 
   extend type Mutation {
-    addCourse(courseInput: CourseInput): CourseResponse
-    editCourse(courseId: ID!, courseInput: CourseInput): CourseResponse
-    deleteCourse(courseId: ID!): CourseResponse
+    addVideo(videoInput: VideoInput): VideoResponse
+    editVideo(videoId: ID!, videoInput: VideoInput): VideoResponse
+    refreshVideo(videoId: ID!): VideoResponse
+    deleteVideo(videoId: ID!): VideoResponse
   }
 
-  input CourseInput {
+  input VideoInput {
     image: URL!
     subject: String!
     tags: [String!]!
@@ -68,10 +69,10 @@ const CourseSchema = gql`
     validity: PositiveInt
     period: Period
     visible: Boolean
-    syllabus: JSON!
+    link: URL!
   }
 
-  type Course {
+  type Video {
     _id: ID!
     image: URL!
     subject: String!
@@ -89,16 +90,25 @@ const CourseSchema = gql`
     validity: PositiveInt
     period: Period
     visible: Boolean!
-    syllabus: JSON!
+    link: Void
+    urls: [VideoURL]
+    courses: [Course]
     purchased: NonNegativeInt
     likes: NonNegativeInt
-    sales: NonNegativeInt
+    watches: NonNegativeInt
+    access: Boolean!
     enable: Boolean!
     createdAt: String!
     updatedAt: String!
   }
 
-  type CourseListResponse implements ListResponse {
+  type VideoURL {
+    url: URL
+    duration: String
+    format: String
+  }
+
+  type VideoListResponse implements ListResponse {
     code: String!
     success: Boolean!
     message: String!
@@ -106,17 +116,17 @@ const CourseSchema = gql`
     offset: Int!
     limit: Int!
     search: String
-    filter: CoursesFilterType
-    payload: [Course]
+    filter: VideosFilterType
+    payload: [Video]
   }
 
-  type CourseResponse implements Response {
+  type VideoResponse implements Response {
     code: String!
     success: Boolean!
     message: String!
     token: String
-    payload: Course
+    payload: Video
   }
 `;
 
-module.exports = CourseSchema;
+module.exports = VideoSchema;

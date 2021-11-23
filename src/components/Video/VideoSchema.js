@@ -1,28 +1,6 @@
 const { gql } = require("apollo-server");
 
 const VideoSchema = gql`
-  enum PurchaseType {
-    FREE
-    PAID
-  }
-
-  enum OfferType {
-    PERCENT
-    AMOUNT
-  }
-
-  enum LanguageType {
-    HI
-    EN
-  }
-
-  enum Period {
-    DAY
-    WEEK
-    MONTH
-    YEAR
-  }
-
   extend type Query {
     videos(
       offset: Int
@@ -31,72 +9,31 @@ const VideoSchema = gql`
       filter: VideosFilterInput
     ): VideoListResponse
     video(videoId: ID!): VideoResponse
+    fetchURL(url: URL!): URLResponse
   }
 
   input VideosFilterInput {
-    type: PurchaseType
-    visible: Boolean
     enable: Boolean
   }
 
   type VideosFilterType {
-    type: PurchaseType
-    visible: Boolean
     enable: Boolean
   }
 
   extend type Mutation {
-    addVideo(videoInput: VideoInput): VideoResponse
-    editVideo(videoId: ID!, videoInput: VideoInput): VideoResponse
+    addVideo(videoLink: URL!): VideoResponse
+    editVideo(videoId: ID!, videoLink: URL!): VideoResponse
     refreshVideo(videoId: ID!): VideoResponse
     deleteVideo(videoId: ID!): VideoResponse
   }
 
-  input VideoInput {
-    image: URL!
-    subject: String!
-    tags: [String!]!
-    title: String!
-    paid: Boolean!
-    price: NonNegativeInt
-    offer: NonNegativeInt
-    offerType: OfferType
-    highlight: String
-    instructors: [String]
-    language: LanguageType!
-    index: String
-    description: String!
-    validity: PositiveInt
-    period: Period
-    visible: Boolean
-    link: URL!
-  }
-
   type Video {
     _id: ID!
-    image: URL!
-    subject: String!
-    tags: [String!]!
-    title: String!
-    paid: Boolean!
-    price: NonNegativeInt
-    offer: NonNegativeInt
-    offerType: OfferType
-    highlight: String
-    instructors: [String]
-    language: LanguageType!
-    index: String
-    description: String!
-    validity: PositiveInt
-    period: Period
-    visible: Boolean!
     link: Void
+    title: String
+    thumbnail: URL
+    duration: String
     urls: [VideoURL]
-    courses: [Course]
-    purchased: NonNegativeInt
-    likes: NonNegativeInt
-    watches: NonNegativeInt
-    access: Boolean!
     enable: Boolean!
     createdAt: String!
     updatedAt: String!
@@ -104,7 +41,6 @@ const VideoSchema = gql`
 
   type VideoURL {
     url: URL
-    duration: String
     format: String
   }
 
@@ -126,6 +62,20 @@ const VideoSchema = gql`
     message: String!
     token: String
     payload: Video
+  }
+
+  type URLResponse implements Response {
+    code: String!
+    success: Boolean!
+    message: String!
+    token: String
+    payload: URLData
+  }
+
+  type URLData {
+    title: String
+    thumbnail: URL
+    duration: String
   }
 `;
 
