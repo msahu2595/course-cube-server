@@ -8,41 +8,47 @@ const TestSchema = gql`
       search: String
       filter: TestsFilterInput
     ): TestListResponse
-    test(testId: ID!, questionEnable: Boolean): TestResponse
+    test(testId: ID!): TestResponse
   }
 
   input TestsFilterInput {
+    type: PurchaseType
+    visible: Boolean
     enable: Boolean
-    questionEnable: Boolean
   }
 
   type TestsFilterType {
+    type: PurchaseType
+    visible: Boolean
     enable: Boolean
-    questionEnable: Boolean
   }
 
   extend type Mutation {
-    addTest(testInput: TestInput!): TestResponse
-    editTest(testId: ID!, testInput: TestInput!): TestResponse
+    addTest(testInput: TestInput): TestResponse
+    editTest(testId: ID!, testInput: TestInput): TestResponse
     deleteTest(testId: ID!): TestResponse
-    addTestQuestion(
-      testId: ID!
-      questionInput: TestQuestionInput!
-    ): TestResponse
-    editTestQuestion(
-      questionId: ID!
-      questionInput: TestQuestionEditInput!
-    ): TestResponse
-    deleteTestQuestion(questionId: ID!): TestResponse
   }
 
   input TestInput {
+    image: URL!
+    subject: String!
+    tags: [String!]!
     title: String!
-    thumbnail: URL
-    instructions: String!
-    duration: Duration!
-    totalMarks: NonNegativeFloat!
-    negativeMark: NonPositiveFloat!
+    paid: Boolean!
+    price: NonNegativeInt
+    offer: NonNegativeInt
+    offerType: OfferType
+    highlight: String
+    instructors: [String]
+    language: LanguageType!
+    index: String
+    description: String!
+    validity: PositiveInt
+    period: Period
+    visible: Boolean
+    questions: [TestQuestionInput!]!
+    duration: NonNegativeInt!
+    marks: NonNegativeInt!
   }
 
   input TestQuestionInput {
@@ -50,28 +56,32 @@ const TestSchema = gql`
     image: URL
     passage: String
     options: [String!]!
-    mark: NonNegativeFloat!
+    mark: NonNegativeInt!
     answerIndex: NonNegativeInt!
-  }
-
-  input TestQuestionEditInput {
-    question: String
-    image: URL
-    passage: String
-    options: [String!]
-    mark: NonNegativeFloat
-    answerIndex: NonNegativeInt
   }
 
   type Test {
     _id: ID!
+    image: URL!
+    subject: String!
+    tags: [String!]!
     title: String!
-    thumbnail: URL
-    instructions: String!
-    questions: [TestQuestion!]
-    duration: Duration!
-    totalMarks: NonNegativeFloat!
-    negativeMark: NonPositiveFloat!
+    paid: Boolean!
+    price: NonNegativeInt
+    offer: NonNegativeInt
+    offerType: OfferType
+    highlight: String
+    instructors: [String]
+    language: LanguageType!
+    index: String
+    description: String!
+    validity: PositiveInt
+    visible: Boolean!
+    questions: [TestQuestion!]!
+    duration: NonNegativeInt!
+    marks: NonNegativeInt!
+    likes: NonNegativeInt
+    attempts: NonNegativeInt
     enable: Boolean!
     createdAt: String!
     updatedAt: String!
@@ -83,7 +93,7 @@ const TestSchema = gql`
     image: URL
     passage: String
     options: [String!]!
-    mark: NonNegativeFloat!
+    mark: NonNegativeInt!
     answerIndex: NonNegativeInt!
     enable: Boolean!
   }

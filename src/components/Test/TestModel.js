@@ -2,94 +2,21 @@ const { Schema, model } = require("mongoose");
 
 const TestSchema = new Schema(
   {
-    image: {
-      required: true,
-      type: String,
-      trim: true,
-    },
-    subject: {
-      required: true,
-      type: String,
-      trim: true,
-      lowercase: true,
-      minlength: 2,
-      maxlength: 40,
-    },
-    tags: [
-      {
-        type: String,
-        trim: true,
-        lowercase: true,
-        minlength: 2,
-        maxlength: 40,
-      },
-    ],
     title: {
       required: true,
       type: String,
       trim: true,
       lowercase: true,
-      minlength: 2,
-      maxlength: 80,
     },
-    paid: {
-      required: true,
-      type: Boolean,
-      default: false,
-    },
-    price: {
-      type: Number,
-      min: 1,
-      max: 100000,
-    },
-    offer: {
-      type: Number,
-      min: 1,
-      max: 100000,
-    },
-    offerType: {
-      type: String,
-      enum: ["PERCENT", "AMOUNT"],
-    },
-    highlight: {
+    thumbnail: {
       type: String,
       trim: true,
-      lowercase: true,
-      minlength: 2,
-      maxlength: 40,
     },
-    instructors: [
-      {
-        type: String,
-        trim: true,
-        lowercase: true,
-        minlength: 2,
-        maxlength: 40,
-      },
-    ],
-    language: {
+    instructions: {
       required: true,
       type: String,
-      enum: ["HI", "EN"],
-      default: "HI",
-    },
-    index: {
-      type: String,
       trim: true,
-      lowercase: true,
-      minlength: 2,
-      maxlength: 1000,
     },
-    description: {
-      type: String,
-      trim: true,
-      lowercase: true,
-      minlength: 2,
-      maxlength: 1000,
-    },
-    validity: { type: Number },
-    period: { type: String, enum: ["DAY", "WEEK", "MONTH", "YEAR"] },
-    visible: { type: Boolean, required: true, default: true },
     questions: [
       {
         question: { type: String, required: true },
@@ -102,10 +29,15 @@ const TestSchema = new Schema(
       },
     ],
     duration: {
+      required: true,
+      type: String,
+      trim: true,
+    },
+    totalMarks: {
       type: Number,
       required: true,
     },
-    marks: {
+    negativeMark: {
       type: Number,
       required: true,
     },
@@ -113,20 +45,6 @@ const TestSchema = new Schema(
   },
   { timestamps: true, runValidators: true, runSettersOnQuery: true }
 );
-
-TestSchema.virtual("likes", {
-  ref: "Like", // The model to use
-  localField: "_id", // Find people where `localField`
-  foreignField: "refId", // is equal to `foreignField`
-  count: true, // And only get the number of docs
-});
-
-TestSchema.virtual("attempts", {
-  ref: "History", // The model to use
-  localField: "_id", // Find people where `localField`
-  foreignField: "refId", // is equal to `foreignField`
-  count: true, // And only get the number of docs
-});
 
 const TestModel = model("Test", TestSchema);
 

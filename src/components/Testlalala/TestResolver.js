@@ -28,17 +28,11 @@ const TestResolver = {
         throw new UserInputError(error.message, error.extensions.code);
       }
     },
-    test: async (
-      _,
-      { testId, questionEnable },
-      { dataSources: { testAPI } }
-    ) => {
+    test: async (_, { testId }, { dataSources: { testAPI } }) => {
       try {
         const payload = await testAPI.test({
           testId,
-          questionEnable,
         });
-        console.log(payload);
         return {
           code: 200,
           success: true,
@@ -46,7 +40,6 @@ const TestResolver = {
           payload,
         };
       } catch (error) {
-        console.log(error);
         throw new UserInputError(error.message, error.extensions.code);
       }
     },
@@ -93,64 +86,6 @@ const TestResolver = {
           code: "200",
           success: true,
           message: "Test deleted successfully.",
-          payload,
-        };
-      } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
-      }
-    },
-    addTestQuestion: async (
-      _,
-      { testId, questionInput },
-      { dataSources: { testAPI } }
-    ) => {
-      try {
-        const payload = await testAPI.addTestQuestion({
-          testId,
-          questionInput,
-        });
-        return {
-          code: "200",
-          success: true,
-          message: "Question added successfully.",
-          payload,
-        };
-      } catch (error) {
-        console.log(error);
-        throw new UserInputError(error.message, error.extensions.code);
-      }
-    },
-    editTestQuestion: async (
-      _,
-      { questionId, questionInput },
-      { dataSources: { testAPI } }
-    ) => {
-      try {
-        const payload = await testAPI.editTestQuestion({
-          questionId,
-          questionInput,
-        });
-        return {
-          code: "200",
-          success: true,
-          message: "Question edited successfully.",
-          payload,
-        };
-      } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
-      }
-    },
-    deleteTestQuestion: async (
-      _,
-      { questionId },
-      { dataSources: { testAPI } }
-    ) => {
-      try {
-        const payload = await testAPI.deleteTestQuestion({ questionId });
-        return {
-          code: "200",
-          success: true,
-          message: "Question deleted successfully.",
           payload,
         };
       } catch (error) {

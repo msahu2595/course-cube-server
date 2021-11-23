@@ -30,10 +30,10 @@ const VideoSchema = gql`
   type Video {
     _id: ID!
     link: Void
-    title: String
+    title: String!
     thumbnail: URL
-    duration: String
-    urls: [VideoURL]
+    duration: String!
+    urls: [VideoURL!]
     enable: Boolean!
     createdAt: String!
     updatedAt: String!

@@ -1,33 +1,24 @@
 const { MongoDataSource } = require("apollo-datasource-mongodb");
 
 class TestAPI extends MongoDataSource {
-  tests({ offset, limit, search, type, visible = true, enable = true }) {
-    const filter = { visible, enable };
-    if (type) {
-      filter["paid"] = type === "PAID" ? true : false;
-    }
+  tests({ offset, limit, search, enable = true, questionEnable = true }) {
+    const filter = {
+      enable,
+      questions: { $elemMatch: { enable: questionEnable } },
+    };
     if (search) {
       filter["$text"] = { $search: search };
     }
-    return (
-      this.model
-        .find(filter)
-        .skip(offset)
-        .limit(limit)
-        .populate("likes")
-        .populate("attempts")
-        .exec()
-    );
+    return this.model.find(filter).skip(offset).limit(limit).exec();
   }
 
-  test({ testId }) {
-    return (
-      this.model
-        .findById(testId)
-        .populate("likes")
-        .populate("attempts")
-        .exec()
-    );
+  test({ testId, questionEnable = true }) {
+    return this.model
+      .findOne({
+        _id: testId,
+        questions: { $elemMatch: { enable: questionEnable } },
+      })
+      .exec();
   }
 
   addTest({ testInput }) {
@@ -37,23 +28,47 @@ class TestAPI extends MongoDataSource {
 
   editTest({ testId, testInput }) {
     return this.model
-      .findOneAndUpdate(
-        {
-          _id: testId,
-        },
-        testInput,
-        { new: true }
-      )
+      .findByIdAndUpdate(testId, testInput, { new: true })
       .exec();
   }
 
   deleteTest({ testId }) {
     return this.model
+      .findByIdAndUpdate(testId, { enable: false }, { new: true })
+      .exec();
+  }
+
+  addTestQuestion({ testId, questionInput }) {
+    return this.model
+      .findByIdAndUpdate(
+        testId,
+        { $push: { questions: questionInput } },
+        { new: true }
+      )
+      .exec();
+  }
+
+  editTestQuestion({ questionId, questionInput }) {
+    const updateData = {};
+    Object.keys(questionInput).map((key) => {
+      updateData[`questions.$.${key}`] = questionInput[key];
+    });
+    return this.model
       .findOneAndUpdate(
+        { "questions._id": questionId },
         {
-          _id: testId,
+          $set: updateData,
         },
-        { enable: false },
+        { new: true }
+      )
+      .exec();
+  }
+
+  deleteTestQuestion({ questionId }) {
+    return this.model
+      .findOneAndUpdate(
+        { "questions._id": questionId },
+        { $set: { "questions.$.enable": false } },
         { new: true }
       )
       .exec();

@@ -14,7 +14,6 @@ const VideoSchema = new Schema(
       lowercase: true,
     },
     thumbnail: {
-      required: true,
       type: String,
       trim: true,
     },
