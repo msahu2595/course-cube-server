@@ -12,42 +12,68 @@ const DocumentSchema = gql`
   }
 
   input DocumentsFilterInput {
+    type: PurchaseType
+    visible: Boolean
     enable: Boolean
   }
 
   type DocumentsFilterType {
+    type: PurchaseType
+    visible: Boolean
     enable: Boolean
   }
 
   extend type Mutation {
-    addDocument(documentInput: DocumentInput!): DocumentResponse
+    addDocument(documentInput: DocumentInput): DocumentResponse
     editDocument(
       documentId: ID!
-      documentInput: DocumentEditInput!
+      documentInput: DocumentInput
     ): DocumentResponse
     deleteDocument(documentId: ID!): DocumentResponse
   }
 
   input DocumentInput {
+    image: URL!
+    subject: String!
+    tags: [String!]!
     title: String!
-    thumbnail: URL
+    paid: Boolean!
+    price: NonNegativeInt
+    offer: NonNegativeInt
+    offerType: OfferType
+    highlight: String
+    instructors: [String]
+    language: LanguageType!
+    index: String
+    description: String!
+    validity: PositiveInt
+    period: Period
+    visible: Boolean
     link: URL!
-    pages: PositiveInt!
-  }
-
-  input DocumentEditInput {
-    title: String
-    thumbnail: URL
-    link: URL
-    pages: PositiveInt
+    pages: NonNegativeInt!
   }
 
   type Document {
     _id: ID!
+    image: URL!
+    subject: String!
+    tags: [String!]!
     title: String!
-    thumbnail: URL
+    paid: Boolean!
+    price: NonNegativeInt
+    offer: NonNegativeInt
+    offerType: OfferType
+    highlight: String
+    instructors: [String]
+    language: LanguageType!
+    index: String
+    description: String!
+    validity: PositiveInt
+    visible: Boolean!
     link: URL!
-    pages: PositiveInt!
+    pages: NonNegativeInt!
+    likes: NonNegativeInt
+    reads: NonNegativeInt
     enable: Boolean!
     createdAt: String!
     updatedAt: String!

@@ -1,33 +1,16 @@
 const { MongoDataSource } = require("apollo-datasource-mongodb");
 
 class DocumentAPI extends MongoDataSource {
-  documents({ offset, limit, search, type, visible = true, enable = true }) {
-    const filter = { visible, enable };
-    if (type) {
-      filter["paid"] = type === "PAID" ? true : false;
-    }
+  documents({ offset, limit, search, enable = true }) {
+    const filter = { enable };
     if (search) {
       filter["$text"] = { $search: search };
     }
-    return (
-      this.model
-        .find(filter)
-        .skip(offset)
-        .limit(limit)
-        .populate("likes")
-        .populate("reads")
-        .exec()
-    );
+    return this.model.find(filter).skip(offset).limit(limit).exec();
   }
 
   document({ documentId }) {
-    return (
-      this.model
-        .findById(documentId)
-        .populate("likes")
-        .populate("reads")
-        .exec()
-    );
+    return this.model.findById(documentId).exec();
   }
 
   addDocument({ documentInput }) {
@@ -37,25 +20,13 @@ class DocumentAPI extends MongoDataSource {
 
   editDocument({ documentId, documentInput }) {
     return this.model
-      .findOneAndUpdate(
-        {
-          _id: documentId,
-        },
-        documentInput,
-        { new: true }
-      )
+      .findByIdAndUpdate(documentId, documentInput, { new: true })
       .exec();
   }
 
   deleteDocument({ documentId }) {
     return this.model
-      .findOneAndUpdate(
-        {
-          _id: documentId,
-        },
-        { enable: false },
-        { new: true }
-      )
+      .findByIdAndUpdate(documentId, { enable: false }, { new: true })
       .exec();
   }
 }

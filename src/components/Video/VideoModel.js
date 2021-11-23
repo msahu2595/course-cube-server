@@ -2,11 +2,6 @@ const { Schema, model } = require("mongoose");
 
 const VideoSchema = new Schema(
   {
-    link: {
-      required: true,
-      type: String,
-      trim: true,
-    },
     title: {
       required: true,
       type: String,
@@ -14,6 +9,11 @@ const VideoSchema = new Schema(
       lowercase: true,
     },
     thumbnail: {
+      type: String,
+      trim: true,
+    },
+    link: {
+      required: true,
       type: String,
       trim: true,
     },
