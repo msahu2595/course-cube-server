@@ -1,0 +1,169 @@
+const { UserInputError } = require("apollo-server");
+
+const ContentResolver = {
+  Media: {
+    __resolveType(obj) {
+      // Only Video has a urls field
+      if (obj.urls) {
+        return "Video";
+      }
+      // Only Test has a questions field
+      if (obj.questions) {
+        return "Test";
+      }
+      // Only Document has a pages field
+      if (obj.pages) {
+        return "Document";
+      }
+      return null; // GraphQLError is thrown
+    },
+  },
+  Query: {
+    contents: async (
+      _,
+      { offset = 0, limit = 10, search, filter },
+      { dataSources: { contentAPI } }
+    ) => {
+      try {
+        const payload = await contentAPI.contents({
+          offset,
+          limit,
+          search,
+          ...filter,
+        });
+        return {
+          code: 200,
+          success: true,
+          message: "Successfully get contents.",
+          limit,
+          offset,
+          search,
+          filter,
+          payload,
+        };
+      } catch (error) {
+        throw new UserInputError(error.message);
+      }
+    },
+    content: async (_, { contentId }, { dataSources: { contentAPI } }) => {
+      try {
+        const payload = await contentAPI.content({
+          contentId,
+        });
+        return {
+          code: 200,
+          success: true,
+          message: "Successfully get content.",
+          payload,
+        };
+      } catch (error) {
+        throw new UserInputError(error.message);
+      }
+    },
+  },
+  Mutation: {
+    addContent: async (
+      _,
+      { contentInput },
+      { dataSources: { contentAPI, videoAPI, testAPI, documentAPI } }
+    ) => {
+      try {
+        let exists = false;
+        if (contentInput?.type === "Video") {
+          exists = await videoAPI.videoExists({
+            videoId: contentInput?.media,
+          });
+        }
+        if (contentInput?.type === "Test") {
+          exists = await testAPI.testExists({
+            testId: contentInput?.media,
+          });
+        }
+        if (contentInput?.type === "Document") {
+          exists = await documentAPI.documentExists({
+            documentId: contentInput?.media,
+          });
+        }
+        // console.log("exists ==> ", exists);
+        if (exists) {
+          const payload = await contentAPI.addContent({ contentInput });
+          return {
+            code: "200",
+            success: true,
+            message: "Content added successfully.",
+            payload,
+          };
+        } else {
+          throw new UserInputError(
+            "Media file not exists, Please check & try again."
+          );
+        }
+      } catch (error) {
+        console.log(error);
+        throw new UserInputError(error.message);
+      }
+    },
+    editContent: async (
+      _,
+      { contentId, contentInput },
+      { dataSources: { contentAPI, videoAPI, testAPI, documentAPI } }
+    ) => {
+      try {
+        let exists = false;
+        if (contentInput?.type === "Video") {
+          exists = await videoAPI.videoExists({
+            videoId: contentInput?.media,
+          });
+        }
+        if (contentInput?.type === "Test") {
+          exists = await testAPI.testExists({
+            testId: contentInput?.media,
+          });
+        }
+        if (contentInput?.type === "Document") {
+          exists = await documentAPI.documentExists({
+            documentId: contentInput?.media,
+          });
+        }
+        // console.log("exists ==> ", exists);
+        if (exists) {
+          const payload = await contentAPI.editContent({
+            contentId,
+            contentInput,
+          });
+          return {
+            code: "200",
+            success: true,
+            message: "Content edited successfully.",
+            payload,
+          };
+        } else {
+          throw new UserInputError(
+            "Media file not exists, Please check & try again."
+          );
+        }
+      } catch (error) {
+        throw new UserInputError(error.message);
+      }
+    },
+    deleteContent: async (
+      _,
+      { contentId },
+      { dataSources: { contentAPI } }
+    ) => {
+      try {
+        const payload = await contentAPI.deleteContent({ contentId });
+        return {
+          code: "200",
+          success: true,
+          message: "Content deleted successfully.",
+          payload,
+        };
+      } catch (error) {
+        throw new UserInputError(error.message);
+      }
+    },
+  },
+};
+
+module.exports = ContentResolver;
