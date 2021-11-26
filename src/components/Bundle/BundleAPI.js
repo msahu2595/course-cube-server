@@ -6,8 +6,8 @@ class BundleAPI extends MongoDataSource {
     limit,
     search,
     paid,
-    language,
     type,
+    language,
     visible = true,
     enable = true,
   }) {
@@ -51,6 +51,10 @@ class BundleAPI extends MongoDataSource {
         },
       ])
       .exec();
+  }
+
+  bundleExists({ bundleId }) {
+    return this.model.exists({ _id: bundleId });
   }
 
   addBundle({ bundleInput }) {
