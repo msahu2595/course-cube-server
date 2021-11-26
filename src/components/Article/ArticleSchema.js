@@ -37,7 +37,7 @@ const ArticleSchema = gql`
     code: String!
     success: Boolean!
     message: String!
-    token: String
+    token: JWT
     offset: Int!
     limit: Int!
     payload: [Article]
@@ -47,7 +47,7 @@ const ArticleSchema = gql`
     code: String!
     success: Boolean!
     message: String!
-    token: String
+    token: JWT
     payload: Article
   }
 `;

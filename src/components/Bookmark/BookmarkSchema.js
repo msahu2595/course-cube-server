@@ -51,7 +51,7 @@ const BookmarkSchema = gql`
     code: String!
     success: Boolean!
     message: String!
-    token: String
+    token: JWT
     limit: Int!
     offset: Int!
     filter: BookmarksFilterType
@@ -62,7 +62,7 @@ const BookmarkSchema = gql`
     code: String!
     success: Boolean!
     message: String!
-    token: String
+    token: JWT
     limit: Int!
     offset: Int!
     refId: ID!
@@ -73,7 +73,7 @@ const BookmarkSchema = gql`
     code: String!
     success: Boolean!
     message: String!
-    token: String
+    token: JWT
     payload: Bookmark
   }
 `;

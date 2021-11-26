@@ -29,7 +29,7 @@ const UserResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
     statistics: async (
@@ -48,7 +48,7 @@ const UserResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
     leaderboard: async (
@@ -69,7 +69,7 @@ const UserResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
   },
@@ -110,7 +110,7 @@ const UserResolver = {
         };
       } catch (error) {
         console.log("error ==> ", error.message);
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
     editProfile: async (
@@ -134,7 +134,7 @@ const UserResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
     assignRole: async (
@@ -158,7 +158,7 @@ const UserResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
     logout: async (_, __, { user, redis }) => {
@@ -172,7 +172,7 @@ const UserResolver = {
             : "You are already logged out.",
         };
       } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
   },

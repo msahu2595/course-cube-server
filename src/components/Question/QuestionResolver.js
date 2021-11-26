@@ -27,7 +27,7 @@ const QuestionResolver = {
         };
       } catch (error) {
         console.log(error);
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
     question: async (_, { questionId }, { dataSources: { questionAPI } }) => {
@@ -40,7 +40,7 @@ const QuestionResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
   },
@@ -60,7 +60,7 @@ const QuestionResolver = {
         };
       } catch (error) {
         console.log(error);
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
     editQuestion: async (
@@ -80,7 +80,7 @@ const QuestionResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
     verifyQuestion: async (
@@ -103,7 +103,7 @@ const QuestionResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
     deleteQuestion: async (
@@ -120,7 +120,7 @@ const QuestionResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
   },

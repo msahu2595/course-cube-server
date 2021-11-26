@@ -12,7 +12,7 @@ const DocumentSchema = new Schema(
       type: String,
       trim: true,
     },
-    link: {
+    url: {
       required: true,
       type: String,
       trim: true,

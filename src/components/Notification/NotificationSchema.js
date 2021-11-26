@@ -38,7 +38,7 @@ const NotificationSchema = gql`
     code: String!
     success: Boolean!
     message: String!
-    token: String
+    token: JWT
     limit: Int!
     offset: Int!
     payload: [Notification]
@@ -48,7 +48,7 @@ const NotificationSchema = gql`
     code: String!
     success: Boolean!
     message: String!
-    token: String
+    token: JWT
     payload: Notification
   }
 `;

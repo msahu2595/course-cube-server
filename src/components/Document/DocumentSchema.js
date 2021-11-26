@@ -31,14 +31,14 @@ const DocumentSchema = gql`
   input DocumentInput {
     title: String!
     thumbnail: URL
-    link: URL!
+    url: URL!
     pages: PositiveInt!
   }
 
   input DocumentEditInput {
     title: String
     thumbnail: URL
-    link: URL
+    url: URL
     pages: PositiveInt
   }
 
@@ -46,7 +46,7 @@ const DocumentSchema = gql`
     _id: ID!
     title: String!
     thumbnail: URL
-    link: URL!
+    url: URL!
     pages: PositiveInt!
     enable: Boolean!
     createdAt: String!
@@ -57,7 +57,7 @@ const DocumentSchema = gql`
     code: String!
     success: Boolean!
     message: String!
-    token: String
+    token: JWT
     offset: Int!
     limit: Int!
     search: String
@@ -69,7 +69,7 @@ const DocumentSchema = gql`
     code: String!
     success: Boolean!
     message: String!
-    token: String
+    token: JWT
     payload: Document
   }
 `;

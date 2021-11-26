@@ -21,7 +21,7 @@ const HeadlineResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
   },
@@ -41,7 +41,7 @@ const HeadlineResolver = {
         };
       } catch (error) {
         console.log(error);
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
     editHeadline: async (
@@ -61,7 +61,7 @@ const HeadlineResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
     deleteHeadline: async (
@@ -78,7 +78,7 @@ const HeadlineResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
   },

@@ -5,7 +5,7 @@ const UserSchema = gql`
     code: String!
     success: Boolean!
     message: String!
-    token: String
+    token: JWT
     limit: Int!
     offset: Int!
   }
@@ -14,7 +14,7 @@ const UserSchema = gql`
     code: String!
     success: Boolean!
     message: String!
-    token: String
+    token: JWT
   }
 
   type Query {
@@ -122,7 +122,7 @@ const UserSchema = gql`
     code: String!
     success: Boolean!
     message: String!
-    token: String
+    token: JWT
     limit: Int!
     offset: Int!
     payload: [User!]
@@ -132,8 +132,8 @@ const UserSchema = gql`
     code: String!
     success: Boolean!
     message: String!
-    token: String
-    refresh: String
+    token: JWT
+    refresh: JWT
     payload: User
   }
 
@@ -141,7 +141,7 @@ const UserSchema = gql`
     code: String!
     success: Boolean!
     message: String!
-    token: String
+    token: JWT
     payload: UserStatistics
   }
 `;

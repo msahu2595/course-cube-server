@@ -24,7 +24,7 @@ const FollowSchema = gql`
     code: String!
     success: Boolean!
     message: String!
-    token: String
+    token: JWT
     limit: Int!
     offset: Int!
     payload: [Follow]
@@ -34,7 +34,7 @@ const FollowSchema = gql`
     code: String!
     success: Boolean!
     message: String!
-    token: String
+    token: JWT
     limit: Int!
     offset: Int!
     payload: [Follow]
@@ -44,7 +44,7 @@ const FollowSchema = gql`
     code: String!
     success: Boolean!
     message: String!
-    token: String
+    token: JWT
     payload: Follow
   }
 `;

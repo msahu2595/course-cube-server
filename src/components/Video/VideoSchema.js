@@ -32,7 +32,7 @@ const VideoSchema = gql`
     title: String!
     thumbnail: URL
     link: Void
-    duration: String!
+    time: String!
     urls: [VideoURL!]
     enable: Boolean!
     createdAt: String!
@@ -48,7 +48,7 @@ const VideoSchema = gql`
     code: String!
     success: Boolean!
     message: String!
-    token: String
+    token: JWT
     offset: Int!
     limit: Int!
     search: String
@@ -60,7 +60,7 @@ const VideoSchema = gql`
     code: String!
     success: Boolean!
     message: String!
-    token: String
+    token: JWT
     payload: Video
   }
 
@@ -68,14 +68,14 @@ const VideoSchema = gql`
     code: String!
     success: Boolean!
     message: String!
-    token: String
+    token: JWT
     payload: URLData
   }
 
   type URLData {
     title: String
     thumbnail: URL
-    duration: String
+    time: String
   }
 `;
 

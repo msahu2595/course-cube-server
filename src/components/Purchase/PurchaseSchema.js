@@ -87,7 +87,7 @@ const PurchaseSchema = gql`
     code: String!
     success: Boolean!
     message: String!
-    token: String
+    token: JWT
     limit: Int!
     offset: Int!
     filter: PurchasesFilterType
@@ -98,7 +98,7 @@ const PurchaseSchema = gql`
     code: String!
     success: Boolean!
     message: String!
-    token: String
+    token: JWT
     limit: Int!
     offset: Int!
     refId: ID!
@@ -109,7 +109,7 @@ const PurchaseSchema = gql`
     code: String!
     success: Boolean!
     message: String!
-    token: String
+    token: JWT
     payload: Purchase
   }
 `;

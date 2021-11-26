@@ -112,7 +112,7 @@ const VideoSchema = gql`
     code: String!
     success: Boolean!
     message: String!
-    token: String
+    token: JWT
     offset: Int!
     limit: Int!
     search: String
@@ -124,7 +124,7 @@ const VideoSchema = gql`
     code: String!
     success: Boolean!
     message: String!
-    token: String
+    token: JWT
     payload: Video
   }
 `;

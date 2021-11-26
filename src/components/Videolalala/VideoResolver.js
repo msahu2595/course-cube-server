@@ -41,7 +41,7 @@ const VideoResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
     video: async (_, { videoId }, { dataSources: { videoAPI } }) => {
@@ -56,7 +56,7 @@ const VideoResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
   },
@@ -79,7 +79,7 @@ const VideoResolver = {
         };
       } catch (error) {
         console.log(error);
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
     editVideo: async (
@@ -107,7 +107,7 @@ const VideoResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
     refreshVideo: async (_, { videoId }, { dataSources: { videoAPI } }) => {
@@ -155,7 +155,7 @@ const VideoResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
     deleteVideo: async (_, { videoId }, { dataSources: { videoAPI } }) => {
@@ -168,7 +168,7 @@ const VideoResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
   },

@@ -23,7 +23,7 @@ const AnswerResolver = {
         };
       } catch (error) {
         console.log(error);
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
     userAnswers: async (
@@ -46,7 +46,7 @@ const AnswerResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
     answer: async (_, { answerId }, { dataSources: { answerAPI } }) => {
@@ -59,7 +59,7 @@ const AnswerResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
   },
@@ -82,7 +82,7 @@ const AnswerResolver = {
         };
       } catch (error) {
         console.log(error);
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
     editAnswer: async (
@@ -102,7 +102,7 @@ const AnswerResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
     verifyAnswer: async (
@@ -125,7 +125,7 @@ const AnswerResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
     deleteAnswer: async (_, { answerId }, { dataSources: { answerAPI } }) => {
@@ -138,7 +138,7 @@ const AnswerResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
   },

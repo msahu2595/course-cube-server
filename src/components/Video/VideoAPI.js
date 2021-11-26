@@ -13,6 +13,10 @@ class VideoAPI extends MongoDataSource {
     return this.model.findById(videoId).exec();
   }
 
+  videoExists({ videoId }) {
+    return this.model.exists({ _id: videoId });
+  }
+
   addVideo({ videoInput }) {
     console.log(videoInput);
     const video = new this.model(videoInput);

@@ -59,7 +59,7 @@ const AnswerSchema = gql`
     code: String!
     success: Boolean!
     message: String!
-    token: String
+    token: JWT
     limit: Int!
     offset: Int!
     payload: [Answer!]
@@ -69,7 +69,7 @@ const AnswerSchema = gql`
     code: String!
     success: Boolean!
     message: String!
-    token: String
+    token: JWT
     payload: Answer
   }
 `;

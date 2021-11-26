@@ -21,6 +21,10 @@ class TestAPI extends MongoDataSource {
       .exec();
   }
 
+  testExists({ testId }) {
+    return this.model.exists({ _id: testId });
+  }
+
   addTest({ testInput }) {
     const test = new this.model(testInput);
     return test.save();

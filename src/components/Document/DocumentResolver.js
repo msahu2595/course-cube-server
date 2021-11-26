@@ -25,7 +25,7 @@ const DocumentResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
     document: async (_, { documentId }, { dataSources: { documentAPI } }) => {
@@ -40,7 +40,7 @@ const DocumentResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
   },
@@ -60,7 +60,7 @@ const DocumentResolver = {
         };
       } catch (error) {
         console.log(error);
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
     editDocument: async (
@@ -80,7 +80,7 @@ const DocumentResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
     deleteDocument: async (
@@ -97,7 +97,7 @@ const DocumentResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
   },

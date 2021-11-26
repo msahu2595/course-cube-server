@@ -25,7 +25,7 @@ const CourseResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
     course: async (_, { courseId }, { dataSources: { courseAPI } }) => {
@@ -40,7 +40,7 @@ const CourseResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
   },
@@ -56,7 +56,7 @@ const CourseResolver = {
         };
       } catch (error) {
         console.log(error);
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
     editCourse: async (
@@ -76,7 +76,7 @@ const CourseResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
     deleteCourse: async (_, { courseId }, { dataSources: { courseAPI } }) => {
@@ -89,7 +89,7 @@ const CourseResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
   },

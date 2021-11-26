@@ -13,6 +13,10 @@ class DocumentAPI extends MongoDataSource {
     return this.model.findById(documentId).exec();
   }
 
+  documentExists({ documentId }) {
+    return this.model.exists({ _id: documentId });
+  }
+
   addDocument({ documentInput }) {
     const document = new this.model(documentInput);
     return document.save();

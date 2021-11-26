@@ -30,7 +30,7 @@ const VideoResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
     video: async (_, { videoId }, { dataSources: { videoAPI } }) => {
@@ -45,21 +45,21 @@ const VideoResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
     fetchURL: async (_, { url }) => {
       try {
         const output = await getVideoDetails(url);
-        const [title, thumbnail, duration] = output.split("\n");
+        const [title, thumbnail, time] = output.split("\n");
         return {
           code: 200,
           success: true,
           message: "Successfully get details.",
-          payload: { title, thumbnail, duration },
+          payload: { title, thumbnail, time },
         };
       } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
   },
@@ -71,7 +71,7 @@ const VideoResolver = {
           title,
           url1,
           thumbnail,
-          duration,
+          time,
           format1,
           // eslint-disable-next-line no-unused-vars
           title2,
@@ -79,7 +79,7 @@ const VideoResolver = {
           // eslint-disable-next-line no-unused-vars
           thumbnail2,
           // eslint-disable-next-line no-unused-vars
-          duration2,
+          time2,
           format2,
         ] = output.split("\n");
         const payload = await videoAPI.addVideo({
@@ -87,7 +87,7 @@ const VideoResolver = {
             link,
             title,
             thumbnail,
-            duration,
+            time,
             urls: [
               { url: url1, format: format1 },
               { url: url2, format: format2 },
@@ -102,7 +102,7 @@ const VideoResolver = {
         };
       } catch (error) {
         console.log(error);
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
     editVideo: async (
@@ -116,7 +116,7 @@ const VideoResolver = {
           title,
           url1,
           thumbnail,
-          duration,
+          time,
           format1,
           // eslint-disable-next-line no-unused-vars
           title2,
@@ -124,7 +124,7 @@ const VideoResolver = {
           // eslint-disable-next-line no-unused-vars
           thumbnail2,
           // eslint-disable-next-line no-unused-vars
-          duration2,
+          time2,
           format2,
         ] = output.split("\n");
         const payload = await videoAPI.editVideo({
@@ -133,7 +133,7 @@ const VideoResolver = {
             link,
             title,
             thumbnail,
-            duration,
+            time,
             urls: [
               { url: url1, format: format1 },
               { url: url2, format: format2 },
@@ -147,7 +147,7 @@ const VideoResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
     refreshVideo: async (_, { videoId }, { dataSources: { videoAPI } }) => {
@@ -170,7 +170,7 @@ const VideoResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
     deleteVideo: async (_, { videoId }, { dataSources: { videoAPI } }) => {
@@ -183,7 +183,7 @@ const VideoResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message, error.extensions.code);
+        throw new UserInputError(error.message);
       }
     },
   },

@@ -23,7 +23,7 @@ const LikeSchema = gql`
     code: String!
     success: Boolean!
     message: String!
-    token: String
+    token: JWT
     limit: Int!
     offset: Int!
     refId: ID!
@@ -34,7 +34,7 @@ const LikeSchema = gql`
     code: String!
     success: Boolean!
     message: String!
-    token: String
+    token: JWT
     payload: Like
   }
 `;
