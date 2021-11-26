@@ -4,6 +4,7 @@ const DirectivesSchema = require("./components/Directives/DirectivesSchema");
 const UserSchema = require("./components/User/UserSchema");
 const FollowSchema = require("./components/Follow/FollowSchema");
 const { CourseSchema } = require("./components/Course");
+const { BundleSchema } = require("./components/Bundle");
 const { ContentSchema } = require("./components/Content");
 const { VideoSchema } = require("./components/Video");
 const { TestSchema } = require("./components/Test");
@@ -25,6 +26,7 @@ module.exports = [
   UserSchema,
   FollowSchema,
   CourseSchema,
+  BundleSchema,
   ContentSchema,
   VideoSchema,
   TestSchema,

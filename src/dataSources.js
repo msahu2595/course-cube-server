@@ -6,6 +6,8 @@ const FollowAPI = require("./components/Follow/FollowAPI");
 const FollowModel = require("./components/Follow/FollowModel");
 // Course API
 const { CourseAPI, CourseModel } = require("./components/Course");
+// Bundle API
+const { BundleAPI, BundleModel } = require("./components/Bundle");
 // Content API
 const { ContentAPI, ContentModel } = require("./components/Content");
 // Video API
@@ -41,6 +43,7 @@ const dataSources = () => ({
   followAPI: new FollowAPI(FollowModel),
   questionAPI: new QuestionAPI(QuestionModel),
   courseAPI: new CourseAPI(CourseModel),
+  bundleAPI: new BundleAPI(BundleModel),
   contentAPI: new ContentAPI(ContentModel),
   videoAPI: new VideoAPI(VideoModel),
   testAPI: new TestAPI(TestModel),
