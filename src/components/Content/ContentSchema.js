@@ -3,7 +3,7 @@ const { gql } = require("apollo-server");
 const ContentSchema = gql`
   union Media = Video | Test | Document
 
-  enum ContentType {
+  enum MediaType {
     Video
     Test
     Document
@@ -22,7 +22,7 @@ const ContentSchema = gql`
 
   input ContentsFilterInput {
     paid: Boolean
-    type: ContentType
+    type: MediaType
     language: LanguageType
     visible: Boolean
     enable: Boolean
@@ -30,7 +30,7 @@ const ContentSchema = gql`
 
   type ContentsFilterType {
     paid: Boolean
-    type: ContentType
+    type: MediaType
     language: LanguageType
     visible: Boolean
     enable: Boolean
@@ -50,7 +50,7 @@ const ContentSchema = gql`
     image: URL!
     title: String!
     media: ID!
-    type: ContentType!
+    type: MediaType!
     paid: Boolean!
     price: NonNegativeInt
     offer: NonNegativeInt
@@ -75,7 +75,7 @@ const ContentSchema = gql`
     image: URL!
     title: String!
     media: Media
-    type: ContentType!
+    type: MediaType!
     paid: Boolean!
     price: NonNegativeInt
     offer: NonNegativeInt

@@ -115,7 +115,7 @@ const ContentSchema = new Schema(
       minlength: 2,
       maxlength: 2000,
     },
-    validity: { type: String, required: true, default: "P9Y0W0DT00H00M00S" },
+    validity: { type: String, required: true, default: "P10Y" },
     visible: { type: Boolean, required: true, default: true },
     enable: { type: Boolean, required: true, default: true },
   },
