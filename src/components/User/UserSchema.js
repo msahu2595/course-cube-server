@@ -83,7 +83,7 @@ const UserSchema = gql`
     area: String
     street: String
     landmark: String
-    FCMToken: String
+    FCMToken: Void
     platform: Platform
     acceptTnC: Boolean!
     role: Role!
