@@ -76,7 +76,7 @@ const UserResolver = {
   Mutation: {
     googleLogIn: async (
       _,
-      { idToken, acceptTnC, FCMToken },
+      { idToken, acceptTnC, FCMToken, webLogin },
       { redis, dataSources: { userAPI } }
     ) => {
       try {
@@ -87,7 +87,7 @@ const UserResolver = {
           email_verified: emailVerified,
           name: fullName,
           picture,
-        } = await verifyIdToken(idToken);
+        } = await verifyIdToken(idToken, webLogin);
         const payload = await userAPI.logIn({
           email,
           emailVerified,

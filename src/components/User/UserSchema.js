@@ -28,6 +28,7 @@ const UserSchema = gql`
       idToken: String!
       acceptTnC: Boolean!
       FCMToken: String
+      webLogin: Boolean
     ): UserResponse
     # appleLogIn(idToken: String!, acceptTnC: Boolean!, FCMToken: String): UserResponse
     editProfile(userInput: UserInput!): UserResponse
