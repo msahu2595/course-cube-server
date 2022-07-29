@@ -19,6 +19,7 @@ class BundleContentAPI extends MongoDataSource {
     }
     return this.model
       .find(filter)
+      .sort({ createdAt: -1 })
       .skip(offset)
       .limit(limit)
       .populate([
