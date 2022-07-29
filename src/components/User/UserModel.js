@@ -10,7 +10,7 @@ const UserSchema = new Schema(
       minlength: 6,
       maxlength: 80,
     },
-    emailVerified: { type: Boolean, required: true },
+    emailVerified: { type: Boolean, required: true, default: false },
     phoneNumber: { type: String },
     fullName: {
       type: String,
