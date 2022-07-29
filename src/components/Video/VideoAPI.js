@@ -6,7 +6,12 @@ class VideoAPI extends MongoDataSource {
     if (search) {
       filter["$text"] = { $search: search };
     }
-    return this.model.find(filter).skip(offset).limit(limit).exec();
+    return this.model
+      .find(filter)
+      .sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(limit)
+      .exec();
   }
 
   video({ videoId }) {
