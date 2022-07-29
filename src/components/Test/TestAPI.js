@@ -1,11 +1,11 @@
 const { MongoDataSource } = require("apollo-datasource-mongodb");
 
 class TestAPI extends MongoDataSource {
-  tests({ offset, limit, search, enable = true, questionEnable = true }) {
-    const filter = {
-      enable,
-      questions: { $elemMatch: { enable: questionEnable } },
-    };
+  tests({ offset, limit, search, enable = true, questionEnable }) {
+    const filter = { enable };
+    if (typeof questionEnable === Boolean) {
+      filter["questions"] = { $elemMatch: { enable: questionEnable } };
+    }
     if (search) {
       filter["$text"] = { $search: search };
     }
