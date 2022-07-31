@@ -17,13 +17,12 @@ class TestAPI extends MongoDataSource {
       .exec();
   }
 
-  test({ testId, questionEnable = true }) {
-    return this.model
-      .findOne({
-        _id: testId,
-        questions: { $elemMatch: { enable: questionEnable } },
-      })
-      .exec();
+  test({ testId, questionEnable }) {
+    const filter = { _id: testId };
+    if (typeof questionEnable === Boolean) {
+      filter["questions"] = { $elemMatch: { enable: questionEnable } };
+    }
+    return this.model.findOne(filter).exec();
   }
 
   testExists({ testId }) {
