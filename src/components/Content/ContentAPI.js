@@ -24,20 +24,19 @@ class ContentAPI extends MongoDataSource {
     if (search) {
       filter["$text"] = { $search: search };
     }
+    const populateArray = ["media", "likes", "purchases"];
+    if (this.context?.user?.role === "USER") {
+      populateArray.push({
+        path: "purchased",
+        match: { user: this.context?.user?._id },
+      });
+    }
     return this.model
       .find(filter)
       .sort({ createdAt: -1 })
       .skip(offset)
       .limit(limit)
-      .populate([
-        "media",
-        "likes",
-        "purchases",
-        {
-          path: "purchased",
-          match: { user: this.context.user._id },
-        },
-      ])
+      .populate(populateArray)
       .exec();
   }
 
