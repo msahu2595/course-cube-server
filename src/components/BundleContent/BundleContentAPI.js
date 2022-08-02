@@ -17,32 +17,31 @@ class BundleContentAPI extends MongoDataSource {
     if (type) {
       filter["type"] = type;
     }
+    const populateArray = ["media"];
+    if (this.context?.user?.role === "USER") {
+      populateArray.push({
+        path: "purchased",
+        match: { user: this.context?.user?._id },
+      });
+    }
     return this.model
       .find(filter)
       .sort({ createdAt: -1 })
       .skip(offset)
       .limit(limit)
-      .populate([
-        "media",
-        {
-          path: "purchased",
-          match: { user: this.context.user._id },
-        },
-      ])
+      .populate(populateArray)
       .exec();
   }
 
   bundleContent({ bundleContentId }) {
-    return this.model
-      .findById(bundleContentId)
-      .populate([
-        "media",
-        {
-          path: "purchased",
-          match: { user: this.context.user._id },
-        },
-      ])
-      .exec();
+    const populateArray = ["media"];
+    if (this.context?.user?.role === "USER") {
+      populateArray.push({
+        path: "purchased",
+        match: { user: this.context?.user?._id },
+      });
+    }
+    return this.model.findById(bundleContentId).populate(populateArray).exec();
   }
 
   // addBundleContent({ bundleContentInput }) {

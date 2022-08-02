@@ -41,18 +41,14 @@ class ContentAPI extends MongoDataSource {
   }
 
   content({ contentId }) {
-    return this.model
-      .findById(contentId)
-      .populate([
-        "media",
-        "likes",
-        "purchases",
-        {
-          path: "purchased",
-          match: { user: this.context.user._id },
-        },
-      ])
-      .exec();
+    const populateArray = ["media", "likes", "purchases"];
+    if (this.context?.user?.role === "USER") {
+      populateArray.push({
+        path: "purchased",
+        match: { user: this.context?.user?._id },
+      });
+    }
+    return this.model.findById(contentId).populate(populateArray).exec();
   }
 
   // addContent({ contentInput }) {
