@@ -12,15 +12,17 @@ const BundleContentSchema = gql`
   }
 
   input BundleContentsFilterInput {
-    value: String
+    subjectId: ID
     type: MediaType
+    language: LanguageType
     visible: Boolean
     enable: Boolean
   }
 
   type BundleContentsFilterType {
-    value: String
+    subjectId: ID
     type: MediaType
+    language: LanguageType
     visible: Boolean
     enable: Boolean
   }
@@ -38,12 +40,13 @@ const BundleContentSchema = gql`
   }
 
   input BundleContentInput {
+    subjectId: ID!
     subject: String!
-    value: String
     image: URL!
     title: String!
     media: ID!
     type: MediaType!
+    language: LanguageType!
     description: String!
     visible: Boolean
   }
@@ -51,20 +54,21 @@ const BundleContentSchema = gql`
   type BundleContent {
     _id: ID!
     # Used for filter
+    subjectId: ID!
     subject: String!
     # General fields
-    bundle: Bundle!
-    value: String
     image: URL!
     title: String!
     media: Media
     type: MediaType!
+    language: LanguageType!
     description: String!
     visible: Boolean!
     enable: Boolean!
     createdAt: String!
     updatedAt: String!
     # Populate fields
+    bundle: Bundle!
     purchased: NonNegativeInt
   }
 

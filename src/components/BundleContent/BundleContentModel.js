@@ -2,6 +2,10 @@ const { Schema, model } = require("mongoose");
 
 const BundleContentSchema = new Schema(
   {
+    subjectId: {
+      required: true,
+      type: Schema.Types.ObjectId,
+    },
     subject: {
       required: true,
       type: String,
@@ -14,13 +18,6 @@ const BundleContentSchema = new Schema(
       type: Schema.Types.ObjectId,
       required: true,
       ref: "Bundle",
-    },
-    value: {
-      type: String,
-      trim: true,
-      lowercase: true,
-      minlength: 1,
-      maxlength: 200,
     },
     image: {
       required: true,
@@ -44,6 +41,11 @@ const BundleContentSchema = new Schema(
       type: String,
       required: true,
       enum: ["Video", "Test", "Document", "Book"],
+    },
+    language: {
+      required: true,
+      type: String,
+      enum: ["HI", "EN"],
     },
     description: {
       type: String,

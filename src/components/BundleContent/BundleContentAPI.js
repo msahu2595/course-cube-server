@@ -5,17 +5,21 @@ class BundleContentAPI extends MongoDataSource {
     offset,
     limit,
     bundleId,
-    value,
+    subjectId,
     type,
+    language,
     visible = true,
     enable = true,
   }) {
     const filter = { visible, enable, bundle: bundleId };
-    if (value) {
-      filter["value"] = value;
+    if (subjectId) {
+      filter["subjectId"] = subjectId;
     }
     if (type) {
       filter["type"] = type;
+    }
+    if (language) {
+      filter["language"] = language;
     }
     const populateArray = ["media"];
     if (this.context?.user?.role === "USER") {
