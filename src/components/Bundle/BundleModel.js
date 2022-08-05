@@ -11,7 +11,7 @@ SyllabusSchema.add({
     minlength: 1,
     maxlength: 80,
   },
-  value: {
+  subjectId: {
     required: true,
     type: Schema.Types.ObjectId,
     default: Types.ObjectId,
