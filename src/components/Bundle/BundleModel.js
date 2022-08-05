@@ -1,6 +1,6 @@
-const { Schema, model } = require("mongoose");
+const { Schema, Types, model } = require("mongoose");
 
-const SyllabusSchema = new Schema();
+const SyllabusSchema = new Schema({}, { _id: false });
 
 SyllabusSchema.add({
   name: {
@@ -13,11 +13,9 @@ SyllabusSchema.add({
   },
   value: {
     required: true,
-    type: String,
-    trim: true,
-    lowercase: true,
-    minlength: 1,
-    maxlength: 80,
+    type: Schema.Types.ObjectId,
+    default: Types.ObjectId,
+    index: { unique: true },
   },
   items: [SyllabusSchema],
 });
