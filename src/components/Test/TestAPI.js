@@ -1,20 +1,43 @@
 const { MongoDataSource } = require("apollo-datasource-mongodb");
 
 class TestAPI extends MongoDataSource {
-  tests({ offset, limit, search, enable = true, questionEnable }) {
-    const filter = { enable };
-    if (typeof questionEnable === Boolean) {
-      filter["questions"] = { $elemMatch: { enable: questionEnable } };
-    }
+  tests({ offset, limit, search, enable = true }) {
+    const compound = {
+      filter: [
+        {
+          equals: {
+            path: "enable",
+            value: enable,
+          },
+        },
+      ],
+    };
     if (search) {
-      filter["$text"] = { $search: search };
+      compound.must = [
+        {
+          text: {
+            query: `${search}`,
+            path: {
+              wildcard: "*",
+            },
+          },
+        },
+      ];
     }
-    return this.model
-      .find(filter)
-      .sort({ createdAt: -1 })
-      .skip(offset)
-      .limit(limit)
-      .exec();
+    const agg = [
+      {
+        $search: {
+          index: "search",
+          compound,
+        },
+      },
+      { $sort: { createdAt: -1 } },
+      { $skip: offset },
+      {
+        $limit: limit,
+      },
+    ];
+    return this.model.aggregate(agg).exec();
   }
 
   test({ testId, questionEnable }) {

@@ -13,12 +13,10 @@ const TestSchema = gql`
 
   input TestsFilterInput {
     enable: Boolean
-    questionEnable: Boolean
   }
 
   type TestsFilterType {
     enable: Boolean
-    questionEnable: Boolean
   }
 
   extend type Mutation {
