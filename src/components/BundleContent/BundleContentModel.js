@@ -3,7 +3,6 @@ const { Schema, model } = require("mongoose");
 const BundleContentSchema = new Schema(
   {
     subjectId: {
-      required: true,
       type: Schema.Types.ObjectId,
     },
     subject: {

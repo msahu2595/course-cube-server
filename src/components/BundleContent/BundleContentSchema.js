@@ -40,7 +40,7 @@ const BundleContentSchema = gql`
   }
 
   input BundleContentInput {
-    subjectId: ID!
+    subjectId: ID
     subject: String!
     image: URL!
     title: String!
@@ -54,7 +54,7 @@ const BundleContentSchema = gql`
   type BundleContent {
     _id: ID!
     # Used for filter
-    subjectId: ID!
+    subjectId: ID
     subject: String!
     # General fields
     image: URL!
