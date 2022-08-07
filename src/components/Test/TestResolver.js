@@ -38,7 +38,6 @@ const TestResolver = {
           testId,
           questionEnable,
         });
-        console.log(payload);
         return {
           code: 200,
           success: true,

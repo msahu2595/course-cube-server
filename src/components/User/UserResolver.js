@@ -109,7 +109,7 @@ const UserResolver = {
           payload,
         };
       } catch (error) {
-        console.log("error ==> ", error.message);
+        console.log(error);
         throw new UserInputError(error.message);
       }
     },

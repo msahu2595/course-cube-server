@@ -34,7 +34,6 @@ const NotificationResolver = {
         const payload = await notificationAPI.readNotification({
           notificationId,
         });
-        console.log(payload);
         return {
           code: "200",
           success: true,

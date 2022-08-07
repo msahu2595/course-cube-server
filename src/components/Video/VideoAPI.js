@@ -49,7 +49,6 @@ class VideoAPI extends MongoDataSource {
   }
 
   addVideo({ videoInput }) {
-    console.log(videoInput);
     const video = new this.model(videoInput);
     return video.save();
   }

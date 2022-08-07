@@ -13,7 +13,6 @@ const FollowResolver = {
           limit,
           userId,
         });
-        console.log(payload);
         return {
           code: 200,
           success: true,

@@ -8,7 +8,6 @@ const QuestionResolver = {
       { dataSources: { questionAPI } }
     ) => {
       try {
-        console.log("filter ==> ", filter);
         const payload = await questionAPI.questions({
           offset,
           limit,

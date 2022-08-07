@@ -113,9 +113,7 @@ const VideoResolver = {
     refreshVideo: async (_, { videoId }, { dataSources: { videoAPI } }) => {
       try {
         const video = await videoAPI.video({ videoId });
-        console.log("video ==> ", video);
         const output = await getVideoUrls(video?.link);
-        console.log("output ==> ", output);
         const [
           title1,
           url1,
