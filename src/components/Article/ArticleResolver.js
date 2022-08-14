@@ -4,20 +4,24 @@ const ArticleResolver = {
   Query: {
     articles: async (
       _,
-      { offset = 0, limit = 10 },
+      { offset = 0, limit = 10, search, filter },
       { dataSources: { articleAPI } }
     ) => {
       try {
         const payload = await articleAPI.articles({
           offset,
           limit,
+          search,
+          ...filter,
         });
         return {
           code: 200,
           success: true,
           message: "Successfully get articles.",
-          offset,
           limit,
+          offset,
+          search,
+          filter,
           payload,
         };
       } catch (error) {

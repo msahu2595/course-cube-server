@@ -2,8 +2,27 @@ const { gql } = require("apollo-server");
 
 const ArticleSchema = gql`
   extend type Query {
-    articles(offset: Int, limit: Int): ArticleListResponse
+    articles(
+      offset: Int
+      limit: Int
+      search: String
+      filter: ArticlesFilterInput
+    ): ArticleListResponse
     article(articleId: ID!): ArticleResponse
+  }
+
+  input ArticlesFilterInput {
+    author: String
+    tag: String
+    visible: Boolean
+    enable: Boolean
+  }
+
+  type ArticlesFilterType {
+    author: String
+    tag: String
+    visible: Boolean
+    enable: Boolean
   }
 
   extend type Mutation {
@@ -16,8 +35,10 @@ const ArticleSchema = gql`
     image: URL
     title: String!
     description: String!
+    author: String!
     tags: [String!]
     sources: [URL!]
+    visible: Boolean
   }
 
   type Article {
@@ -25,10 +46,12 @@ const ArticleSchema = gql`
     image: URL
     title: String!
     description: String!
+    author: String!
     tags: [String!]
     sources: [URL!]
-    likes: NonNegativeInt
+    visible: Boolean!
     enable: Boolean!
+    likes: NonNegativeInt
     createdAt: String!
     updatedAt: String!
   }
@@ -40,6 +63,8 @@ const ArticleSchema = gql`
     token: JWT
     offset: Int!
     limit: Int!
+    search: String
+    filter: ArticlesFilterType
     payload: [Article]
   }
 

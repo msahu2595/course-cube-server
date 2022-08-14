@@ -18,6 +18,12 @@ const ArticleSchema = new Schema(
       trim: true,
       lowercase: true,
     },
+    author: {
+      type: String,
+      required: true,
+      trim: true,
+      lowercase: true,
+    },
     tags: [
       {
         type: String,
@@ -31,6 +37,7 @@ const ArticleSchema = new Schema(
         trim: true,
       },
     ],
+    visible: { type: Boolean, required: true, default: true },
     enable: { type: Boolean, required: true, default: true },
   },
   { timestamps: true, runValidators: true, runSettersOnQuery: true }

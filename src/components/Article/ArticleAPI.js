@@ -1,12 +1,32 @@
 const { MongoDataSource } = require("apollo-datasource-mongodb");
 
 class ArticleAPI extends MongoDataSource {
-  articles({ offset, limit }) {
+  articles({
+    offset,
+    limit,
+    search,
+    author,
+    tag,
+    visible = true,
+    enable = true,
+  }) {
+    const filter = { visible, enable };
+    if (author) {
+      filter["author"] = author;
+    }
+    if (tag) {
+      filter["tags"] = tag;
+    }
+    if (search) {
+      filter["$text"] = { $search: search };
+    }
+    const populateArray = ["likes"];
     return this.model
-      .find({ enable: true })
+      .find(filter)
+      .sort({ updatedAt: -1 })
       .skip(offset)
       .limit(limit)
-      .sort("createdAt")
+      .populate(populateArray)
       .exec();
   }
 
