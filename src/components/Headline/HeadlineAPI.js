@@ -4,9 +4,9 @@ class HeadlineAPI extends MongoDataSource {
   headlines({ offset, limit }) {
     return this.model
       .find({ enable: true })
+      .sort({ createdAt: -1 })
       .skip(offset)
       .limit(limit)
-      .sort("createdAt")
       .exec();
   }
 
