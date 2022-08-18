@@ -25,7 +25,7 @@ const NotificationSchema = new Schema(
     type: {
       type: String,
       required: true,
-      enum: ["USER", "ADMIN", "COMMUNITY"],
+      enum: ["USER", "ADMIN", "CONTENT", "COMMUNITY"],
       default: "USER",
     },
     route: { type: String, trim: true, maxlength: 80 },

@@ -15,8 +15,6 @@ const ArticleSchema = new Schema(
     description: {
       type: String,
       required: true,
-      trim: true,
-      lowercase: true,
     },
     author: {
       type: String,

@@ -31,6 +31,7 @@ const NotificationSchema = gql`
   enum NotificationType {
     USER
     ADMIN
+    CONTENT
     COMMUNITY
   }
 

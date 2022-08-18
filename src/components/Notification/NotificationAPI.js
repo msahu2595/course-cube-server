@@ -4,9 +4,9 @@ class NotificationAPI extends MongoDataSource {
   notifications({ offset, limit, type }) {
     return this.model
       .find({ userId: this.context.user._id, type })
+      .sort({ createdAt: -1 })
       .skip(offset)
       .limit(limit)
-      .sort('createdAt')
       .exec();
   }
 
