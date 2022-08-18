@@ -50,7 +50,8 @@ const QuestionResolver = {
       { dataSources: { questionAPI } }
     ) => {
       try {
-        const payload = await questionAPI.createQuestion(questionInput);
+        const question = await questionAPI.createQuestion(questionInput);
+        const payload = await questionAPI.populateQuestion(question);
         return {
           code: "200",
           success: true,

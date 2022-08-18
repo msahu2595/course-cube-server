@@ -53,7 +53,11 @@ class QuestionAPI extends MongoDataSource {
       route,
       params,
     });
-    return question.save().then((res) => res.populate("user").execPopulate());
+    return question.save();
+  }
+
+  populateQuestion(question) {
+    return this.model.populate(question, { path: "user" });
   }
 
   editQuestion({
