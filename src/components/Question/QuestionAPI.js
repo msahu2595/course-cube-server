@@ -12,6 +12,10 @@ const populateArray = (userId) => [
     match: { user: userId, active: true },
   },
   "bookmarks",
+  {
+    path: "answered",
+    match: { user: userId, verified: true, enable: true },
+  },
   "answers",
   "views",
 ];

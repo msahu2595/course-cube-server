@@ -99,6 +99,13 @@ QuestionSchema.virtual("bookmarks", {
   count: true, // And only get the number of docs
 });
 
+QuestionSchema.virtual("answered", {
+  ref: "Answer", // The model to use
+  localField: "_id", // Find people where `localField`
+  foreignField: "question", // is equal to `foreignField`
+  count: true, // And only get the number of docs
+});
+
 QuestionSchema.virtual("answers", {
   ref: "Answer", // The model to use
   localField: "_id", // Find people where `localField`

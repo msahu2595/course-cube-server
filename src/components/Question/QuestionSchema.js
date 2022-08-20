@@ -70,6 +70,7 @@ const QuestionSchema = gql`
     likes: Int
     bookmarked: Int
     bookmarks: Int
+    answered: Int
     answers: Int
     views: Int
     message: String
