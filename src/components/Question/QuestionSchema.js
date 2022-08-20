@@ -66,7 +66,10 @@ const QuestionSchema = gql`
     link: URL
     route: String
     params: JSONObject
+    liked: Int
     likes: Int
+    bookmarked: Int
+    bookmarks: Int
     answers: Int
     views: Int
     message: String

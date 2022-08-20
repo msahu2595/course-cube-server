@@ -9,14 +9,26 @@ class QuestionAPI extends MongoDataSource {
     if (userId) {
       filter["user"] = userId;
     }
+    const populateArray = [
+      "user",
+      {
+        path: "liked",
+        match: { user: this.context.user._id, active: true },
+      },
+      "likes",
+      {
+        path: "bookmarked",
+        match: { user: this.context.user._id, active: true },
+      },
+      "bookmarks",
+      "answers",
+      "views",
+    ];
     return this.model
       .find(filter)
       .skip(offset)
       .limit(limit)
-      .populate("user")
-      .populate("likes")
-      .populate("answers")
-      .populate("views")
+      .populate(populateArray)
       .exec();
   }
 
