@@ -1,5 +1,21 @@
 const { MongoDataSource } = require("apollo-datasource-mongodb");
 
+const populateArray = (userId) => [
+  "user",
+  {
+    path: "liked",
+    match: { user: userId, active: true },
+  },
+  "likes",
+  {
+    path: "bookmarked",
+    match: { user: userId, active: true },
+  },
+  "bookmarks",
+  "answers",
+  "views",
+];
+
 class QuestionAPI extends MongoDataSource {
   questions({ offset, limit, search, userId, verified = true, enable = true }) {
     const filter = { verified, enable };
@@ -9,46 +25,19 @@ class QuestionAPI extends MongoDataSource {
     if (userId) {
       filter["user"] = userId;
     }
-    const populateArray = [
-      "user",
-      {
-        path: "liked",
-        match: { user: this.context.user._id, active: true },
-      },
-      "likes",
-      {
-        path: "bookmarked",
-        match: { user: this.context.user._id, active: true },
-      },
-      "bookmarks",
-      "answers",
-      "views",
-    ];
     return this.model
       .find(filter)
       .skip(offset)
       .limit(limit)
-      .populate(populateArray)
+      .populate(populateArray(this.context.user._id))
       .exec();
   }
 
   question({ questionId }) {
-    const populateArray = [
-      "user",
-      {
-        path: "liked",
-        match: { user: this.context.user._id, active: true },
-      },
-      "likes",
-      {
-        path: "bookmarked",
-        match: { user: this.context.user._id, active: true },
-      },
-      "bookmarks",
-      "answers",
-      "views",
-    ];
-    return this.model.findById(questionId).populate(populateArray).exec();
+    return this.model
+      .findById(questionId)
+      .populate(populateArray(this.context.user._id))
+      .exec();
   }
 
   createQuestion({
@@ -78,7 +67,7 @@ class QuestionAPI extends MongoDataSource {
   }
 
   populateQuestion(question) {
-    return this.model.populate(question, { path: "user" });
+    return this.model.populate(question, populateArray(this.context.user._id));
   }
 
   editQuestion({
@@ -113,7 +102,7 @@ class QuestionAPI extends MongoDataSource {
         },
         { new: true }
       )
-      .populate("user")
+      .populate(populateArray(this.context.user._id))
       .exec();
   }
 
@@ -126,7 +115,7 @@ class QuestionAPI extends MongoDataSource {
         { tags, message, verified },
         { new: true }
       )
-      .populate("user")
+      .populate(populateArray(this.context.user._id))
       .exec();
   }
 
@@ -140,7 +129,7 @@ class QuestionAPI extends MongoDataSource {
         { enable: false },
         { new: true }
       )
-      .populate("user")
+      .populate(populateArray(this.context.user._id))
       .exec();
   }
 }
