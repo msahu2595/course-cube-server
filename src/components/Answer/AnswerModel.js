@@ -37,7 +37,7 @@ const AnswerSchema = new Schema(
       minlength: 2,
       maxlength: 80,
     },
-    verified: { type: Boolean, required: true, default: false },
+    verified: { type: Boolean, required: true, default: true },
     edited: { type: Boolean, required: true, default: false },
     enable: { type: Boolean, required: true, default: true },
   },
