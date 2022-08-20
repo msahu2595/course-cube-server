@@ -13,7 +13,7 @@ class AnswerAPI extends MongoDataSource {
 
   userAnswers({ offset, limit, userId, verified, enable }) {
     return this.model
-    .find({
+      .find({
         user: userId || this.context.user._id,
         verified: verified || true,
         enable: enable || true,
@@ -45,7 +45,11 @@ class AnswerAPI extends MongoDataSource {
       route,
       params,
     });
-    return question.save().then((res) => res.populate("user").execPopulate());
+    return question.save();
+  }
+
+  populateAnswer(answer) {
+    return this.model.populate(answer, { path: "user" });
   }
 
   editAnswer({ answerId, answer, image, link, route, params }) {

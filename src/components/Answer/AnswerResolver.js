@@ -70,10 +70,11 @@ const AnswerResolver = {
       { dataSources: { answerAPI } }
     ) => {
       try {
-        const payload = await answerAPI.createAnswer({
+        const answer = await answerAPI.createAnswer({
           questionId,
           ...answerInput,
         });
+        const payload = await answerAPI.populateAnswer(answer);
         return {
           code: "200",
           success: true,
