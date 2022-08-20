@@ -12,7 +12,7 @@ const QuestionSchema = new Schema(
       required: true,
       lowercase: true,
       trim: true,
-      minlength: 16,
+      minlength: 1,
       maxlength: 150,
     },
     description: {
@@ -20,7 +20,7 @@ const QuestionSchema = new Schema(
       required: true,
       lowercase: true,
       trim: true,
-      minlength: 40,
+      minlength: 1,
       maxlength: 1000,
     },
     image: {
@@ -59,8 +59,8 @@ const QuestionSchema = new Schema(
       type: String,
       lowercase: true,
       trim: true,
-      minlength: 2,
-      maxlength: 80,
+      minlength: 1,
+      maxlength: 500,
     },
     verified: { type: Boolean, required: true, default: false },
     edited: { type: Boolean, required: true, default: false },
