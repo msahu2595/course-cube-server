@@ -33,13 +33,22 @@ class QuestionAPI extends MongoDataSource {
   }
 
   question({ questionId }) {
-    return this.model
-      .findById(questionId)
-      .populate("user")
-      .populate("likes")
-      .populate("answers")
-      .populate("views")
-      .exec();
+    const populateArray = [
+      "user",
+      {
+        path: "liked",
+        match: { user: this.context.user._id, active: true },
+      },
+      "likes",
+      {
+        path: "bookmarked",
+        match: { user: this.context.user._id, active: true },
+      },
+      "bookmarks",
+      "answers",
+      "views",
+    ];
+    return this.model.findById(questionId).populate(populateArray).exec();
   }
 
   createQuestion({
