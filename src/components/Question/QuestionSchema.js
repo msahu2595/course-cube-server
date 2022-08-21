@@ -38,7 +38,7 @@ const QuestionSchema = gql`
 
   input QuestionInput {
     title: String!
-    description: String!
+    description: String
     image: URL
     options: [String!]
     answerIndex: PositiveInt
@@ -58,7 +58,7 @@ const QuestionSchema = gql`
     _id: ID!
     user: User
     title: String!
-    description: String!
+    description: String
     image: URL
     options: [String!]
     answerIndex: PositiveInt

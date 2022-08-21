@@ -17,7 +17,6 @@ const QuestionSchema = new Schema(
     },
     description: {
       type: String,
-      required: true,
       lowercase: true,
       trim: true,
       minlength: 1,
