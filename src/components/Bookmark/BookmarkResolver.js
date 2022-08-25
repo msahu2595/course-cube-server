@@ -65,9 +65,13 @@ const BookmarkResolver = {
         throw new Error(error.message, error.extensions.code);
       }
     },
-    unBookmark: async (_, { bookmarkId }, { dataSources: { bookmarkAPI } }) => {
+    unbookmark: async (
+      _,
+      { refId, type },
+      { dataSources: { bookmarkAPI } }
+    ) => {
       try {
-        const payload = await bookmarkAPI.unBookmark({ bookmarkId });
+        const payload = await bookmarkAPI.unbookmark({ refId, type });
         return {
           code: "200",
           success: true,

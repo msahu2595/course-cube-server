@@ -24,7 +24,7 @@ const BookmarkSchema = gql`
 
   extend type Mutation {
     bookmark(refId: ID!, type: BookmarkType!): BookmarkResponse
-    unBookmark(bookmarkId: ID!): BookmarkResponse
+    unBookmark(refId: ID!, type: BookmarkType!): BookmarkResponse
   }
 
   input BookmarksFilterInput {

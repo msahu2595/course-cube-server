@@ -35,11 +35,12 @@ class BookmarkAPI extends MongoDataSource {
     );
   }
 
-  unBookmark({ bookmarkId }) {
+  unbookmark({ refId, type }) {
     return this.model.findOneAndUpdate(
       {
-        _id: bookmarkId,
         user: this.context.user._id,
+        refId,
+        type,
       },
       { active: false },
       { upsert: true, new: true }
