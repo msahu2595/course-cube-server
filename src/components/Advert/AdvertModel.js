@@ -10,7 +10,7 @@ const AdvertSchema = new Schema(
     type: {
       type: String,
       required: true,
-      enum: ["SHORT", "MEDIUM", "LARGE"],
+      enum: ["SMALL", "MEDIUM", "LARGE"],
     },
     link: {
       type: String,
