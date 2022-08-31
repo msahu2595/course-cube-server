@@ -1,5 +1,6 @@
 const UserModel = require("./components/User/UserModel");
 const FollowModel = require("./components/Follow/FollowModel");
+const { AdvertModel } = require("./components/Advert");
 const { CourseModel } = require("./components/Course");
 const { BundleModel } = require("./components/Bundle");
 const { BundleContentModel } = require("./components/BundleContent");
@@ -20,6 +21,7 @@ const { NotificationModel } = require("./components/Notification");
 module.exports = {
   UserModel,
   FollowModel,
+  AdvertModel,
   CourseModel,
   BundleModel,
   BundleContentModel,

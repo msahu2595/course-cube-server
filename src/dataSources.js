@@ -4,6 +4,8 @@ const UserModel = require("./components/User/UserModel");
 // Follow API
 const FollowAPI = require("./components/Follow/FollowAPI");
 const FollowModel = require("./components/Follow/FollowModel");
+// Advert API
+const { AdvertAPI, AdvertModel } = require("./components/Advert");
 // Course API
 const { CourseAPI, CourseModel } = require("./components/Course");
 // Bundle API
@@ -47,6 +49,7 @@ const dataSources = () => ({
   userAPI: new UserAPI(UserModel),
   followAPI: new FollowAPI(FollowModel),
   questionAPI: new QuestionAPI(QuestionModel),
+  advertAPI: new AdvertAPI(AdvertModel),
   courseAPI: new CourseAPI(CourseModel),
   bundleAPI: new BundleAPI(BundleModel),
   bundleContentAPI: new BundleContentAPI(BundleContentModel),
