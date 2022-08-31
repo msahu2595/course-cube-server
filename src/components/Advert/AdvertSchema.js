@@ -2,7 +2,8 @@ const { gql } = require("apollo-server");
 
 const AdvertSchema = gql`
   enum AdvertType {
-    SMALL # 4/1 Ratio
+    TINY # 4/1 Ratio
+    SMALL # 2.5/1 Ratio
     MEDIUM # 16/9 Ratio
     LARGE #1/1 Ratio
   }
