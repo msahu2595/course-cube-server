@@ -10,6 +10,7 @@ const VideoSchema = gql`
     ): VideoListResponse
     video(videoId: ID!): VideoResponse
     fetchURL(url: URL!): URLResponse
+    fetchDownloadURL(videoId: ID!): DownloadURLResponse
   }
 
   input VideosFilterInput {
@@ -76,6 +77,14 @@ const VideoSchema = gql`
     title: String
     thumbnail: URL
     time: String
+  }
+
+  type DownloadURLResponse implements Response {
+    code: String!
+    success: Boolean!
+    message: String!
+    token: JWT
+    payload: [VideoURL!]
   }
 `;
 

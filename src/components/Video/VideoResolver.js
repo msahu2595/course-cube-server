@@ -62,6 +62,25 @@ const VideoResolver = {
         throw new UserInputError(error.message);
       }
     },
+    fetchDownloadURL: async (_, { videoId }, { dataSources: { videoAPI } }) => {
+      try {
+        const video = await videoAPI.video({ videoId });
+        const output = await getVideoUrls(video?.link);
+        const [url1, format1, url2, format2] = output.split("\n");
+        const urls = [
+          { url: url1, format: format1 },
+          { url: url2, format: format2 },
+        ];
+        return {
+          code: "200",
+          success: true,
+          message: "Video URL fetched successfully.",
+          payload: urls,
+        };
+      } catch (error) {
+        throw new UserInputError(error.message);
+      }
+    },
   },
   Mutation: {
     addVideo: async (_, { videoLink: link }, { dataSources: { videoAPI } }) => {
