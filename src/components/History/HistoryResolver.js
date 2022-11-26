@@ -1,4 +1,4 @@
-const { UserInputError } = require("apollo-server");
+const { GraphQLError } = require("graphql");
 
 const HistoryResolver = {
   Query: {
@@ -23,7 +23,7 @@ const HistoryResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
     historyUsers: async (
@@ -47,7 +47,7 @@ const HistoryResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
   },

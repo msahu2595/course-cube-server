@@ -1,4 +1,4 @@
-const { UserInputError } = require("apollo-server");
+const { GraphQLError } = require("graphql");
 
 const QuestionResolver = {
   Query: {
@@ -26,7 +26,7 @@ const QuestionResolver = {
         };
       } catch (error) {
         console.log(error);
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
     question: async (_, { questionId }, { dataSources: { questionAPI } }) => {
@@ -39,7 +39,7 @@ const QuestionResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
   },
@@ -60,7 +60,7 @@ const QuestionResolver = {
         };
       } catch (error) {
         console.log(error);
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
     editQuestion: async (
@@ -80,7 +80,7 @@ const QuestionResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
     verifyQuestion: async (
@@ -103,7 +103,7 @@ const QuestionResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
     deleteQuestion: async (
@@ -120,7 +120,7 @@ const QuestionResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
   },

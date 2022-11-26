@@ -1,4 +1,4 @@
-const { gql } = require("apollo-server");
+const gql = require("graphql-tag");
 
 const DirectivesSchema = gql`
   directive @upper on FIELD_DEFINITION

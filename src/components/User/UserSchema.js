@@ -1,4 +1,4 @@
-const { gql } = require("apollo-server");
+const gql = require("graphql-tag");
 
 const UserSchema = gql`
   interface ListResponse {
@@ -65,7 +65,7 @@ const UserSchema = gql`
     email: EmailAddress!
     emailVerified: Boolean!
     phoneNumber: PhoneNumber
-    fullName: String @capitalize
+    fullName: String # @capitalize
     picture: URL
     gender: Gender
     about: String

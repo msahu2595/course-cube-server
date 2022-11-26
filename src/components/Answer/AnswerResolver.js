@@ -1,4 +1,4 @@
-const { UserInputError } = require("apollo-server");
+const { GraphQLError } = require("graphql");
 
 const AnswerResolver = {
   Query: {
@@ -23,7 +23,7 @@ const AnswerResolver = {
         };
       } catch (error) {
         console.log(error);
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
     userAnswers: async (
@@ -46,7 +46,7 @@ const AnswerResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
     answer: async (_, { answerId }, { dataSources: { answerAPI } }) => {
@@ -59,7 +59,7 @@ const AnswerResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
   },
@@ -83,7 +83,7 @@ const AnswerResolver = {
         };
       } catch (error) {
         console.log(error);
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
     editAnswer: async (
@@ -103,7 +103,7 @@ const AnswerResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
     verifyAnswer: async (
@@ -126,7 +126,7 @@ const AnswerResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
     deleteAnswer: async (_, { answerId }, { dataSources: { answerAPI } }) => {
@@ -139,7 +139,7 @@ const AnswerResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
   },

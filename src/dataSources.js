@@ -45,7 +45,7 @@ const {
   NotificationModel,
 } = require("./components/Notification");
 
-const dataSources = () => ({
+const dataSources = {
   userAPI: new UserAPI(UserModel),
   followAPI: new FollowAPI(FollowModel),
   questionAPI: new QuestionAPI(QuestionModel),
@@ -65,6 +65,6 @@ const dataSources = () => ({
   likeAPI: new LikeAPI(LikeModel),
   bookmarkAPI: new BookmarkAPI(BookmarkModel),
   notificationAPI: new NotificationAPI(NotificationModel),
-});
+};
 
 module.exports = dataSources;

@@ -1,4 +1,4 @@
-const { UserInputError } = require("apollo-server");
+const { GraphQLError } = require("graphql");
 
 const AdvertResolver = {
   Query: {
@@ -22,7 +22,7 @@ const AdvertResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
   },
@@ -42,7 +42,7 @@ const AdvertResolver = {
         };
       } catch (error) {
         console.log(error);
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
     editAdvert: async (
@@ -62,7 +62,7 @@ const AdvertResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
     deleteAdvert: async (_, { advertId }, { dataSources: { advertAPI } }) => {
@@ -75,7 +75,7 @@ const AdvertResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
   },

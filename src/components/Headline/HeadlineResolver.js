@@ -1,4 +1,4 @@
-const { UserInputError } = require("apollo-server");
+const { GraphQLError } = require("graphql");
 
 const HeadlineResolver = {
   Query: {
@@ -21,7 +21,7 @@ const HeadlineResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
   },
@@ -41,7 +41,7 @@ const HeadlineResolver = {
         };
       } catch (error) {
         console.log(error);
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
     editHeadline: async (
@@ -61,7 +61,7 @@ const HeadlineResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
     deleteHeadline: async (
@@ -78,7 +78,7 @@ const HeadlineResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
   },

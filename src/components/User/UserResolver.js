@@ -1,4 +1,4 @@
-const { UserInputError } = require("apollo-server");
+const { GraphQLError } = require("graphql");
 const verifyIdToken = require("../../libs/verifyIdToken");
 const {
   createAccessToken,
@@ -29,7 +29,7 @@ const UserResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
     statistics: async (
@@ -48,7 +48,7 @@ const UserResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
     leaderboard: async (
@@ -69,7 +69,7 @@ const UserResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
   },
@@ -110,7 +110,7 @@ const UserResolver = {
         };
       } catch (error) {
         console.log(error);
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
     editProfile: async (
@@ -134,7 +134,7 @@ const UserResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
     assignRole: async (
@@ -158,7 +158,7 @@ const UserResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
     logout: async (_, __, { user, redis }) => {
@@ -172,7 +172,7 @@ const UserResolver = {
             : "You are already logged out.",
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
   },

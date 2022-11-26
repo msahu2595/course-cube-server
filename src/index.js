@@ -2,11 +2,12 @@ require("dotenv").config();
 
 const Redis = require("ioredis");
 const mongoose = require("mongoose");
-const { ApolloServer } = require("apollo-server");
+const { ApolloServer } = require("@apollo/server");
+const { startStandaloneServer } = require("@apollo/server/standalone");
 
 const typeDefs = require("./schema");
 const resolvers = require("./resolvers");
-const schemaDirectives = require("./schemaDirectives");
+// const schemaDirectives = require("./schemaDirectives");
 const dataSources = require("./dataSources");
 
 const {
@@ -51,7 +52,7 @@ const context = async ({ req }) => {
     const auth = req.headers["authorization"];
     const refreshToken = req.headers["refresh-token"];
     const accessToken = auth && auth.split(" ")[1];
-    if (accessToken == null) return { user: null, redis };
+    if (accessToken == null) return { user: null, redis, dataSources };
     const user = verifyAccessToken(accessToken);
     if (!user) {
       // eslint-disable-next-line no-unused-vars
@@ -59,11 +60,16 @@ const context = async ({ req }) => {
       const savedRefreshedToken = await redis.get(verifiedUser._id);
       if (savedRefreshedToken === refreshToken) {
         const newAccessToken = createAccessToken(verifiedUser);
-        return { user: verifiedUser, token: newAccessToken, redis };
+        return {
+          user: verifiedUser,
+          token: newAccessToken,
+          redis,
+          dataSources,
+        };
       }
       throw new Error("Refresh token expired.");
     }
-    return { user, redis };
+    return { user, redis, dataSources };
   } catch (error) {
     console.log(error);
     throw new Error(error.message || "You have to logged in again.");
@@ -74,35 +80,31 @@ const context = async ({ req }) => {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  schemaDirectives,
-  dataSources,
-  context,
-  introspection: true,
-  playground: true,
-  debug: true,
+  // schemaDirectives,
+  includeStacktraceInErrorResponses: true,
 });
 
 // Start our server if we're not in a test env.
 // if we're in a test env, we'll manually start it in a test
 if (process.env.NODE_ENV !== "test") {
-  server
-    .listen({
+  startStandaloneServer(server, {
+    context,
+    listen: {
       port: process.env.PORT || 4000,
-    })
-    .then(({ url }) => {
-      console.log(`
+    },
+  }).then(({ url }) => {
+    console.log(`
       Server is running!
       Listening on port ${process.env.PORT}, 🚀 Server ready at ${url}
     `);
-    });
+  });
 }
 
 // export all the important pieces for integration/e2e tests to use
 module.exports = {
   typeDefs,
   resolvers,
-  schemaDirectives,
-  dataSources,
+  // schemaDirectives,
   context,
   ApolloServer,
   server,

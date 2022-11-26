@@ -1,4 +1,4 @@
-const { UserInputError } = require("apollo-server");
+const { GraphQLError } = require("graphql");
 const { getVideoDetails, getVideoUrls } = require("../../libs/getVideoData");
 
 const VideoResolver = {
@@ -41,7 +41,7 @@ const VideoResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
     video: async (_, { videoId }, { dataSources: { videoAPI } }) => {
@@ -56,7 +56,7 @@ const VideoResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
   },
@@ -79,7 +79,7 @@ const VideoResolver = {
         };
       } catch (error) {
         console.log(error);
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
     editVideo: async (
@@ -107,7 +107,7 @@ const VideoResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
     refreshVideo: async (_, { videoId }, { dataSources: { videoAPI } }) => {
@@ -153,7 +153,7 @@ const VideoResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
     deleteVideo: async (_, { videoId }, { dataSources: { videoAPI } }) => {
@@ -166,7 +166,7 @@ const VideoResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
   },

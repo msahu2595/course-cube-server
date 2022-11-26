@@ -1,4 +1,4 @@
-const { gql } = require("apollo-server");
+const gql = require("graphql-tag");
 
 const NotificationSchema = gql`
   extend type Query {

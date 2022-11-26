@@ -1,4 +1,4 @@
-const { UserInputError } = require("apollo-server");
+const { GraphQLError } = require("graphql");
 
 const BundleResolver = {
   Query: {
@@ -25,7 +25,7 @@ const BundleResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
     bundle: async (_, { bundleId }, { dataSources: { bundleAPI } }) => {
@@ -40,7 +40,7 @@ const BundleResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
   },
@@ -56,7 +56,7 @@ const BundleResolver = {
         };
       } catch (error) {
         console.log(error);
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
     editBundle: async (
@@ -76,7 +76,7 @@ const BundleResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
     deleteBundle: async (_, { bundleId }, { dataSources: { bundleAPI } }) => {
@@ -89,7 +89,7 @@ const BundleResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
   },

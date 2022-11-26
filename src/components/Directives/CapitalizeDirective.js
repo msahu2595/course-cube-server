@@ -1,4 +1,4 @@
-const { SchemaDirectiveVisitor } = require("apollo-server");
+const { SchemaDirectiveVisitor } = require("@apollo/server");
 const { defaultFieldResolver } = require("graphql");
 const capitalize = require("lodash/capitalize");
 

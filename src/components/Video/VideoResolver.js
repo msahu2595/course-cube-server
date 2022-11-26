@@ -1,4 +1,4 @@
-const { UserInputError } = require("apollo-server");
+const { GraphQLError } = require("graphql");
 const {
   getVideoData,
   getVideoDetails,
@@ -30,7 +30,7 @@ const VideoResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
     video: async (_, { videoId }, { dataSources: { videoAPI } }) => {
@@ -45,7 +45,7 @@ const VideoResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
     fetchURL: async (_, { url }) => {
@@ -59,7 +59,7 @@ const VideoResolver = {
           payload: { title, thumbnail, time },
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
     fetchDownloadURL: async (_, { videoId }, { dataSources: { videoAPI } }) => {
@@ -78,7 +78,7 @@ const VideoResolver = {
           payload: urls,
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
   },
@@ -121,7 +121,7 @@ const VideoResolver = {
         };
       } catch (error) {
         console.log(error);
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
     editVideo: async (
@@ -166,7 +166,7 @@ const VideoResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
     refreshVideo: async (_, { videoId }, { dataSources: { videoAPI } }) => {
@@ -189,7 +189,7 @@ const VideoResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
     deleteVideo: async (_, { videoId }, { dataSources: { videoAPI } }) => {
@@ -202,7 +202,7 @@ const VideoResolver = {
           payload,
         };
       } catch (error) {
-        throw new UserInputError(error.message);
+        throw new GraphQLError(error.message);
       }
     },
   },
