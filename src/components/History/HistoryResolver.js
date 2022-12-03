@@ -5,7 +5,7 @@ const HistoryResolver = {
     history: async (
       _,
       { offset = 0, limit = 10, filter },
-      { dataSources: { historyAPI } }
+      { token, dataSources: { historyAPI } }
     ) => {
       try {
         const payload = await historyAPI.history({
@@ -17,6 +17,7 @@ const HistoryResolver = {
           code: 200,
           success: true,
           message: "Successfully get history.",
+          token,
           limit,
           offset,
           filter,
@@ -29,7 +30,7 @@ const HistoryResolver = {
     historyUsers: async (
       _,
       { offset = 0, limit = 10, refId },
-      { dataSources: { historyAPI } }
+      { token, dataSources: { historyAPI } }
     ) => {
       try {
         const payload = await historyAPI.historyUsers({
@@ -41,6 +42,7 @@ const HistoryResolver = {
           code: 200,
           success: true,
           message: "Successfully get history users.",
+          token,
           limit,
           offset,
           refId,
@@ -52,13 +54,18 @@ const HistoryResolver = {
     },
   },
   Mutation: {
-    addHistory: async (_, { refId, type }, { dataSources: { historyAPI } }) => {
+    addHistory: async (
+      _,
+      { refId, type },
+      { token, dataSources: { historyAPI } }
+    ) => {
       try {
         const payload = await historyAPI.addHistory({ refId, type });
         return {
           code: "200",
           success: true,
           message: "You are successfully added history.",
+          token,
           payload,
         };
       } catch (error) {
@@ -68,7 +75,7 @@ const HistoryResolver = {
     removeHistory: async (
       _,
       { historyId },
-      { dataSources: { historyAPI } }
+      { token, dataSources: { historyAPI } }
     ) => {
       try {
         const payload = await historyAPI.removeHistory({ historyId });
@@ -76,6 +83,7 @@ const HistoryResolver = {
           code: "200",
           success: true,
           message: "You are successfully removed history.",
+          token,
           payload,
         };
       } catch (error) {

@@ -5,7 +5,7 @@ const ArticleResolver = {
     articles: async (
       _,
       { offset = 0, limit = 10, search, filter },
-      { dataSources: { articleAPI } }
+      { token, dataSources: { articleAPI } }
     ) => {
       try {
         const payload = await articleAPI.articles({
@@ -18,6 +18,7 @@ const ArticleResolver = {
           code: 200,
           success: true,
           message: "Successfully get articles.",
+          token,
           limit,
           offset,
           search,
@@ -28,7 +29,7 @@ const ArticleResolver = {
         throw new GraphQLError(error.message);
       }
     },
-    article: async (_, { articleId }, { dataSources: { articleAPI } }) => {
+    article: async (_, { articleId }, { token, dataSources: { articleAPI } }) => {
       try {
         const payload = await articleAPI.article({
           articleId,
@@ -37,6 +38,7 @@ const ArticleResolver = {
           code: 200,
           success: true,
           message: "Successfully get article.",
+          token,
           payload,
         };
       } catch (error) {
@@ -48,7 +50,7 @@ const ArticleResolver = {
     createArticle: async (
       _,
       { articleInput },
-      { dataSources: { articleAPI } }
+      { token, dataSources: { articleAPI } }
     ) => {
       try {
         const payload = await articleAPI.createArticle({ articleInput });
@@ -56,6 +58,7 @@ const ArticleResolver = {
           code: "200",
           success: true,
           message: "Article added successfully.",
+          token,
           payload,
         };
       } catch (error) {
@@ -66,7 +69,7 @@ const ArticleResolver = {
     editArticle: async (
       _,
       { articleId, articleInput },
-      { dataSources: { articleAPI } }
+      { token, dataSources: { articleAPI } }
     ) => {
       try {
         const payload = await articleAPI.editArticle({
@@ -77,6 +80,7 @@ const ArticleResolver = {
           code: "200",
           success: true,
           message: "Article edited successfully.",
+          token,
           payload,
         };
       } catch (error) {
@@ -86,7 +90,7 @@ const ArticleResolver = {
     deleteArticle: async (
       _,
       { articleId },
-      { dataSources: { articleAPI } }
+      { token, dataSources: { articleAPI } }
     ) => {
       try {
         const payload = await articleAPI.deleteArticle({ articleId });
@@ -94,6 +98,7 @@ const ArticleResolver = {
           code: "200",
           success: true,
           message: "Article deleted successfully.",
+          token,
           payload,
         };
       } catch (error) {

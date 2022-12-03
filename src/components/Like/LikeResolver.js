@@ -5,7 +5,7 @@ const LikeResolver = {
     likedUsers: async (
       _,
       { offset = 0, limit = 10, refId },
-      { dataSources: { likeAPI } }
+      { token, dataSources: { likeAPI } }
     ) => {
       try {
         const payload = await likeAPI.likedUsers({
@@ -17,6 +17,7 @@ const LikeResolver = {
           code: 200,
           success: true,
           message: "Successfully get liked users.",
+          token,
           limit,
           offset,
           refId,
@@ -28,26 +29,28 @@ const LikeResolver = {
     },
   },
   Mutation: {
-    like: async (_, { refId }, { dataSources: { likeAPI } }) => {
+    like: async (_, { refId }, { token, dataSources: { likeAPI } }) => {
       try {
         const payload = await likeAPI.like({ refId });
         return {
           code: "200",
           success: true,
           message: "You are successfully like.",
+          token,
           payload,
         };
       } catch (error) {
         throw new Error(error.message, error.extensions.code);
       }
     },
-    unlike: async (_, { refId }, { dataSources: { likeAPI } }) => {
+    unlike: async (_, { refId }, { token, dataSources: { likeAPI } }) => {
       try {
         const payload = await likeAPI.unlike({ refId });
         return {
           code: "200",
           success: true,
           message: "You are successfully unlike.",
+          token,
           payload,
         };
       } catch (error) {

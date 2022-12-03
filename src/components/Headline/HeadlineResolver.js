@@ -5,7 +5,7 @@ const HeadlineResolver = {
     headlines: async (
       _,
       { offset = 0, limit = 10 },
-      { dataSources: { headlineAPI } }
+      { token, dataSources: { headlineAPI } }
     ) => {
       try {
         const payload = await headlineAPI.headlines({
@@ -16,6 +16,7 @@ const HeadlineResolver = {
           code: 200,
           success: true,
           message: "Successfully get headlines.",
+          token,
           offset,
           limit,
           payload,
@@ -29,7 +30,7 @@ const HeadlineResolver = {
     createHeadline: async (
       _,
       { headlineInput },
-      { dataSources: { headlineAPI } }
+      { token, dataSources: { headlineAPI } }
     ) => {
       try {
         const payload = await headlineAPI.createHeadline({ headlineInput });
@@ -37,6 +38,7 @@ const HeadlineResolver = {
           code: "200",
           success: true,
           message: "Headline added successfully.",
+          token,
           payload,
         };
       } catch (error) {
@@ -47,7 +49,7 @@ const HeadlineResolver = {
     editHeadline: async (
       _,
       { headlineId, headlineInput },
-      { dataSources: { headlineAPI } }
+      { token, dataSources: { headlineAPI } }
     ) => {
       try {
         const payload = await headlineAPI.editHeadline({
@@ -58,6 +60,7 @@ const HeadlineResolver = {
           code: "200",
           success: true,
           message: "Headline edited successfully.",
+          token,
           payload,
         };
       } catch (error) {
@@ -67,7 +70,7 @@ const HeadlineResolver = {
     deleteHeadline: async (
       _,
       { headlineId },
-      { dataSources: { headlineAPI } }
+      { token, dataSources: { headlineAPI } }
     ) => {
       try {
         const payload = await headlineAPI.deleteHeadline({ headlineId });
@@ -75,6 +78,7 @@ const HeadlineResolver = {
           code: "200",
           success: true,
           message: "Headline deleted successfully.",
+          token,
           payload,
         };
       } catch (error) {

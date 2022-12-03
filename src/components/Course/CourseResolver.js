@@ -5,7 +5,7 @@ const CourseResolver = {
     courses: async (
       _,
       { offset = 0, limit = 10, search, filter },
-      { dataSources: { courseAPI } }
+      { token, dataSources: { courseAPI } }
     ) => {
       try {
         const payload = await courseAPI.courses({
@@ -18,6 +18,7 @@ const CourseResolver = {
           code: 200,
           success: true,
           message: "Successfully get courses.",
+          token,
           limit,
           offset,
           search,
@@ -28,7 +29,7 @@ const CourseResolver = {
         throw new GraphQLError(error.message);
       }
     },
-    course: async (_, { courseId }, { dataSources: { courseAPI } }) => {
+    course: async (_, { courseId }, { token, dataSources: { courseAPI } }) => {
       try {
         const payload = await courseAPI.course({
           courseId,
@@ -37,6 +38,7 @@ const CourseResolver = {
           code: 200,
           success: true,
           message: "Successfully get course.",
+          token,
           payload,
         };
       } catch (error) {
@@ -45,13 +47,14 @@ const CourseResolver = {
     },
   },
   Mutation: {
-    addCourse: async (_, { courseInput }, { dataSources: { courseAPI } }) => {
+    addCourse: async (_, { courseInput }, { token, dataSources: { courseAPI } }) => {
       try {
         const payload = await courseAPI.addCourse({ courseInput });
         return {
           code: "200",
           success: true,
           message: "Course added successfully.",
+          token,
           payload,
         };
       } catch (error) {
@@ -62,7 +65,7 @@ const CourseResolver = {
     editCourse: async (
       _,
       { courseId, courseInput },
-      { dataSources: { courseAPI } }
+      { token, dataSources: { courseAPI } }
     ) => {
       try {
         const payload = await courseAPI.editCourse({
@@ -73,19 +76,21 @@ const CourseResolver = {
           code: "200",
           success: true,
           message: "Course edited successfully.",
+          token,
           payload,
         };
       } catch (error) {
         throw new GraphQLError(error.message);
       }
     },
-    deleteCourse: async (_, { courseId }, { dataSources: { courseAPI } }) => {
+    deleteCourse: async (_, { courseId }, { token, dataSources: { courseAPI } }) => {
       try {
         const payload = await courseAPI.deleteCourse({ courseId });
         return {
           code: "200",
           success: true,
           message: "Course deleted successfully.",
+          token,
           payload,
         };
       } catch (error) {

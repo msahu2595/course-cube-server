@@ -5,7 +5,7 @@ const NotificationResolver = {
     notifications: async (
       _,
       { offset = 0, limit = 10, type = "USER" },
-      { dataSources: { notificationAPI } }
+      { token, dataSources: { notificationAPI } }
     ) => {
       try {
         const payload = await notificationAPI.notifications({
@@ -17,6 +17,7 @@ const NotificationResolver = {
           code: "200",
           success: true,
           message: "",
+          token,
           payload,
         };
       } catch (error) {
@@ -28,7 +29,7 @@ const NotificationResolver = {
     readNotification: async (
       _,
       { notificationId },
-      { dataSources: { notificationAPI } }
+      { token, dataSources: { notificationAPI } }
     ) => {
       try {
         const payload = await notificationAPI.readNotification({
@@ -38,6 +39,7 @@ const NotificationResolver = {
           code: "200",
           success: true,
           message: "",
+          token,
           payload,
         };
       } catch (error) {

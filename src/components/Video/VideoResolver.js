@@ -10,7 +10,7 @@ const VideoResolver = {
     videos: async (
       _,
       { offset = 0, limit = 10, search, filter },
-      { dataSources: { videoAPI } }
+      { token, dataSources: { videoAPI } }
     ) => {
       try {
         const payload = await videoAPI.videos({
@@ -23,6 +23,7 @@ const VideoResolver = {
           code: 200,
           success: true,
           message: "Successfully get videos.",
+          token,
           limit,
           offset,
           search,
@@ -33,7 +34,7 @@ const VideoResolver = {
         throw new GraphQLError(error.message);
       }
     },
-    video: async (_, { videoId }, { dataSources: { videoAPI } }) => {
+    video: async (_, { videoId }, { token, dataSources: { videoAPI } }) => {
       try {
         const payload = await videoAPI.video({
           videoId,
@@ -42,13 +43,14 @@ const VideoResolver = {
           code: 200,
           success: true,
           message: "Successfully get video.",
+          token,
           payload,
         };
       } catch (error) {
         throw new GraphQLError(error.message);
       }
     },
-    fetchURL: async (_, { url }) => {
+    fetchURL: async (_, { url }, { token }) => {
       try {
         const output = await getVideoDetails(url);
         const [title, thumbnail, time] = output.split("\n");
@@ -56,13 +58,14 @@ const VideoResolver = {
           code: 200,
           success: true,
           message: "Successfully get details.",
+          token,
           payload: { title, thumbnail, time },
         };
       } catch (error) {
         throw new GraphQLError(error.message);
       }
     },
-    fetchDownloadURL: async (_, { videoId }, { dataSources: { videoAPI } }) => {
+    fetchDownloadURL: async (_, { videoId }, { token, dataSources: { videoAPI } }) => {
       try {
         const video = await videoAPI.video({ videoId });
         const output = await getVideoUrls(video?.link);
@@ -75,6 +78,7 @@ const VideoResolver = {
           code: "200",
           success: true,
           message: "Video URL fetched successfully.",
+          token,
           payload: urls,
         };
       } catch (error) {
@@ -83,7 +87,7 @@ const VideoResolver = {
     },
   },
   Mutation: {
-    addVideo: async (_, { videoLink: link }, { dataSources: { videoAPI } }) => {
+    addVideo: async (_, { videoLink: link }, { token, dataSources: { videoAPI } }) => {
       try {
         const output = await getVideoData(link);
         const [
@@ -117,6 +121,7 @@ const VideoResolver = {
           code: "200",
           success: true,
           message: "Video added successfully.",
+          token,
           payload,
         };
       } catch (error) {
@@ -127,7 +132,7 @@ const VideoResolver = {
     editVideo: async (
       _,
       { videoId, videoLink: link },
-      { dataSources: { videoAPI } }
+      { token, dataSources: { videoAPI } }
     ) => {
       try {
         const output = await getVideoData(link);
@@ -163,13 +168,14 @@ const VideoResolver = {
           code: "200",
           success: true,
           message: "Video edited successfully.",
+          token,
           payload,
         };
       } catch (error) {
         throw new GraphQLError(error.message);
       }
     },
-    refreshVideo: async (_, { videoId }, { dataSources: { videoAPI } }) => {
+    refreshVideo: async (_, { videoId }, { token, dataSources: { videoAPI } }) => {
       try {
         const video = await videoAPI.video({ videoId });
         const output = await getVideoUrls(video?.link);
@@ -186,19 +192,21 @@ const VideoResolver = {
           code: "200",
           success: true,
           message: "Video refreshed successfully.",
+          token,
           payload,
         };
       } catch (error) {
         throw new GraphQLError(error.message);
       }
     },
-    deleteVideo: async (_, { videoId }, { dataSources: { videoAPI } }) => {
+    deleteVideo: async (_, { videoId }, { token, dataSources: { videoAPI } }) => {
       try {
         const payload = await videoAPI.deleteVideo({ videoId });
         return {
           code: "200",
           success: true,
           message: "Video deleted successfully.",
+          token,
           payload,
         };
       } catch (error) {

@@ -5,7 +5,7 @@ const BundleResolver = {
     bundles: async (
       _,
       { offset = 0, limit = 10, search, filter },
-      { dataSources: { bundleAPI } }
+      { token, dataSources: { bundleAPI } }
     ) => {
       try {
         const payload = await bundleAPI.bundles({
@@ -18,6 +18,7 @@ const BundleResolver = {
           code: 200,
           success: true,
           message: "Successfully get bundles.",
+          token,
           limit,
           offset,
           search,
@@ -28,7 +29,7 @@ const BundleResolver = {
         throw new GraphQLError(error.message);
       }
     },
-    bundle: async (_, { bundleId }, { dataSources: { bundleAPI } }) => {
+    bundle: async (_, { bundleId }, { token, dataSources: { bundleAPI } }) => {
       try {
         const payload = await bundleAPI.bundle({
           bundleId,
@@ -37,6 +38,7 @@ const BundleResolver = {
           code: 200,
           success: true,
           message: "Successfully get bundle.",
+          token,
           payload,
         };
       } catch (error) {
@@ -45,13 +47,18 @@ const BundleResolver = {
     },
   },
   Mutation: {
-    addBundle: async (_, { bundleInput }, { dataSources: { bundleAPI } }) => {
+    addBundle: async (
+      _,
+      { bundleInput },
+      { token, dataSources: { bundleAPI } }
+    ) => {
       try {
         const payload = await bundleAPI.addBundle({ bundleInput });
         return {
           code: "200",
           success: true,
           message: "Bundle added successfully.",
+          token,
           payload,
         };
       } catch (error) {
@@ -62,7 +69,7 @@ const BundleResolver = {
     editBundle: async (
       _,
       { bundleId, bundleInput },
-      { dataSources: { bundleAPI } }
+      { token, dataSources: { bundleAPI } }
     ) => {
       try {
         const payload = await bundleAPI.editBundle({
@@ -73,19 +80,25 @@ const BundleResolver = {
           code: "200",
           success: true,
           message: "Bundle edited successfully.",
+          token,
           payload,
         };
       } catch (error) {
         throw new GraphQLError(error.message);
       }
     },
-    deleteBundle: async (_, { bundleId }, { dataSources: { bundleAPI } }) => {
+    deleteBundle: async (
+      _,
+      { bundleId },
+      { token, dataSources: { bundleAPI } }
+    ) => {
       try {
         const payload = await bundleAPI.deleteBundle({ bundleId });
         return {
           code: "200",
           success: true,
           message: "Bundle deleted successfully.",
+          token,
           payload,
         };
       } catch (error) {

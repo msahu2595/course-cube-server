@@ -5,7 +5,7 @@ const PurchaseResolver = {
     purchases: async (
       _,
       { offset = 0, limit = 10, filter },
-      { dataSources: { purchaseAPI } }
+      { token, dataSources: { purchaseAPI } }
     ) => {
       try {
         const payload = await purchaseAPI.purchases({
@@ -17,6 +17,7 @@ const PurchaseResolver = {
           code: 200,
           success: true,
           message: "Successfully get purchases.",
+          token,
           limit,
           offset,
           filter,
@@ -29,7 +30,7 @@ const PurchaseResolver = {
     purchasedUsers: async (
       _,
       { offset = 0, limit = 10, refId },
-      { dataSources: { purchaseAPI } }
+      { token, dataSources: { purchaseAPI } }
     ) => {
       try {
         const payload = await purchaseAPI.purchasedUsers({
@@ -41,6 +42,7 @@ const PurchaseResolver = {
           code: 200,
           success: true,
           message: "Successfully get purchased users.",
+          token,
           limit,
           offset,
           refId,
@@ -55,7 +57,7 @@ const PurchaseResolver = {
     createPurchase: async (
       _,
       { purchaseInput },
-      { dataSources: { purchaseAPI } }
+      { token, dataSources: { purchaseAPI } }
     ) => {
       try {
         const payload = await purchaseAPI.createPurchase(purchaseInput);
@@ -63,6 +65,7 @@ const PurchaseResolver = {
           code: "200",
           success: true,
           message: "Purchase added successfully.",
+          token,
           payload,
         };
       } catch (error) {

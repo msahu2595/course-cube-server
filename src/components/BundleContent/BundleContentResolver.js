@@ -5,7 +5,7 @@ const BundleContentResolver = {
     bundleContents: async (
       _,
       { offset = 0, limit = 10, bundleId, filter },
-      { dataSources: { bundleContentAPI } }
+      { token, dataSources: { bundleContentAPI } }
     ) => {
       try {
         const payload = await bundleContentAPI.bundleContents({
@@ -18,6 +18,7 @@ const BundleContentResolver = {
           code: 200,
           success: true,
           message: "Successfully get bundle contents.",
+          token,
           limit,
           offset,
           bundleId,
@@ -31,7 +32,7 @@ const BundleContentResolver = {
     bundleContent: async (
       _,
       { bundleContentId },
-      { dataSources: { bundleContentAPI } }
+      { token, dataSources: { bundleContentAPI } }
     ) => {
       try {
         const payload = await bundleContentAPI.bundleContent({
@@ -41,6 +42,7 @@ const BundleContentResolver = {
           code: 200,
           success: true,
           message: "Successfully get bundle content.",
+          token,
           payload,
         };
       } catch (error) {
@@ -53,7 +55,7 @@ const BundleContentResolver = {
       _,
       { bundleId, bundleContentInput },
       {
-        dataSources: {
+        token, dataSources: {
           bundleContentAPI,
           bundleAPI,
           videoAPI,
@@ -92,6 +94,7 @@ const BundleContentResolver = {
             code: "200",
             success: true,
             message: "Bundle content added successfully.",
+            token,
             payload,
           };
         } else {
@@ -107,7 +110,7 @@ const BundleContentResolver = {
     editBundleContent: async (
       _,
       { bundleContentId, bundleContentInput },
-      { dataSources: { bundleContentAPI, videoAPI, testAPI, documentAPI } }
+      { token, dataSources: { bundleContentAPI, videoAPI, testAPI, documentAPI } }
     ) => {
       try {
         let exists = false;
@@ -136,6 +139,7 @@ const BundleContentResolver = {
             code: "200",
             success: true,
             message: "Bundle content edited successfully.",
+            token,
             payload,
           };
         } else {
@@ -150,7 +154,7 @@ const BundleContentResolver = {
     deleteBundleContent: async (
       _,
       { bundleContentId },
-      { dataSources: { bundleContentAPI } }
+      { token, dataSources: { bundleContentAPI } }
     ) => {
       try {
         const payload = await bundleContentAPI.deleteBundleContent({
@@ -160,6 +164,7 @@ const BundleContentResolver = {
           code: "200",
           success: true,
           message: "Bundle content deleted successfully.",
+          token,
           payload,
         };
       } catch (error) {

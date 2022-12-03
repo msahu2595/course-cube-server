@@ -5,7 +5,7 @@ const AnswerResolver = {
     answers: async (
       _,
       { offset = 0, limit = 10, questionId },
-      { dataSources: { answerAPI } }
+      { token, dataSources: { answerAPI } }
     ) => {
       try {
         const payload = await answerAPI.answers({
@@ -17,6 +17,7 @@ const AnswerResolver = {
           code: 200,
           success: true,
           message: "",
+          token,
           limit,
           offset,
           payload,
@@ -29,7 +30,7 @@ const AnswerResolver = {
     userAnswers: async (
       _,
       { offset = 0, limit = 10, filter },
-      { dataSources: { answerAPI } }
+      { token, dataSources: { answerAPI } }
     ) => {
       try {
         const payload = await answerAPI.userAnswers({
@@ -41,6 +42,7 @@ const AnswerResolver = {
           code: 200,
           success: true,
           message: "",
+          token,
           limit,
           offset,
           payload,
@@ -49,13 +51,14 @@ const AnswerResolver = {
         throw new GraphQLError(error.message);
       }
     },
-    answer: async (_, { answerId }, { dataSources: { answerAPI } }) => {
+    answer: async (_, { answerId }, { token, dataSources: { answerAPI } }) => {
       try {
         const payload = await answerAPI.answer({ answerId });
         return {
           code: "200",
           success: true,
           message: "",
+          token,
           payload,
         };
       } catch (error) {
@@ -67,7 +70,7 @@ const AnswerResolver = {
     createAnswer: async (
       _,
       { questionId, answerInput },
-      { dataSources: { answerAPI } }
+      { token, dataSources: { answerAPI } }
     ) => {
       try {
         const answer = await answerAPI.createAnswer({
@@ -79,6 +82,7 @@ const AnswerResolver = {
           code: "200",
           success: true,
           message: "Answer created successfully.",
+          token,
           payload,
         };
       } catch (error) {
@@ -89,7 +93,7 @@ const AnswerResolver = {
     editAnswer: async (
       _,
       { answerId, answerInput },
-      { dataSources: { answerAPI } }
+      { token, dataSources: { answerAPI } }
     ) => {
       try {
         const payload = await answerAPI.editAnswer({
@@ -100,6 +104,7 @@ const AnswerResolver = {
           code: "200",
           success: true,
           message: "Answer edited successfully.",
+          token,
           payload,
         };
       } catch (error) {
@@ -109,7 +114,7 @@ const AnswerResolver = {
     verifyAnswer: async (
       _,
       { answerId, answerInput },
-      { dataSources: { answerAPI }, user: { role } }
+      { token, dataSources: { answerAPI }, user: { role } }
     ) => {
       try {
         if (role !== "ADMIN") {
@@ -123,19 +128,25 @@ const AnswerResolver = {
           code: "200",
           success: true,
           message: "Answer verified successfully.",
+          token,
           payload,
         };
       } catch (error) {
         throw new GraphQLError(error.message);
       }
     },
-    deleteAnswer: async (_, { answerId }, { dataSources: { answerAPI } }) => {
+    deleteAnswer: async (
+      _,
+      { answerId },
+      { token, dataSources: { answerAPI } }
+    ) => {
       try {
         const payload = await answerAPI.deleteAnswer({ answerId });
         return {
           code: "200",
           success: true,
           message: "Answer deleted successfully.",
+          token,
           payload,
         };
       } catch (error) {

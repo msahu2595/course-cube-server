@@ -5,7 +5,7 @@ const BookmarkResolver = {
     bookmarks: async (
       _,
       { offset = 0, limit = 10, filter },
-      { dataSources: { bookmarkAPI } }
+      { token, dataSources: { bookmarkAPI } }
     ) => {
       try {
         const payload = await bookmarkAPI.bookmarks({
@@ -17,6 +17,7 @@ const BookmarkResolver = {
           code: 200,
           success: true,
           message: "Successfully get bookmarks.",
+          token,
           limit,
           offset,
           filter,
@@ -29,7 +30,7 @@ const BookmarkResolver = {
     bookmarkedUsers: async (
       _,
       { offset = 0, limit = 10, refId },
-      { dataSources: { bookmarkAPI } }
+      { token, dataSources: { bookmarkAPI } }
     ) => {
       try {
         const payload = await bookmarkAPI.bookmarkedUsers({
@@ -41,6 +42,7 @@ const BookmarkResolver = {
           code: 200,
           success: true,
           message: "Successfully get bookmarked users.",
+          token,
           limit,
           offset,
           refId,
@@ -52,13 +54,18 @@ const BookmarkResolver = {
     },
   },
   Mutation: {
-    bookmark: async (_, { refId, type }, { dataSources: { bookmarkAPI } }) => {
+    bookmark: async (
+      _,
+      { refId, type },
+      { token, dataSources: { bookmarkAPI } }
+    ) => {
       try {
         const payload = await bookmarkAPI.bookmark({ refId, type });
         return {
           code: "200",
           success: true,
           message: "You are successfully bookmarked.",
+          token,
           payload,
         };
       } catch (error) {
@@ -68,7 +75,7 @@ const BookmarkResolver = {
     unbookmark: async (
       _,
       { refId, type },
-      { dataSources: { bookmarkAPI } }
+      { token, dataSources: { bookmarkAPI } }
     ) => {
       try {
         const payload = await bookmarkAPI.unbookmark({ refId, type });
@@ -76,6 +83,7 @@ const BookmarkResolver = {
           code: "200",
           success: true,
           message: "You are successfully un-bookmarked.",
+          token,
           payload,
         };
       } catch (error) {

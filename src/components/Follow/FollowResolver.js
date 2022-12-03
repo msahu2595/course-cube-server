@@ -5,7 +5,7 @@ const FollowResolver = {
     followerList: async (
       _,
       { offset = 0, limit = 10, userId },
-      { dataSources: { followAPI } }
+      { token, dataSources: { followAPI } }
     ) => {
       try {
         const payload = await followAPI.followerList({
@@ -17,6 +17,7 @@ const FollowResolver = {
           code: 200,
           success: true,
           message: "Successfully get your followers.",
+          token,
           limit,
           offset,
           payload,
@@ -28,7 +29,7 @@ const FollowResolver = {
     followingList: async (
       _,
       { offset = 0, limit = 10, userId },
-      { dataSources: { followAPI } }
+      { token, dataSources: { followAPI } }
     ) => {
       try {
         const payload = await followAPI.followingList({
@@ -40,6 +41,7 @@ const FollowResolver = {
           code: 200,
           success: true,
           message: "Successfully get your followings.",
+          token,
           limit,
           offset,
           payload,
@@ -53,7 +55,7 @@ const FollowResolver = {
     follow: async (
       _,
       { followingId },
-      { dataSources: { followAPI, notificationAPI }, user: { _id: followerId } }
+      { token, dataSources: { followAPI, notificationAPI }, user: { _id: followerId } }
     ) => {
       try {
         if (followerId === followingId) {
@@ -73,6 +75,7 @@ const FollowResolver = {
           code: "200",
           success: true,
           message: "You are successfully followed.",
+          token,
           payload,
         };
       } catch (error) {
@@ -82,7 +85,7 @@ const FollowResolver = {
     unFollow: async (
       _,
       { followingId },
-      { dataSources: { followAPI }, user: { _id: followerId } }
+      { token, dataSources: { followAPI }, user: { _id: followerId } }
     ) => {
       try {
         if (followerId === followingId) {
@@ -93,6 +96,7 @@ const FollowResolver = {
           code: "200",
           success: true,
           message: "You are successfully un-followed.",
+          token,
           payload,
         };
       } catch (error) {

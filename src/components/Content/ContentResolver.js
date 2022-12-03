@@ -22,7 +22,7 @@ const ContentResolver = {
     contents: async (
       _,
       { offset = 0, limit = 10, search, filter },
-      { dataSources: { contentAPI } }
+      { token, dataSources: { contentAPI } }
     ) => {
       try {
         const payload = await contentAPI.contents({
@@ -35,6 +35,7 @@ const ContentResolver = {
           code: 200,
           success: true,
           message: "Successfully get contents.",
+          token,
           limit,
           offset,
           search,
@@ -45,7 +46,7 @@ const ContentResolver = {
         throw new GraphQLError(error.message);
       }
     },
-    content: async (_, { contentId }, { dataSources: { contentAPI } }) => {
+    content: async (_, { contentId }, { token, dataSources: { contentAPI } }) => {
       try {
         const payload = await contentAPI.content({
           contentId,
@@ -54,6 +55,7 @@ const ContentResolver = {
           code: 200,
           success: true,
           message: "Successfully get content.",
+          token,
           payload,
         };
       } catch (error) {
@@ -65,7 +67,7 @@ const ContentResolver = {
     addContent: async (
       _,
       { contentInput },
-      { dataSources: { contentAPI, videoAPI, testAPI, documentAPI } }
+      { token, dataSources: { contentAPI, videoAPI, testAPI, documentAPI } }
     ) => {
       try {
         let exists = false;
@@ -91,6 +93,7 @@ const ContentResolver = {
             code: "200",
             success: true,
             message: "Content added successfully.",
+            token,
             payload,
           };
         } else {
@@ -106,7 +109,7 @@ const ContentResolver = {
     editContent: async (
       _,
       { contentId, contentInput },
-      { dataSources: { contentAPI, videoAPI, testAPI, documentAPI } }
+      { token, dataSources: { contentAPI, videoAPI, testAPI, documentAPI } }
     ) => {
       try {
         let exists = false;
@@ -135,6 +138,7 @@ const ContentResolver = {
             code: "200",
             success: true,
             message: "Content edited successfully.",
+            token,
             payload,
           };
         } else {
@@ -149,7 +153,7 @@ const ContentResolver = {
     deleteContent: async (
       _,
       { contentId },
-      { dataSources: { contentAPI } }
+      { token, dataSources: { contentAPI } }
     ) => {
       try {
         const payload = await contentAPI.deleteContent({ contentId });
@@ -157,6 +161,7 @@ const ContentResolver = {
           code: "200",
           success: true,
           message: "Content deleted successfully.",
+          token,
           payload,
         };
       } catch (error) {

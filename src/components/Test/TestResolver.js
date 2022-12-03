@@ -5,7 +5,7 @@ const TestResolver = {
     tests: async (
       _,
       { offset = 0, limit = 10, search, filter },
-      { dataSources: { testAPI } }
+      { token, dataSources: { testAPI } }
     ) => {
       try {
         const payload = await testAPI.tests({
@@ -18,6 +18,7 @@ const TestResolver = {
           code: 200,
           success: true,
           message: "Successfully get tests.",
+          token,
           limit,
           offset,
           search,
@@ -31,7 +32,7 @@ const TestResolver = {
     test: async (
       _,
       { testId, questionEnable },
-      { dataSources: { testAPI } }
+      { token, dataSources: { testAPI } }
     ) => {
       try {
         const payload = await testAPI.test({
@@ -42,6 +43,7 @@ const TestResolver = {
           code: 200,
           success: true,
           message: "Successfully get test.",
+          token,
           payload,
         };
       } catch (error) {
@@ -51,13 +53,14 @@ const TestResolver = {
     },
   },
   Mutation: {
-    addTest: async (_, { testInput }, { dataSources: { testAPI } }) => {
+    addTest: async (_, { testInput }, { token, dataSources: { testAPI } }) => {
       try {
         const payload = await testAPI.addTest({ testInput });
         return {
           code: "200",
           success: true,
           message: "Test added successfully.",
+          token,
           payload,
         };
       } catch (error) {
@@ -68,7 +71,7 @@ const TestResolver = {
     editTest: async (
       _,
       { testId, testInput },
-      { dataSources: { testAPI } }
+      { token, dataSources: { testAPI } }
     ) => {
       try {
         const payload = await testAPI.editTest({
@@ -79,19 +82,21 @@ const TestResolver = {
           code: "200",
           success: true,
           message: "Test edited successfully.",
+          token,
           payload,
         };
       } catch (error) {
         throw new GraphQLError(error.message);
       }
     },
-    deleteTest: async (_, { testId }, { dataSources: { testAPI } }) => {
+    deleteTest: async (_, { testId }, { token, dataSources: { testAPI } }) => {
       try {
         const payload = await testAPI.deleteTest({ testId });
         return {
           code: "200",
           success: true,
           message: "Test deleted successfully.",
+          token,
           payload,
         };
       } catch (error) {
@@ -101,7 +106,7 @@ const TestResolver = {
     addTestQuestion: async (
       _,
       { testId, questionInput },
-      { dataSources: { testAPI } }
+      { token, dataSources: { testAPI } }
     ) => {
       try {
         const payload = await testAPI.addTestQuestion({
@@ -112,6 +117,7 @@ const TestResolver = {
           code: "200",
           success: true,
           message: "Question added successfully.",
+          token,
           payload,
         };
       } catch (error) {
@@ -122,7 +128,7 @@ const TestResolver = {
     editTestQuestion: async (
       _,
       { questionId, questionInput },
-      { dataSources: { testAPI } }
+      { token, dataSources: { testAPI } }
     ) => {
       try {
         const payload = await testAPI.editTestQuestion({
@@ -133,6 +139,7 @@ const TestResolver = {
           code: "200",
           success: true,
           message: "Question edited successfully.",
+          token,
           payload,
         };
       } catch (error) {
@@ -142,7 +149,7 @@ const TestResolver = {
     deleteTestQuestion: async (
       _,
       { questionId },
-      { dataSources: { testAPI } }
+      { token, dataSources: { testAPI } }
     ) => {
       try {
         const payload = await testAPI.deleteTestQuestion({ questionId });
@@ -150,6 +157,7 @@ const TestResolver = {
           code: "200",
           success: true,
           message: "Question deleted successfully.",
+          token,
           payload,
         };
       } catch (error) {

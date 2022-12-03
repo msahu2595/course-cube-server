@@ -5,7 +5,7 @@ const DocumentResolver = {
     documents: async (
       _,
       { offset = 0, limit = 10, search, filter },
-      { dataSources: { documentAPI } }
+      { token, dataSources: { documentAPI } }
     ) => {
       try {
         const payload = await documentAPI.documents({
@@ -18,6 +18,7 @@ const DocumentResolver = {
           code: 200,
           success: true,
           message: "Successfully get documents.",
+          token,
           limit,
           offset,
           search,
@@ -28,7 +29,7 @@ const DocumentResolver = {
         throw new GraphQLError(error.message);
       }
     },
-    document: async (_, { documentId }, { dataSources: { documentAPI } }) => {
+    document: async (_, { documentId }, { token, dataSources: { documentAPI } }) => {
       try {
         const payload = await documentAPI.document({
           documentId,
@@ -37,6 +38,7 @@ const DocumentResolver = {
           code: 200,
           success: true,
           message: "Successfully get document.",
+          token,
           payload,
         };
       } catch (error) {
@@ -48,7 +50,7 @@ const DocumentResolver = {
     addDocument: async (
       _,
       { documentInput },
-      { dataSources: { documentAPI } }
+      { token, dataSources: { documentAPI } }
     ) => {
       try {
         const payload = await documentAPI.addDocument({ documentInput });
@@ -56,6 +58,7 @@ const DocumentResolver = {
           code: "200",
           success: true,
           message: "Document added successfully.",
+          token,
           payload,
         };
       } catch (error) {
@@ -66,7 +69,7 @@ const DocumentResolver = {
     editDocument: async (
       _,
       { documentId, documentInput },
-      { dataSources: { documentAPI } }
+      { token, dataSources: { documentAPI } }
     ) => {
       try {
         const payload = await documentAPI.editDocument({
@@ -77,6 +80,7 @@ const DocumentResolver = {
           code: "200",
           success: true,
           message: "Document edited successfully.",
+          token,
           payload,
         };
       } catch (error) {
@@ -86,7 +90,7 @@ const DocumentResolver = {
     deleteDocument: async (
       _,
       { documentId },
-      { dataSources: { documentAPI } }
+      { token, dataSources: { documentAPI } }
     ) => {
       try {
         const payload = await documentAPI.deleteDocument({ documentId });
@@ -94,6 +98,7 @@ const DocumentResolver = {
           code: "200",
           success: true,
           message: "Document deleted successfully.",
+          token,
           payload,
         };
       } catch (error) {

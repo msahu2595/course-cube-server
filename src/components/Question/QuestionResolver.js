@@ -5,7 +5,7 @@ const QuestionResolver = {
     questions: async (
       _,
       { offset = 0, limit = 10, search, filter },
-      { dataSources: { questionAPI } }
+      { token, dataSources: { questionAPI } }
     ) => {
       try {
         const payload = await questionAPI.questions({
@@ -18,6 +18,7 @@ const QuestionResolver = {
           code: "200",
           success: true,
           message: "Successful",
+          token,
           offset,
           limit,
           search,
@@ -29,13 +30,18 @@ const QuestionResolver = {
         throw new GraphQLError(error.message);
       }
     },
-    question: async (_, { questionId }, { dataSources: { questionAPI } }) => {
+    question: async (
+      _,
+      { questionId },
+      { token, dataSources: { questionAPI } }
+    ) => {
       try {
         const payload = await questionAPI.question({ questionId });
         return {
           code: "200",
           success: true,
           message: "Successful",
+          token,
           payload,
         };
       } catch (error) {
@@ -47,7 +53,7 @@ const QuestionResolver = {
     createQuestion: async (
       _,
       { questionInput },
-      { dataSources: { questionAPI } }
+      { token, dataSources: { questionAPI } }
     ) => {
       try {
         const question = await questionAPI.createQuestion(questionInput);
@@ -56,6 +62,7 @@ const QuestionResolver = {
           code: "200",
           success: true,
           message: "Question created successfully.",
+          token,
           payload,
         };
       } catch (error) {
@@ -66,7 +73,7 @@ const QuestionResolver = {
     editQuestion: async (
       _,
       { questionId, questionInput },
-      { dataSources: { questionAPI } }
+      { token, dataSources: { questionAPI } }
     ) => {
       try {
         const payload = await questionAPI.editQuestion({
@@ -77,6 +84,7 @@ const QuestionResolver = {
           code: "200",
           success: true,
           message: "Question edited successfully.",
+          token,
           payload,
         };
       } catch (error) {
@@ -86,7 +94,7 @@ const QuestionResolver = {
     verifyQuestion: async (
       _,
       { questionId, questionInput },
-      { dataSources: { questionAPI }, user: { role } }
+      { token, dataSources: { questionAPI }, user: { role } }
     ) => {
       try {
         if (role !== "ADMIN") {
@@ -100,6 +108,7 @@ const QuestionResolver = {
           code: "200",
           success: true,
           message: "Question verified successfully.",
+          token,
           payload,
         };
       } catch (error) {
@@ -109,7 +118,7 @@ const QuestionResolver = {
     deleteQuestion: async (
       _,
       { questionId },
-      { dataSources: { questionAPI } }
+      { token, dataSources: { questionAPI } }
     ) => {
       try {
         const payload = await questionAPI.deleteQuestion({ questionId });
@@ -117,6 +126,7 @@ const QuestionResolver = {
           code: "200",
           success: true,
           message: "Question deleted successfully.",
+          token,
           payload,
         };
       } catch (error) {
