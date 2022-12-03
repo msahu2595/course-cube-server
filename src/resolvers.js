@@ -1,7 +1,7 @@
 const { resolvers: scalarResolvers } = require("graphql-scalars");
 const PasswordResolver = require("./components/Scalars/PasswordResolver");
-const UserResolver = require("./components/User/UserResolver");
-const FollowResolver = require("./components/Follow/FollowResolver");
+const { UserResolver } = require("./components/User");
+const { FollowResolver } = require("./components/Follow");
 const { AdvertResolver } = require("./components/Advert");
 const { CourseResolver } = require("./components/Course");
 const { BundleResolver } = require("./components/Bundle");

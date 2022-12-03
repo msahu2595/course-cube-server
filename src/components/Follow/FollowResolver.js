@@ -57,7 +57,7 @@ const FollowResolver = {
     ) => {
       try {
         if (followerId === followingId) {
-          throw new UserInputError("You can't follow or un-follow yourself.");
+          throw new GraphQLError("You can't follow or un-follow yourself.");
         }
         const payload = await followAPI.follow({ followingId });
         const { following } = payload;
@@ -86,7 +86,7 @@ const FollowResolver = {
     ) => {
       try {
         if (followerId === followingId) {
-          throw new UserInputError("You can't follow or un-follow yourself.");
+          throw new GraphQLError("You can't follow or un-follow yourself.");
         }
         const payload = await followAPI.unFollow({ followingId });
         return {

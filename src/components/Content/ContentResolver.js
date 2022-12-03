@@ -94,7 +94,7 @@ const ContentResolver = {
             payload,
           };
         } else {
-          throw new UserInputError(
+          throw new GraphQLError(
             "Media file not exists, Please check & try again."
           );
         }
@@ -138,7 +138,7 @@ const ContentResolver = {
             payload,
           };
         } else {
-          throw new UserInputError(
+          throw new GraphQLError(
             "Media file not exists, Please check & try again."
           );
         }

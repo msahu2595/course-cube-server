@@ -65,7 +65,7 @@ const BundleContentResolver = {
       try {
         const bundleExists = await bundleAPI.bundleExists({ bundleId });
         if (!bundleExists)
-          throw new UserInputError("Bundle id does not exists.");
+          throw new GraphQLError("Bundle id does not exists.");
         let exists = false;
         if (bundleContentInput?.type === "Video") {
           exists = await videoAPI.videoExists({
@@ -95,7 +95,7 @@ const BundleContentResolver = {
             payload,
           };
         } else {
-          throw new UserInputError(
+          throw new GraphQLError(
             "Media file not exists, Please check & try again."
           );
         }
@@ -139,7 +139,7 @@ const BundleContentResolver = {
             payload,
           };
         } else {
-          throw new UserInputError(
+          throw new GraphQLError(
             "Media file not exists, Please check & try again."
           );
         }

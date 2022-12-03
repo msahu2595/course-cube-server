@@ -80,8 +80,9 @@ const UserResolver = {
       { redis, dataSources: { userAPI } }
     ) => {
       try {
-        if (!acceptTnC)
-          throw new UserInputError("Please accept terms & conditions.");
+        if (!acceptTnC) {
+          throw new GraphQLError("Please accept terms & conditions.");
+        }
         const {
           email,
           email_verified: emailVerified,
@@ -116,7 +117,7 @@ const UserResolver = {
     editProfile: async (
       _,
       { userInput },
-      { dataSources: { userAPI }, user }
+      { redis, dataSources: { userAPI }, user }
     ) => {
       if (!user) throw new Error("Authentication token required.");
       try {
@@ -125,6 +126,7 @@ const UserResolver = {
         });
         const accessToken = createAccessToken(payload.toJSON());
         const refreshToken = createRefreshToken(payload.toJSON());
+        redis.set(payload._id, refreshToken, "ex", 604800000);
         return {
           code: "200",
           success: true,
@@ -143,7 +145,7 @@ const UserResolver = {
       { dataSources: { userAPI }, user, token }
     ) => {
       if (user?.role !== "ADMIN") {
-        throw new UserInputError("You are not authorized.");
+        throw new GraphQLError("You are not authorized.");
       }
       try {
         const payload = await userAPI.assignRole({

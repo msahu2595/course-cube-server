@@ -113,7 +113,7 @@ const AnswerResolver = {
     ) => {
       try {
         if (role !== "ADMIN") {
-          throw new UserInputError("You are not authorized.");
+          throw new GraphQLError("You are not authorized.");
         }
         const payload = await answerAPI.verifyAnswer({
           answerId,

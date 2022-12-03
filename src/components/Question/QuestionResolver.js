@@ -90,7 +90,7 @@ const QuestionResolver = {
     ) => {
       try {
         if (role !== "ADMIN") {
-          throw new UserInputError("You are not authorized.");
+          throw new GraphQLError("You are not authorized.");
         }
         const payload = await questionAPI.verifyQuestion({
           questionId,
