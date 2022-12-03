@@ -52,6 +52,7 @@ const context = async ({ req }) => {
     const auth = req.headers["authorization"];
     const refreshToken = req.headers["refresh-token"];
     const accessToken = auth && auth.split(" ")[1];
+    // console.log({ refreshToken, accessToken });
     if (accessToken == null) return { user: null, redis, dataSources };
     const user = verifyAccessToken(accessToken);
     if (!user) {

@@ -51,9 +51,7 @@ class UserAPI extends MongoDataSource {
     FCMToken,
     platform,
   }) {
-    const payload = await this.findByFields({
-      email,
-    });
+    const payload = await this.model.findOne({ email }).exec();
     if (!payload.length) {
       return this.model
         .findOneAndUpdate(
