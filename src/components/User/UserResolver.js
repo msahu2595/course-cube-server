@@ -20,7 +20,7 @@ const UserResolver = {
     user: async (_, { userId }, { dataSources: { userAPI }, user, token }) => {
       if (!user) throw new Error("Authentication token required.");
       try {
-        const payload = await userAPI.user({ userId });
+        const payload = await userAPI.user({ userId: userId || user._id });
         return {
           code: "200",
           success: true,
@@ -39,7 +39,7 @@ const UserResolver = {
     ) => {
       if (!user) throw new Error("Authentication token required.");
       try {
-        const payload = await userAPI.statistics({ userId });
+        const payload = await userAPI.statistics({ userId: userId || user._id });
         return {
           code: "200",
           success: true,
