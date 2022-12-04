@@ -17,17 +17,25 @@ function verifyAccessToken(token) {
     token,
     process.env.JWT_ACCESS_SECRET,
     function (err, decoded) {
+      if (err) {
+        console.log("verifyAccessToken error ", err);
+      }
       return decoded;
     }
   );
 }
 
 function verifyRefreshToken(token) {
-  const verifiedRefreshToken = jwt.verify(
+  return jwt.verify(
     token,
-    process.env.JWT_REFRESH_SECRET
+    process.env.JWT_REFRESH_SECRET,
+    function (err, decoded) {
+      if (err) {
+        console.log("verifyRefreshToken error ", err);
+      }
+      return decoded;
+    }
   );
-  return verifiedRefreshToken;
 }
 
 module.exports = {
