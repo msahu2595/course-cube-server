@@ -21,6 +21,12 @@ const populateArray = (userId) => [
 ];
 
 class QuestionAPI extends MongoDataSource {
+  constructor(options) {
+    super(options); // this sends our server's `cache` through
+    this.model = options.QuestionModel;
+    this.context = options.context;
+  }
+
   questions({ offset, limit, search, userId, verified = true, enable = true }) {
     const filter = { verified, enable };
     if (search) {

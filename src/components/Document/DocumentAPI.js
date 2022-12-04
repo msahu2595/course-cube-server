@@ -1,6 +1,12 @@
 const { MongoDataSource } = require("apollo-datasource-mongodb");
 
 class DocumentAPI extends MongoDataSource {
+  constructor(options) {
+    super(options); // this sends our server's `cache` through
+    this.model = options.DocumentModel;
+    this.context = options.context;
+  }
+
   documents({ offset, limit, search, enable = true }) {
     const compound = {
       filter: [

@@ -1,6 +1,12 @@
 const { MongoDataSource } = require("apollo-datasource-mongodb");
 
 class CourseAPI extends MongoDataSource {
+  constructor(options) {
+    super(options); // this sends our server's `cache` through
+    this.model = options.CourseModel;
+    this.context = options.context;
+  }
+
   courses({ offset, limit, search, type, visible = true, enable = true }) {
     const filter = { visible, enable };
     if (type) {

@@ -1,6 +1,12 @@
 const { MongoDataSource } = require("apollo-datasource-mongodb");
 
 class ContentAPI extends MongoDataSource {
+  constructor(options) {
+    super(options); // this sends our server's `cache` through
+    this.model = options.ContentModel;
+    this.context = options.context;
+  }
+
   contents({
     offset,
     limit,

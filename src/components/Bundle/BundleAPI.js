@@ -1,6 +1,12 @@
 const { MongoDataSource } = require("apollo-datasource-mongodb");
 
 class BundleAPI extends MongoDataSource {
+  constructor(options) {
+    super(options); // this sends our server's `cache` through
+    this.model = options.BundleModel;
+    this.context = options.context;
+  }
+
   bundles({
     offset,
     limit,

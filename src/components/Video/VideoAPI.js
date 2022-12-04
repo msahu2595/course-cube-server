@@ -1,6 +1,12 @@
 const { MongoDataSource } = require("apollo-datasource-mongodb");
 
 class VideoAPI extends MongoDataSource {
+  constructor(options) {
+    super(options); // this sends our server's `cache` through
+    this.model = options.VideoModel;
+    this.context = options.context;
+  }
+
   videos({ offset, limit, search, enable = true }) {
     const compound = {
       filter: [

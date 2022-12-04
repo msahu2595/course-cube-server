@@ -53,7 +53,13 @@ const context = async ({ req }) => {
     const refreshToken = req.headers["refresh-token"];
     const accessToken = auth && auth.split(" ")[1];
     // console.log({ refreshToken, accessToken });
-    if (accessToken == null) return { user: null, redis, dataSources };
+    if (accessToken == null)
+      return {
+        user: null,
+        token: null,
+        redis,
+        dataSources: dataSources({ user: {} }),
+      };
     const user = verifyAccessToken(accessToken);
     if (!user) {
       // eslint-disable-next-line no-unused-vars
@@ -65,12 +71,17 @@ const context = async ({ req }) => {
           user: verifiedUser,
           token: newAccessToken,
           redis,
-          dataSources,
+          dataSources: dataSources({ user: verifiedUser }),
         };
       }
       throw new Error("Refresh token expired.");
     }
-    return { user, redis, dataSources };
+    return {
+      user,
+      token: null,
+      redis,
+      dataSources: dataSources({ user }),
+    };
   } catch (error) {
     console.log(error);
     throw new Error(error.message || "You have to logged in again.");

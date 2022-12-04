@@ -1,6 +1,12 @@
 const { MongoDataSource } = require("apollo-datasource-mongodb");
 
 class PurchaseAPI extends MongoDataSource {
+  constructor(options) {
+    super(options); // this sends our server's `cache` through
+    this.model = options.PurchaseModel;
+    this.context = options.context;
+  }
+
   purchases({ offset, limit, userId, type }) {
     const query = { user: userId || this.context.user._id };
     if (type) {

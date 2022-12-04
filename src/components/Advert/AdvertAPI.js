@@ -1,6 +1,12 @@
 const { MongoDataSource } = require("apollo-datasource-mongodb");
 
 class AdvertAPI extends MongoDataSource {
+  constructor(options) {
+    super(options); // this sends our server's `cache` through
+    this.model = options.AdvertModel;
+    this.context = options.context;
+  }
+
   adverts({ offset, limit, type, enable = true }) {
     const filter = { enable };
     if (type) {

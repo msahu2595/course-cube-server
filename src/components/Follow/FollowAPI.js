@@ -1,6 +1,12 @@
 const { MongoDataSource } = require("apollo-datasource-mongodb");
 
 class FollowAPI extends MongoDataSource {
+  constructor(options) {
+    super(options); // this sends our server's `cache` through
+    this.model = options.FollowModel;
+    this.context = options.context;
+  }
+
   followerList({ offset, limit, userId }) {
     return this.model
       .find({ following: userId || this.context.user._id })

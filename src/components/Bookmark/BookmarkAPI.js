@@ -1,6 +1,12 @@
 const { MongoDataSource } = require("apollo-datasource-mongodb");
 
 class BookmarkAPI extends MongoDataSource {
+  constructor(options) {
+    super(options); // this sends our server's `cache` through
+    this.model = options.BookmarkModel;
+    this.context = options.context;
+  }
+
   bookmarks({ offset, limit, userId, type }) {
     const query = { user: userId || this.context.user._id, active: true };
     if (type) {

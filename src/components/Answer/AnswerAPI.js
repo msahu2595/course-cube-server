@@ -1,6 +1,12 @@
 const { MongoDataSource } = require("apollo-datasource-mongodb");
 
 class AnswerAPI extends MongoDataSource {
+  constructor(options) {
+    super(options); // this sends our server's `cache` through
+    this.model = options.AnswerModel;
+    this.context = options.context;
+  }
+
   answers({ offset, limit, questionId }) {
     return this.model
       .find({ verified: true, enable: true, question: questionId })

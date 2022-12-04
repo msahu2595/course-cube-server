@@ -1,6 +1,12 @@
 const { MongoDataSource } = require("apollo-datasource-mongodb");
 
 class HeadlineAPI extends MongoDataSource {
+  constructor(options) {
+    super(options); // this sends our server's `cache` through
+    this.model = options.HeadlineModel;
+    this.context = options.context;
+  }
+
   headlines({ offset, limit }) {
     return this.model
       .find({ enable: true })

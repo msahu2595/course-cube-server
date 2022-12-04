@@ -1,6 +1,12 @@
 const { MongoDataSource } = require("apollo-datasource-mongodb");
 
 class UserAPI extends MongoDataSource {
+  constructor(options) {
+    super(options); // this sends our server's `cache` through
+    this.model = options.UserModel;
+    this.context = options.context;
+  }
+
   user({ userId }) {
     return this.model
       .findById(userId || this.context.user._id)

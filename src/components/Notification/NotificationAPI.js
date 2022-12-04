@@ -1,6 +1,12 @@
 const { MongoDataSource } = require("apollo-datasource-mongodb");
 
 class NotificationAPI extends MongoDataSource {
+  constructor(options) {
+    super(options); // this sends our server's `cache` through
+    this.model = options.NotificationModel;
+    this.context = options.context;
+  }
+
   notifications({ offset, limit, type }) {
     return this.model
       .find({ userId: this.context.user._id, type })

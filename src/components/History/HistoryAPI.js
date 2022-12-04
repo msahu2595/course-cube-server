@@ -1,6 +1,12 @@
 const { MongoDataSource } = require("apollo-datasource-mongodb");
 
 class HistoryAPI extends MongoDataSource {
+  constructor(options) {
+    super(options); // this sends our server's `cache` through
+    this.model = options.HistoryModel;
+    this.context = options.context;
+  }
+
   history({ offset, limit, userId, type }) {
     const query = { user: userId || this.context.user._id, visible: true };
     if (type) {

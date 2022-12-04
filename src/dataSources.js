@@ -45,26 +45,26 @@ const {
   NotificationModel,
 } = require("./components/Notification");
 
-const dataSources = {
-  userAPI: new UserAPI(UserModel),
-  followAPI: new FollowAPI(FollowModel),
-  questionAPI: new QuestionAPI(QuestionModel),
-  advertAPI: new AdvertAPI(AdvertModel),
-  courseAPI: new CourseAPI(CourseModel),
-  bundleAPI: new BundleAPI(BundleModel),
-  bundleContentAPI: new BundleContentAPI(BundleContentModel),
-  contentAPI: new ContentAPI(ContentModel),
-  videoAPI: new VideoAPI(VideoModel),
-  testAPI: new TestAPI(TestModel),
-  documentAPI: new DocumentAPI(DocumentModel),
-  headlineAPI: new HeadlineAPI(HeadlineModel),
-  articleAPI: new ArticleAPI(ArticleModel),
-  purchaseAPI: new PurchaseAPI(PurchaseModel),
-  answerAPI: new AnswerAPI(AnswerModel),
-  historyAPI: new HistoryAPI(HistoryModel),
-  likeAPI: new LikeAPI(LikeModel),
-  bookmarkAPI: new BookmarkAPI(BookmarkModel),
-  notificationAPI: new NotificationAPI(NotificationModel),
-};
+const dataSources = (context) => ({
+  userAPI: new UserAPI({ UserModel, context }),
+  followAPI: new FollowAPI({ FollowModel, context }),
+  questionAPI: new QuestionAPI({ QuestionModel, context }),
+  advertAPI: new AdvertAPI({ AdvertModel, context }),
+  courseAPI: new CourseAPI({ CourseModel, context }),
+  bundleAPI: new BundleAPI({ BundleModel, context }),
+  bundleContentAPI: new BundleContentAPI({ BundleContentModel, context }),
+  contentAPI: new ContentAPI({ ContentModel, context }),
+  videoAPI: new VideoAPI({ VideoModel, context }),
+  testAPI: new TestAPI({ TestModel, context }),
+  documentAPI: new DocumentAPI({ DocumentModel, context }),
+  headlineAPI: new HeadlineAPI({ HeadlineModel, context }),
+  articleAPI: new ArticleAPI({ ArticleModel, context }),
+  purchaseAPI: new PurchaseAPI({ PurchaseModel, context }),
+  answerAPI: new AnswerAPI({ AnswerModel, context }),
+  historyAPI: new HistoryAPI({ HistoryModel, context }),
+  likeAPI: new LikeAPI({ LikeModel, context }),
+  bookmarkAPI: new BookmarkAPI({ BookmarkModel, context }),
+  notificationAPI: new NotificationAPI({ NotificationModel, context }),
+});
 
 module.exports = dataSources;
