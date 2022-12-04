@@ -26,6 +26,7 @@ const UserResolver = {
           success: true,
           message: "Successful",
           token,
+          refresh: null,
           payload,
         };
       } catch (error) {
@@ -157,6 +158,7 @@ const UserResolver = {
           success: true,
           message: `Your role changed to "${role}".`,
           token,
+          refresh: null,
           payload,
         };
       } catch (error) {
@@ -172,6 +174,9 @@ const UserResolver = {
           message: res
             ? "You are successfully logged out."
             : "You are already logged out.",
+          token: null,
+          refresh: null,
+          payload: null,
         };
       } catch (error) {
         throw new GraphQLError(error.message);
