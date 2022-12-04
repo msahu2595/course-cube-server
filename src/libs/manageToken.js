@@ -17,9 +17,9 @@ function verifyAccessToken(token) {
     token,
     process.env.JWT_ACCESS_SECRET,
     function (err, decoded) {
-      if (err) {
-        console.log("verifyAccessToken error ", err);
-      }
+      // if (err) {
+      //   console.log("verifyAccessToken error ", err);
+      // }
       return decoded;
     }
   );
@@ -30,9 +30,9 @@ function verifyRefreshToken(token) {
     token,
     process.env.JWT_REFRESH_SECRET,
     function (err, decoded) {
-      if (err) {
-        console.log("verifyRefreshToken error ", err);
-      }
+      // if (err) {
+      //   console.log("verifyRefreshToken error ", err);
+      // }
       return decoded;
     }
   );
