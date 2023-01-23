@@ -58,7 +58,7 @@ class UserAPI extends MongoDataSource {
     platform,
   }) {
     const payload = await this.model.findOne({ email }).exec();
-    if (!payload.length) {
+    if (!payload?.length) {
       return this.model
         .findOneAndUpdate(
           {
