@@ -4,6 +4,10 @@ const Redis = require("ioredis");
 const mongoose = require("mongoose");
 const { ApolloServer } = require("@apollo/server");
 const { startStandaloneServer } = require("@apollo/server/standalone");
+const {
+  ApolloServerPluginLandingPageLocalDefault,
+  ApolloServerPluginLandingPageProductionDefault,
+} = require("@apollo/server/plugin/landingPage/default");
 
 const typeDefs = require("./schema");
 const resolvers = require("./resolvers");
@@ -20,6 +24,23 @@ const redis = new Redis({
   host: process.env.REDIS_HOST, // Redis host
   port: process.env.REDIS_PORT, // Redis port
   password: process.env.REDIS_PASSWORD,
+});
+
+// Listener Emitted when Redis successfully makes its initial connection to the Redis server.
+redis.on("connect", () => {
+  console.log(
+    "Redis successfully makes its initial connection to the Redis server"
+  );
+});
+
+// Listener Emitted when Redis lost connection to the Redis server.
+redis.on("close", () => {
+  console.log("Redis lost connection to the Redis server.");
+});
+
+// Listener Emitted if an error occurs on a connection.
+redis.on("error", (error) => {
+  console.log("Redis error occurs on a connection.", error);
 });
 
 // Listener Emitted when Mongoose successfully makes its initial connection to the MongoDB server, or when Mongoose reconnects after losing connectivity.
@@ -94,6 +115,11 @@ const server = new ApolloServer({
   resolvers,
   // schemaDirectives,
   includeStacktraceInErrorResponses: true,
+  plugins: [
+    process.env.NODE_ENV === "production"
+      ? ApolloServerPluginLandingPageProductionDefault()
+      : ApolloServerPluginLandingPageLocalDefault({ embed: false }),
+  ],
 });
 
 // Start our server if we're not in a test env.
