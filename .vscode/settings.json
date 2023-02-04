@@ -3,5 +3,8 @@
         "Bhavesh",
         "Gajpal",
         "unbookmark"
-    ]
+    ],
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#228b22",
+    }
 }
