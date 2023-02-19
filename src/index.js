@@ -117,10 +117,7 @@ const server = new ApolloServer({
   includeStacktraceInErrorResponses: true,
   plugins: [
     process.env.NODE_ENV === "production"
-      ? ApolloServerPluginLandingPageProductionDefault({
-          embed: true,
-          graphRef: "course-cube@current",
-        })
+      ? ApolloServerPluginLandingPageProductionDefault()
       : ApolloServerPluginLandingPageLocalDefault({ embed: true }),
   ],
 });
