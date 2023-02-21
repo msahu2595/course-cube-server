@@ -115,9 +115,10 @@ const server = new ApolloServer({
   resolvers,
   // schemaDirectives,
   includeStacktraceInErrorResponses: true,
+  introspection: true,
   plugins: [
     process.env.NODE_ENV === "production"
-      ? ApolloServerPluginLandingPageProductionDefault()
+      ? ApolloServerPluginLandingPageProductionDefault({ embed: true })
       : ApolloServerPluginLandingPageLocalDefault({ embed: true }),
   ],
 });
