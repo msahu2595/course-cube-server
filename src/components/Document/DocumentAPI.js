@@ -38,7 +38,7 @@ class DocumentAPI extends MongoDataSource {
         },
       },
       { $sort: { createdAt: -1 } },
-      { $skip: offset },
+      { $skip: offset * limit},
       {
         $limit: limit,
       },
