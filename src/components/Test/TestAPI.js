@@ -38,7 +38,7 @@ class TestAPI extends MongoDataSource {
         },
       },
       { $sort: { createdAt: -1 } },
-      { $skip: offset * limit },
+      { $skip: offset },
       {
         $limit: limit,
       },
