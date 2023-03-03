@@ -15,7 +15,6 @@ SyllabusSchema.add({
     required: true,
     type: Schema.Types.ObjectId,
     default: Types.ObjectId,
-    index: { unique: true },
   },
   items: [SyllabusSchema],
 });
