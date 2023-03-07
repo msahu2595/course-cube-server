@@ -62,8 +62,8 @@ const BundleSchema = gql`
   }
 
   input SyllabusInput {
+    subjectId: ID
     name: String!
-    value: ID
     items: [SyllabusInput]
   }
 

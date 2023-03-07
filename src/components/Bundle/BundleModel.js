@@ -3,6 +3,11 @@ const { Schema, Types, model } = require("mongoose");
 const SyllabusSchema = new Schema({}, { _id: false });
 
 SyllabusSchema.add({
+  subjectId: {
+    required: true,
+    type: Schema.Types.ObjectId,
+    default: Types.ObjectId,
+  },
   name: {
     required: true,
     type: String,
@@ -10,11 +15,6 @@ SyllabusSchema.add({
     lowercase: true,
     minlength: 1,
     maxlength: 80,
-  },
-  value: {
-    required: true,
-    type: Schema.Types.ObjectId,
-    default: Types.ObjectId,
   },
   items: [SyllabusSchema],
 });
