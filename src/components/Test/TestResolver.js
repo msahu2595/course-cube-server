@@ -29,15 +29,10 @@ const TestResolver = {
         throw new GraphQLError(error.message);
       }
     },
-    test: async (
-      _,
-      { testId, questionEnable },
-      { token, dataSources: { testAPI } }
-    ) => {
+    test: async (_, { testId }, { token, dataSources: { testAPI } }) => {
       try {
         const payload = await testAPI.test({
           testId,
-          questionEnable,
         });
         return {
           code: 200,
@@ -109,9 +104,18 @@ const TestResolver = {
       { token, dataSources: { testAPI } }
     ) => {
       try {
-        const payload = await testAPI.addTestQuestion({
+        const { questions } = await testAPI.addTestQuestion({
           testId,
           questionInput,
+        });
+        const payload = await testAPI.editTest({
+          testId,
+          testInput: {
+            totalMarks: questions.reduce(
+              (accumulator, question) => accumulator + question.mark,
+              0
+            ),
+          },
         });
         return {
           code: "200",
@@ -131,9 +135,18 @@ const TestResolver = {
       { token, dataSources: { testAPI } }
     ) => {
       try {
-        const payload = await testAPI.editTestQuestion({
+        const { _id: testId, questions } = await testAPI.editTestQuestion({
           questionId,
           questionInput,
+        });
+        const payload = await testAPI.editTest({
+          testId,
+          testInput: {
+            totalMarks: questions.reduce(
+              (accumulator, question) => accumulator + question.mark,
+              0
+            ),
+          },
         });
         return {
           code: "200",
@@ -152,7 +165,18 @@ const TestResolver = {
       { token, dataSources: { testAPI } }
     ) => {
       try {
-        const payload = await testAPI.deleteTestQuestion({ questionId });
+        const { _id: testId, questions } = await testAPI.deleteTestQuestion({
+          questionId,
+        });
+        const payload = await testAPI.editTest({
+          testId,
+          testInput: {
+            totalMarks: questions.reduce(
+              (accumulator, question) => accumulator + question.mark,
+              0
+            ),
+          },
+        });
         return {
           code: "200",
           success: true,

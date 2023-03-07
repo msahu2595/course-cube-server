@@ -8,7 +8,7 @@ const TestSchema = gql`
       search: String
       filter: TestsFilterInput
     ): TestListResponse
-    test(testId: ID!, questionEnable: Boolean): TestResponse
+    test(testId: ID!): TestResponse
   }
 
   input TestsFilterInput {
@@ -21,7 +21,7 @@ const TestSchema = gql`
 
   extend type Mutation {
     addTest(testInput: TestInput!): TestResponse
-    editTest(testId: ID!, testInput: TestInput!): TestResponse
+    editTest(testId: ID!, testInput: TestEditInput!): TestResponse
     deleteTest(testId: ID!): TestResponse
     addTestQuestion(
       testId: ID!
@@ -39,8 +39,13 @@ const TestSchema = gql`
     thumbnail: URL
     instructions: String!
     duration: Duration!
-    totalMarks: NonNegativeFloat!
-    negativeMark: NonPositiveFloat!
+  }
+
+  input TestEditInput {
+    title: String
+    thumbnail: URL
+    instructions: String
+    duration: Duration
   }
 
   input TestQuestionInput {
@@ -48,8 +53,9 @@ const TestSchema = gql`
     image: URL
     passage: String
     options: [String!]!
-    mark: NonNegativeFloat!
     answerIndex: NonNegativeInt!
+    mark: PositiveFloat!
+    negativeMark: NonPositiveFloat
   }
 
   input TestQuestionEditInput {
@@ -57,8 +63,9 @@ const TestSchema = gql`
     image: URL
     passage: String
     options: [String!]
-    mark: NonNegativeFloat
     answerIndex: NonNegativeInt
+    mark: PositiveFloat
+    negativeMark: NonPositiveFloat
   }
 
   type Test {
@@ -66,10 +73,9 @@ const TestSchema = gql`
     title: String!
     thumbnail: URL
     instructions: String!
-    questions: [TestQuestion!]
     duration: Duration!
+    questions: [TestQuestion!]
     totalMarks: NonNegativeFloat!
-    negativeMark: NonPositiveFloat!
     enable: Boolean!
     createdAt: String!
     updatedAt: String!
@@ -81,9 +87,9 @@ const TestSchema = gql`
     image: URL
     passage: String
     options: [String!]!
-    mark: NonNegativeFloat!
     answerIndex: NonNegativeInt!
-    enable: Boolean!
+    mark: PositiveFloat!
+    negativeMark: NonPositiveFloat!
   }
 
   type TestListResponse implements ListResponse {

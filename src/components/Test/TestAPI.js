@@ -20,12 +20,8 @@ class TestAPI extends MongoDataSource {
       .exec();
   }
 
-  test({ testId, questionEnable }) {
-    const filter = { _id: testId };
-    if (typeof questionEnable === Boolean) {
-      filter["questions"] = { $elemMatch: { enable: questionEnable } };
-    }
-    return this.model.findOne(filter).exec();
+  test({ testId }) {
+    return this.model.findById(testId).exec();
   }
 
   testExists({ testId }) {
@@ -79,7 +75,7 @@ class TestAPI extends MongoDataSource {
     return this.model
       .findOneAndUpdate(
         { "questions._id": questionId },
-        { $set: { "questions.$.enable": false } },
+        { $pull: { questions: { _id: questionId } } },
         { new: true }
       )
       .exec();

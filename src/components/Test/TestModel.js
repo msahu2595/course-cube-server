@@ -17,29 +17,26 @@ const TestSchema = new Schema(
       type: String,
       trim: true,
     },
+    duration: {
+      required: true,
+      type: String,
+      trim: true,
+    },
     questions: [
       {
         question: { type: String, required: true },
         image: String,
         passage: String,
         options: [{ type: String, required: true }],
-        mark: { type: Number, required: true },
         answerIndex: { type: Number, required: true },
-        enable: { type: Boolean, required: true, default: true },
+        mark: { type: Number, required: true },
+        negativeMark: { type: Number, required: true, default: 0 },
       },
     ],
-    duration: {
-      required: true,
-      type: String,
-      trim: true,
-    },
     totalMarks: {
       type: Number,
       required: true,
-    },
-    negativeMark: {
-      type: Number,
-      required: true,
+      default: 0,
     },
     enable: { type: Boolean, required: true, default: true },
   },
