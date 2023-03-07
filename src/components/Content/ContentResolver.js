@@ -46,7 +46,11 @@ const ContentResolver = {
         throw new GraphQLError(error.message);
       }
     },
-    content: async (_, { contentId }, { token, dataSources: { contentAPI } }) => {
+    content: async (
+      _,
+      { contentId },
+      { token, dataSources: { contentAPI } }
+    ) => {
       try {
         const payload = await contentAPI.content({
           contentId,

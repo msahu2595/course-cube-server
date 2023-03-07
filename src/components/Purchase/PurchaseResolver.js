@@ -1,6 +1,16 @@
 const { GraphQLError } = require("graphql");
 
 const PurchaseResolver = {
+  Item: {
+    __resolveType(obj) {
+      // Only Bundle has a syllabus field
+      if (obj.syllabus) {
+        return "Bundle";
+      } else {
+        return "Content";
+      }
+    },
+  },
   Query: {
     purchases: async (
       _,
@@ -29,14 +39,14 @@ const PurchaseResolver = {
     },
     purchasedUsers: async (
       _,
-      { offset = 0, limit = 10, refId },
+      { offset = 0, limit = 10, item },
       { token, dataSources: { purchaseAPI } }
     ) => {
       try {
         const payload = await purchaseAPI.purchasedUsers({
           offset,
           limit,
-          refId,
+          item,
         });
         return {
           code: 200,
@@ -45,7 +55,7 @@ const PurchaseResolver = {
           token,
           limit,
           offset,
-          refId,
+          item,
           payload,
         };
       } catch (error) {

@@ -6,8 +6,6 @@ const FollowAPI = require("./components/Follow/FollowAPI");
 const FollowModel = require("./components/Follow/FollowModel");
 // Advert API
 const { AdvertAPI, AdvertModel } = require("./components/Advert");
-// Course API
-const { CourseAPI, CourseModel } = require("./components/Course");
 // Bundle API
 const { BundleAPI, BundleModel } = require("./components/Bundle");
 // BundleContent API
@@ -50,7 +48,6 @@ const dataSources = (context) => ({
   followAPI: new FollowAPI({ FollowModel, context }),
   questionAPI: new QuestionAPI({ QuestionModel, context }),
   advertAPI: new AdvertAPI({ AdvertModel, context }),
-  courseAPI: new CourseAPI({ CourseModel, context }),
   bundleAPI: new BundleAPI({ BundleModel, context }),
   bundleContentAPI: new BundleContentAPI({ BundleContentModel, context }),
   contentAPI: new ContentAPI({ ContentModel, context }),

@@ -14,18 +14,17 @@ class PurchaseAPI extends MongoDataSource {
     }
     return this.model
       .find(query)
+      .sort({ createdAt: -1 })
       .skip(offset)
       .limit(limit)
-      .populate("course")
-      .populate("video")
-      .populate("test")
-      .populate("document")
+      .populate("item")
       .exec();
   }
 
-  purchasedUsers({ offset, limit, refId }) {
+  purchasedUsers({ offset, limit, item }) {
     return this.model
-      .find({ refId, active: true })
+      .find({ item })
+      .sort({ createdAt: -1 })
       .skip(offset)
       .limit(limit)
       .populate("user")
@@ -33,7 +32,7 @@ class PurchaseAPI extends MongoDataSource {
   }
 
   createPurchase({
-    refId,
+    item,
     type,
     image,
     subject,
@@ -47,7 +46,7 @@ class PurchaseAPI extends MongoDataSource {
     return this.model.findOneAndUpdate(
       {
         user: this.context.user._id,
-        refId,
+        item,
         type,
       },
       {

@@ -1,6 +1,16 @@
 const gql = require("graphql-tag");
 
 const BundleSchema = gql`
+  enum OfferType {
+    PERCENT
+    AMOUNT
+  }
+
+  enum LanguageType {
+    HI
+    EN
+  }
+
   enum BundleType {
     FULL_COURSE
     SUBJECT_COURSE

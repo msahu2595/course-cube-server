@@ -3,7 +3,6 @@ const PasswordResolver = require("./components/Scalars/PasswordResolver");
 const { UserResolver } = require("./components/User");
 const { FollowResolver } = require("./components/Follow");
 const { AdvertResolver } = require("./components/Advert");
-const { CourseResolver } = require("./components/Course");
 const { BundleResolver } = require("./components/Bundle");
 const { BundleContentResolver } = require("./components/BundleContent");
 const { ContentResolver } = require("./components/Content");
@@ -25,7 +24,6 @@ module.exports = [
   PasswordResolver,
   UserResolver,
   AdvertResolver,
-  CourseResolver,
   BundleResolver,
   BundleContentResolver,
   ContentResolver,

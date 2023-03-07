@@ -1,11 +1,11 @@
 const gql = require("graphql-tag");
 
 const PurchaseSchema = gql`
-  enum PurchaseContentType {
-    COURSE
-    VIDEO
-    TEST
-    DOCUMENT
+  union Item = Bundle | Content
+
+  enum ItemType {
+    Bundle
+    Content
   }
 
   enum PurchaseStatus {
@@ -27,18 +27,18 @@ const PurchaseSchema = gql`
     purchasedUsers(
       limit: Int
       offset: Int
-      refId: ID!
+      item: ID!
     ): PurchasedUserListResponse
   }
 
   input PurchasesFilterInput {
     userId: ID
-    type: PurchaseContentType
+    type: ItemType
   }
 
   type PurchasesFilterType {
     userId: ID
-    type: PurchaseContentType
+    type: ItemType
   }
 
   extend type Mutation {
@@ -46,39 +46,35 @@ const PurchaseSchema = gql`
   }
 
   input PurchaseInput {
-    refId: ID!
-    type: PurchaseContentType!
+    item: ID!
+    type: ItemType!
     image: URL!
     subject: String!
     title: String!
     price: NonNegativeInt
     offer: NonNegativeInt
     offerType: OfferType
-    validity: Date!
+    validity: Duration
     orderId: String
   }
 
   type Purchase {
     _id: ID!
     user: User
-    refId: ID!
-    type: PurchaseContentType!
+    item: Item
+    type: ItemType!
     image: URL!
     subject: String!
     title: String!
     price: NonNegativeInt
     offer: NonNegativeInt
     offerType: OfferType
-    validity: Date!
+    validity: Duration
     status: PurchaseStatus
     orderIds: [String]
     paymentIds: [String]
     subscriptionId: String
     response: JSON
-    course: Course
-    video: Video
-    test: Test
-    document: Document
     createdAt: String!
     updatedAt: String!
   }
@@ -101,7 +97,7 @@ const PurchaseSchema = gql`
     token: JWT
     limit: Int!
     offset: Int!
-    refId: ID!
+    item: ID!
     payload: [Purchase]
   }
 

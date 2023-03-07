@@ -7,14 +7,15 @@ const PurchaseSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-    refId: {
-      required: true,
+    item: {
       type: Schema.Types.ObjectId,
+      required: true,
+      refPath: "type",
     },
     type: {
       required: true,
       type: String,
-      enum: ["COURSE", "VIDEO", "TEST", "DOCUMENT"],
+      enum: ["Bundle", "Content"],
     },
     image: {
       required: true,
@@ -52,7 +53,7 @@ const PurchaseSchema = new Schema(
       type: String,
       enum: ["PERCENT", "AMOUNT"],
     },
-    validity: { type: Date },
+    validity: { type: String, required: true, default: "P10Y" },
     status: {
       type: String,
       enum: [
@@ -74,30 +75,6 @@ const PurchaseSchema = new Schema(
   },
   { timestamps: true, runValidators: true, runSettersOnQuery: true }
 );
-
-PurchaseSchema.virtual("course", {
-  ref: "Course", // The model to use
-  localField: "refId", // Find people where `localField`
-  foreignField: "_id", // is equal to `foreignField`
-});
-
-PurchaseSchema.virtual("video", {
-  ref: "Video", // The model to use
-  localField: "refId", // Find people where `localField`
-  foreignField: "_id", // is equal to `foreignField`
-});
-
-PurchaseSchema.virtual("test", {
-  ref: "Test", // The model to use
-  localField: "refId", // Find people where `localField`
-  foreignField: "_id", // is equal to `foreignField`
-});
-
-PurchaseSchema.virtual("document", {
-  ref: "Document", // The model to use
-  localField: "refId", // Find people where `localField`
-  foreignField: "_id", // is equal to `foreignField`
-});
 
 const PurchaseModel = model("Purchase", PurchaseSchema);
 
