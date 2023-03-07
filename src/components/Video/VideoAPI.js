@@ -8,42 +8,16 @@ class VideoAPI extends MongoDataSource {
   }
 
   videos({ offset, limit, search, enable = true }) {
-    const compound = {
-      filter: [
-        {
-          equals: {
-            path: "enable",
-            value: enable,
-          },
-        },
-      ],
-    };
+    const filter = { enable };
     if (search) {
-      compound.must = [
-        {
-          text: {
-            query: `${search}`,
-            path: {
-              wildcard: "*",
-            },
-          },
-        },
-      ];
+      filter["$text"] = { $search: search };
     }
-    const agg = [
-      {
-        $search: {
-          index: "search",
-          compound,
-        },
-      },
-      { $sort: { createdAt: -1 } },
-      { $skip: offset },
-      {
-        $limit: limit,
-      },
-    ];
-    return this.model.aggregate(agg).exec();
+    return this.model
+      .find(filter)
+      .sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(limit)
+      .exec();
   }
 
   video({ videoId }) {
@@ -54,6 +28,10 @@ class VideoAPI extends MongoDataSource {
     return this.model.exists({ _id: videoId });
   }
 
+  videoLinkExists({ link }) {
+    return this.model.exists({ link });
+  }
+
   addVideo({ videoInput }) {
     const video = new this.model(videoInput);
     return video.save();
@@ -62,12 +40,6 @@ class VideoAPI extends MongoDataSource {
   editVideo({ videoId, videoInput }) {
     return this.model
       .findByIdAndUpdate(videoId, videoInput, { new: true })
-      .exec();
-  }
-
-  refreshVideo({ videoId, urls }) {
-    return this.model
-      .findByIdAndUpdate(videoId, { urls }, { new: true })
       .exec();
   }
 

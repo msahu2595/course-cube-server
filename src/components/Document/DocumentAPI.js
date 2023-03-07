@@ -8,42 +8,16 @@ class DocumentAPI extends MongoDataSource {
   }
 
   documents({ offset, limit, search, enable = true }) {
-    const compound = {
-      filter: [
-        {
-          equals: {
-            path: "enable",
-            value: enable,
-          },
-        },
-      ],
-    };
+    const filter = { enable };
     if (search) {
-      compound.must = [
-        {
-          text: {
-            query: `${search}`,
-            path: {
-              wildcard: "*",
-            },
-          },
-        },
-      ];
+      filter["$text"] = { $search: search };
     }
-    const agg = [
-      {
-        $search: {
-          index: "search",
-          compound,
-        },
-      },
-      { $sort: { createdAt: -1 } },
-      { $skip: offset },
-      {
-        $limit: limit,
-      },
-    ];
-    return this.model.aggregate(agg).exec();
+    return this.model
+      .find(filter)
+      .sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(limit)
+      .exec();
   }
 
   document({ documentId }) {
@@ -52,6 +26,10 @@ class DocumentAPI extends MongoDataSource {
 
   documentExists({ documentId }) {
     return this.model.exists({ _id: documentId });
+  }
+
+  documentURLExists({ url }) {
+    return this.model.exists({ url });
   }
 
   addDocument({ documentInput }) {

@@ -1,9 +1,5 @@
 const { GraphQLError } = require("graphql");
-const {
-  getVideoData,
-  getVideoDetails,
-  getVideoUrls,
-} = require("../../libs/getVideoData");
+const { getVideoDetails, getVideoUrls } = require("../../libs/getVideoData");
 
 const VideoResolver = {
   Query: {
@@ -50,9 +46,9 @@ const VideoResolver = {
         throw new GraphQLError(error.message);
       }
     },
-    fetchURL: async (_, { url }, { token }) => {
+    fetchURL: async (_, { videoLink: link }, { token }) => {
       try {
-        const output = await getVideoDetails(url);
+        const output = await getVideoDetails(link);
         const [title, thumbnail, time] = output.split("\n");
         return {
           code: 200,
@@ -65,7 +61,11 @@ const VideoResolver = {
         throw new GraphQLError(error.message);
       }
     },
-    fetchDownloadURL: async (_, { videoId }, { token, dataSources: { videoAPI } }) => {
+    fetchDownloadURL: async (
+      _,
+      { videoId },
+      { token, dataSources: { videoAPI } }
+    ) => {
       try {
         const video = await videoAPI.video({ videoId });
         const output = await getVideoUrls(video?.link);
@@ -77,7 +77,7 @@ const VideoResolver = {
         return {
           code: "200",
           success: true,
-          message: "Video URL fetched successfully.",
+          message: "Video download URL fetched successfully.",
           token,
           payload: urls,
         };
@@ -87,34 +87,22 @@ const VideoResolver = {
     },
   },
   Mutation: {
-    addVideo: async (_, { videoLink: link }, { token, dataSources: { videoAPI } }) => {
+    addVideo: async (
+      _,
+      { videoLink: link },
+      { token, dataSources: { videoAPI } }
+    ) => {
       try {
-        const output = await getVideoData(link);
-        const [
-          title,
-          url1,
-          thumbnail,
-          time,
-          format1,
-          // eslint-disable-next-line no-unused-vars
-          title2,
-          url2,
-          // eslint-disable-next-line no-unused-vars
-          thumbnail2,
-          // eslint-disable-next-line no-unused-vars
-          time2,
-          format2,
-        ] = output.split("\n");
+        const videoExists = await videoAPI.videoLinkExists({ link });
+        if (videoExists) throw new GraphQLError("Video already added.");
+        const output = await getVideoDetails(link);
+        const [title, thumbnail, time] = output.split("\n");
         const payload = await videoAPI.addVideo({
           videoInput: {
-            link,
             title,
             thumbnail,
             time,
-            urls: [
-              { url: url1, format: format1 },
-              { url: url2, format: format2 },
-            ],
+            link,
           },
         });
         return {
@@ -131,38 +119,13 @@ const VideoResolver = {
     },
     editVideo: async (
       _,
-      { videoId, videoLink: link },
+      { videoId, videoInput },
       { token, dataSources: { videoAPI } }
     ) => {
       try {
-        const output = await getVideoData(link);
-        const [
-          title,
-          url1,
-          thumbnail,
-          time,
-          format1,
-          // eslint-disable-next-line no-unused-vars
-          title2,
-          url2,
-          // eslint-disable-next-line no-unused-vars
-          thumbnail2,
-          // eslint-disable-next-line no-unused-vars
-          time2,
-          format2,
-        ] = output.split("\n");
         const payload = await videoAPI.editVideo({
           videoId,
-          videoInput: {
-            link,
-            title,
-            thumbnail,
-            time,
-            urls: [
-              { url: url1, format: format1 },
-              { url: url2, format: format2 },
-            ],
-          },
+          videoInput,
         });
         return {
           code: "200",
@@ -175,31 +138,11 @@ const VideoResolver = {
         throw new GraphQLError(error.message);
       }
     },
-    refreshVideo: async (_, { videoId }, { token, dataSources: { videoAPI } }) => {
-      try {
-        const video = await videoAPI.video({ videoId });
-        const output = await getVideoUrls(video?.link);
-        const [url1, format1, url2, format2] = output.split("\n");
-        const urls = [
-          { url: url1, format: format1 },
-          { url: url2, format: format2 },
-        ];
-        const payload = await videoAPI.refreshVideo({
-          videoId,
-          urls,
-        });
-        return {
-          code: "200",
-          success: true,
-          message: "Video refreshed successfully.",
-          token,
-          payload,
-        };
-      } catch (error) {
-        throw new GraphQLError(error.message);
-      }
-    },
-    deleteVideo: async (_, { videoId }, { token, dataSources: { videoAPI } }) => {
+    deleteVideo: async (
+      _,
+      { videoId },
+      { token, dataSources: { videoAPI } }
+    ) => {
       try {
         const payload = await videoAPI.deleteVideo({ videoId });
         return {

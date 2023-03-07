@@ -9,7 +9,7 @@ const VideoSchema = gql`
       filter: VideosFilterInput
     ): VideoListResponse
     video(videoId: ID!): VideoResponse
-    fetchURL(url: URL!): URLResponse
+    fetchURL(videoLink: URL!): URLResponse
     fetchDownloadURL(videoId: ID!): DownloadURLResponse
   }
 
@@ -23,26 +23,24 @@ const VideoSchema = gql`
 
   extend type Mutation {
     addVideo(videoLink: URL!): VideoResponse
-    editVideo(videoId: ID!, videoLink: URL!): VideoResponse
-    refreshVideo(videoId: ID!): VideoResponse
+    editVideo(videoId: ID!, videoInput: VideoInput!): VideoResponse
     deleteVideo(videoId: ID!): VideoResponse
+  }
+
+  input VideoInput {
+    title: String
+    thumbnail: URL
   }
 
   type Video {
     _id: ID!
     title: String!
     thumbnail: URL
-    link: Void
     time: String!
-    urls: [VideoURL!]
+    link: URL!
     enable: Boolean!
     createdAt: String!
     updatedAt: String!
-  }
-
-  type VideoURL {
-    url: URL
-    format: String
   }
 
   type VideoListResponse implements ListResponse {
@@ -65,6 +63,12 @@ const VideoSchema = gql`
     payload: Video
   }
 
+  type URLData {
+    title: String
+    thumbnail: URL
+    time: String
+  }
+
   type URLResponse implements Response {
     code: String!
     success: Boolean!
@@ -73,10 +77,9 @@ const VideoSchema = gql`
     payload: URLData
   }
 
-  type URLData {
-    title: String
-    thumbnail: URL
-    time: String
+  type VideoURL {
+    url: URL
+    format: String
   }
 
   type DownloadURLResponse implements Response {

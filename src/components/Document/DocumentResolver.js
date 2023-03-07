@@ -29,7 +29,11 @@ const DocumentResolver = {
         throw new GraphQLError(error.message);
       }
     },
-    document: async (_, { documentId }, { token, dataSources: { documentAPI } }) => {
+    document: async (
+      _,
+      { documentId },
+      { token, dataSources: { documentAPI } }
+    ) => {
       try {
         const payload = await documentAPI.document({
           documentId,
@@ -53,6 +57,10 @@ const DocumentResolver = {
       { token, dataSources: { documentAPI } }
     ) => {
       try {
+        const documentExists = await documentAPI.documentURLExists({
+          url: documentInput.url,
+        });
+        if (documentExists) throw new GraphQLError("Document already added.");
         const payload = await documentAPI.addDocument({ documentInput });
         return {
           code: "200",
