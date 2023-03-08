@@ -4,7 +4,7 @@ const ContentResolver = {
   Media: {
     __resolveType(obj) {
       // Only Video has a urls field
-      if (obj.urls) {
+      if (obj.time) {
         return "Video";
       }
       // Only Test has a questions field
