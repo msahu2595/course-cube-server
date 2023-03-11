@@ -58,7 +58,7 @@ const ContentSchema = new Schema(
     type: {
       type: String,
       required: true,
-      enum: ["Video", "Test", "Document", "Book"],
+      enum: ["Video", "Test", "Document"],
     },
     paid: {
       required: true,

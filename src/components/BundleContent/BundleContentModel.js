@@ -39,7 +39,7 @@ const BundleContentSchema = new Schema(
     type: {
       type: String,
       required: true,
-      enum: ["Video", "Test", "Document", "Book"],
+      enum: ["Video", "Test", "Document"],
     },
     language: {
       required: true,

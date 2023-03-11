@@ -7,7 +7,6 @@ const ContentSchema = gql`
     Video
     Test
     Document
-    Book
   }
 
   extend type Query {
