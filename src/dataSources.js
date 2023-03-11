@@ -1,9 +1,7 @@
 // User API
-const UserAPI = require("./components/User/UserAPI");
-const UserModel = require("./components/User/UserModel");
+const { UserAPI, UserModel } = require("./components/User");
 // Follow API
-const FollowAPI = require("./components/Follow/FollowAPI");
-const FollowModel = require("./components/Follow/FollowModel");
+const { FollowAPI, FollowModel } = require("./components/Follow");
 // Advert API
 const { AdvertAPI, AdvertModel } = require("./components/Advert");
 // Bundle API
@@ -25,6 +23,8 @@ const { DocumentAPI, DocumentModel } = require("./components/Document");
 const { HeadlineAPI, HeadlineModel } = require("./components/Headline");
 // Article API
 const { ArticleAPI, ArticleModel } = require("./components/Article");
+// Website API
+const { WebsiteAPI, WebsiteModel } = require("./components/Website");
 // Purchase API
 const { PurchaseAPI, PurchaseModel } = require("./components/Purchase");
 // Question API
@@ -56,6 +56,7 @@ const dataSources = (context) => ({
   documentAPI: new DocumentAPI({ DocumentModel, context }),
   headlineAPI: new HeadlineAPI({ HeadlineModel, context }),
   articleAPI: new ArticleAPI({ ArticleModel, context }),
+  websiteAPI: new WebsiteAPI({ WebsiteModel, context }),
   purchaseAPI: new PurchaseAPI({ PurchaseModel, context }),
   answerAPI: new AnswerAPI({ AnswerModel, context }),
   historyAPI: new HistoryAPI({ HistoryModel, context }),

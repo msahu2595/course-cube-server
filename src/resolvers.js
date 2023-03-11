@@ -11,6 +11,7 @@ const { TestResolver } = require("./components/Test");
 const { DocumentResolver } = require("./components/Document");
 const { HeadlineResolver } = require("./components/Headline");
 const { ArticleResolver } = require("./components/Article");
+const { WebsiteResolver } = require("./components/Website");
 const { PurchaseResolver } = require("./components/Purchase");
 const { QuestionResolver } = require("./components/Question");
 const { AnswerResolver } = require("./components/Answer");
@@ -32,6 +33,7 @@ module.exports = [
   DocumentResolver,
   HeadlineResolver,
   ArticleResolver,
+  WebsiteResolver,
   PurchaseResolver,
   FollowResolver,
   QuestionResolver,

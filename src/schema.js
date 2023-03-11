@@ -1,8 +1,8 @@
 const { typeDefs: scalarTypeDefs } = require("graphql-scalars");
 const ScalarsSchema = require("./components/Scalars/ScalarsSchema");
 const DirectivesSchema = require("./components/Directives/DirectivesSchema");
-const UserSchema = require("./components/User/UserSchema");
-const FollowSchema = require("./components/Follow/FollowSchema");
+const { UserSchema } = require("./components/User");
+const { FollowSchema } = require("./components/Follow");
 const { AdvertSchema } = require("./components/Advert");
 const { BundleSchema } = require("./components/Bundle");
 const { BundleContentSchema } = require("./components/BundleContent");
@@ -12,6 +12,7 @@ const { TestSchema } = require("./components/Test");
 const { DocumentSchema } = require("./components/Document");
 const { HeadlineSchema } = require("./components/Headline");
 const { ArticleSchema } = require("./components/Article");
+const { WebsiteSchema } = require("./components/Website");
 const { PurchaseSchema } = require("./components/Purchase");
 const { QuestionSchema } = require("./components/Question");
 const { AnswerSchema } = require("./components/Answer");
@@ -34,6 +35,7 @@ module.exports = [
   TestSchema,
   DocumentSchema,
   ArticleSchema,
+  WebsiteSchema,
   HeadlineSchema,
   PurchaseSchema,
   QuestionSchema,

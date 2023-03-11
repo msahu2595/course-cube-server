@@ -1,5 +1,5 @@
-const UserModel = require("./components/User/UserModel");
-const FollowModel = require("./components/Follow/FollowModel");
+const { UserModel } = require("./components/User");
+const { FollowModel } = require("./components/Follow");
 const { AdvertModel } = require("./components/Advert");
 const { BundleModel } = require("./components/Bundle");
 const { BundleContentModel } = require("./components/BundleContent");
@@ -9,6 +9,7 @@ const { TestModel } = require("./components/Test");
 const { DocumentModel } = require("./components/Document");
 const { HeadlineModel } = require("./components/Headline");
 const { ArticleModel } = require("./components/Article");
+const { WebsiteModel } = require("./components/Website");
 const { PurchaseModel } = require("./components/Purchase");
 const { QuestionModel } = require("./components/Question");
 const { AnswerModel } = require("./components/Answer");
@@ -29,6 +30,7 @@ module.exports = {
   DocumentModel,
   HeadlineModel,
   ArticleModel,
+  WebsiteModel,
   PurchaseModel,
   QuestionModel,
   AnswerModel,
