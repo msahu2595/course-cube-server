@@ -3,12 +3,12 @@ const { GraphQLError } = require("graphql");
 const ContentResolver = {
   Media: {
     __resolveType(obj) {
-      // Only Video has a urls field
+      // Only Video has a time field
       if (obj.time) {
         return "Video";
       }
-      // Only Test has a questions field
-      if (obj.questions) {
+      // Only Test has a duration field
+      if (obj.duration) {
         return "Test";
       }
       // Only Document has a pages field
