@@ -21,7 +21,7 @@ const TestSchema = gql`
 
   extend type Mutation {
     addTest(testInput: TestInput!): TestResponse
-    editTest(testId: ID!, testInput: TestEditInput!): TestResponse
+    editTest(testId: ID!, testInput: TestInput!): TestResponse
     deleteTest(testId: ID!): TestResponse
     addTestQuestion(
       testId: ID!
@@ -39,13 +39,6 @@ const TestSchema = gql`
     thumbnail: URL
     instructions: String!
     duration: Duration!
-  }
-
-  input TestEditInput {
-    title: String
-    thumbnail: URL
-    instructions: String
-    duration: Duration
   }
 
   input TestQuestionInput {

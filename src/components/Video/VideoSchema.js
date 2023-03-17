@@ -28,8 +28,8 @@ const VideoSchema = gql`
   }
 
   input VideoInput {
-    title: String
-    thumbnail: URL
+    title: String!
+    thumbnail: URL!
   }
 
   type Video {
