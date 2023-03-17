@@ -74,6 +74,11 @@ const ContentResolver = {
       { token, dataSources: { contentAPI, videoAPI, testAPI, documentAPI } }
     ) => {
       try {
+        const mediaExists = await contentAPI.mediaContentExists({
+          media: contentInput.media,
+        });
+        if (mediaExists)
+          throw new GraphQLError("Content already created using this media.");
         let exists = false;
         if (contentInput?.type === "Video") {
           exists = await videoAPI.videoExists({
@@ -121,6 +126,11 @@ const ContentResolver = {
       { token, dataSources: { contentAPI, videoAPI, testAPI, documentAPI } }
     ) => {
       try {
+        const mediaExists = await contentAPI.mediaContentExists({
+          media: contentInput.media,
+        });
+        if (mediaExists && mediaExists._id.toString() !== contentId)
+          throw new GraphQLError("Another content already using this media.");
         let exists = false;
         if (contentInput?.type === "Video") {
           exists = await videoAPI.videoExists({

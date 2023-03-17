@@ -64,6 +64,10 @@ class ContentAPI extends MongoDataSource {
   //   });
   // }
 
+  mediaContentExists({ media }) {
+    return this.model.exists({ media });
+  }
+
   addContent({ contentInput }) {
     return this.model
       .findOneAndUpdate({ media: contentInput?.media }, contentInput, {
