@@ -155,7 +155,7 @@ const VideoResolver = {
           throw new GraphQLError(
             `${
               contentExists ? "Content" : "Course content"
-            } is using this media, you can't delete this.`
+            } is using this video, Please remove from that before deleting this.`
           );
         const payload = await videoAPI.deleteVideo({ videoId });
         return {

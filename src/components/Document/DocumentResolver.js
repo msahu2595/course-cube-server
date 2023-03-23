@@ -98,9 +98,22 @@ const DocumentResolver = {
     deleteDocument: async (
       _,
       { documentId },
-      { token, dataSources: { documentAPI } }
+      { token, dataSources: { documentAPI, contentAPI, bundleContentAPI } }
     ) => {
       try {
+        const contentExists = await contentAPI.mediaContentExists({
+          media: documentId,
+        });
+        const bundleContentExists =
+          await bundleContentAPI.mediaBundleContentExists({
+            media: documentId,
+          });
+        if (contentExists || bundleContentExists)
+          throw new GraphQLError(
+            `${
+              contentExists ? "Content" : "Course content"
+            } is using this document, Please remove from that before deleting this.`
+          );
         const payload = await documentAPI.deleteDocument({ documentId });
         return {
           code: "200",
