@@ -141,9 +141,22 @@ const VideoResolver = {
     deleteVideo: async (
       _,
       { videoId },
-      { token, dataSources: { videoAPI } }
+      { token, dataSources: { videoAPI, contentAPI, bundleContentAPI } }
     ) => {
       try {
+        const contentExists = await contentAPI.mediaContentExists({
+          media: videoId,
+        });
+        const bundleContentExists =
+          await bundleContentAPI.mediaBundleContentExists({
+            media: videoId,
+          });
+        if (contentExists || bundleContentExists)
+          throw new GraphQLError(
+            `${
+              contentExists ? "Content" : "Course content"
+            } is using this media, you can't delete this.`
+          );
         const payload = await videoAPI.deleteVideo({ videoId });
         return {
           code: "200",
