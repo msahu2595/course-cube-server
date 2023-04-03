@@ -6,7 +6,6 @@ const WebsiteSchema = new Schema(
       type: String,
       required: true,
       trim: true,
-      lowercase: true,
     },
     link: {
       type: String,
