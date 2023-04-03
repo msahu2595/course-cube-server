@@ -2,7 +2,20 @@ const gql = require("graphql-tag");
 
 const WebsiteSchema = gql`
   extend type Query {
-    websites(offset: Int, limit: Int): WebsiteListResponse
+    websites(
+      offset: Int
+      limit: Int
+      search: String
+      filter: WebsitesFilterInput
+    ): WebsiteListResponse
+  }
+
+  input WebsitesFilterInput {
+    enable: Boolean
+  }
+
+  type WebsitesFilterType {
+    enable: Boolean
   }
 
   extend type Mutation {
@@ -32,6 +45,8 @@ const WebsiteSchema = gql`
     token: JWT
     offset: Int!
     limit: Int!
+    search: String
+    filter: WebsitesFilterType
     payload: [Website]
   }
 

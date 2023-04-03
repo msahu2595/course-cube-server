@@ -7,13 +7,21 @@ class WebsiteAPI extends MongoDataSource {
     this.context = options.context;
   }
 
-  websites({ offset, limit }) {
+  websites({ offset, limit, search, enable = true }) {
+    const filter = { enable };
+    if (search) {
+      filter["$text"] = { $search: search };
+    }
     return this.model
-      .find({ enable: true })
+      .find(filter)
       .sort({ createdAt: -1 })
       .skip(offset)
       .limit(limit)
       .exec();
+  }
+
+  websiteLinkExists({ link }) {
+    return this.model.exists({ link });
   }
 
   addWebsite({ websiteInput }) {
@@ -22,25 +30,13 @@ class WebsiteAPI extends MongoDataSource {
 
   editWebsite({ websiteId, websiteInput }) {
     return this.model
-      .findOneAndUpdate(
-        {
-          _id: websiteId,
-        },
-        { ...websiteInput },
-        { new: true }
-      )
+      .findByIdAndUpdate(websiteId, websiteInput, { new: true })
       .exec();
   }
 
   deleteWebsite({ websiteId }) {
     return this.model
-      .findOneAndUpdate(
-        {
-          _id: websiteId,
-        },
-        { enable: false },
-        { new: true }
-      )
+      .findByIdAndUpdate(websiteId, { enable: false }, { new: true })
       .exec();
   }
 }

@@ -4,13 +4,15 @@ const WebsiteResolver = {
   Query: {
     websites: async (
       _,
-      { offset = 0, limit = 10 },
+      { offset = 0, limit = 10, search, filter },
       { token, dataSources: { websiteAPI } }
     ) => {
       try {
         const payload = await websiteAPI.websites({
           offset,
           limit,
+          search,
+          ...filter,
         });
         return {
           code: 200,
@@ -33,6 +35,10 @@ const WebsiteResolver = {
       { token, dataSources: { websiteAPI } }
     ) => {
       try {
+        const websiteExists = await websiteAPI.websiteLinkExists({
+          link: websiteInput.link,
+        });
+        if (websiteExists) throw new GraphQLError("Link already added.");
         const payload = await websiteAPI.addWebsite({ websiteInput });
         return {
           code: "200",
