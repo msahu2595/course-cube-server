@@ -19,8 +19,10 @@ const WebsiteResolver = {
           success: true,
           message: "Successfully get websites.",
           token,
-          offset,
           limit,
+          offset,
+          search,
+          filter,
           payload,
         };
       } catch (error) {
