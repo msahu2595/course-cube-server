@@ -13,10 +13,16 @@ class ArticleAPI extends MongoDataSource {
     search,
     author,
     tag,
-    visible = true,
+    visible = null,
     enable = true,
   }) {
-    const filter = { visible, enable };
+    const filter = { enable };
+    if (this.context?.user?.role === "USER") {
+      filter["visible"] = true;
+    }
+    if (typeof visible == "boolean" && this.context?.user?.role !== "USER") {
+      filter["visible"] = visible;
+    }
     if (author) {
       filter["author"] = author;
     }
