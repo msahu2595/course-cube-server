@@ -7,10 +7,14 @@ class HeadlineAPI extends MongoDataSource {
     this.context = options.context;
   }
 
-  headlines({ offset, limit }) {
+  headlines({ offset, limit, search, enable = true }) {
+    const filter = { enable };
+    if (search) {
+      filter["$text"] = { $search: search };
+    }
     return this.model
-      .find({ enable: true })
-      .sort({ createdAt: -1 })
+      .find(filter)
+      .sort({ updatedAt: -1 })
       .skip(offset)
       .limit(limit)
       .exec();

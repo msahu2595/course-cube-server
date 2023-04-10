@@ -2,7 +2,20 @@ const gql = require("graphql-tag");
 
 const HeadlineSchema = gql`
   extend type Query {
-    headlines(offset: Int, limit: Int): HeadlineListResponse
+    headlines(
+      offset: Int
+      limit: Int
+      search: String
+      filter: HeadlinesFilterInput
+    ): HeadlineListResponse
+  }
+
+  input HeadlinesFilterInput {
+    enable: Boolean
+  }
+
+  type HeadlinesFilterType {
+    enable: Boolean
   }
 
   extend type Mutation {
@@ -41,6 +54,8 @@ const HeadlineSchema = gql`
     token: JWT
     offset: Int!
     limit: Int!
+    search: String
+    filter: HeadlinesFilterType
     payload: [Headline]
   }
 

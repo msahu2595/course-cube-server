@@ -4,13 +4,15 @@ const HeadlineResolver = {
   Query: {
     headlines: async (
       _,
-      { offset = 0, limit = 10 },
+      { offset = 0, limit = 10, search, filter },
       { token, dataSources: { headlineAPI } }
     ) => {
       try {
         const payload = await headlineAPI.headlines({
           offset,
           limit,
+          search,
+          ...filter,
         });
         return {
           code: 200,
