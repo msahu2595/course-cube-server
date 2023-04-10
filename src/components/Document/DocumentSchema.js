@@ -39,8 +39,10 @@ const DocumentSchema = gql`
     _id: ID!
     title: String!
     thumbnail: URL
+    #
     url: URL!
     pages: PositiveInt!
+    #
     enable: Boolean!
     createdAt: String!
     updatedAt: String!

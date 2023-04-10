@@ -65,10 +65,12 @@ const TestSchema = gql`
     _id: ID!
     title: String!
     thumbnail: URL
+    #
     instructions: String!
     duration: Duration!
     questions: [TestQuestion!]
     totalMarks: NonNegativeFloat!
+    #
     enable: Boolean!
     createdAt: String!
     updatedAt: String!

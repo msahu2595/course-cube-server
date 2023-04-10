@@ -14,10 +14,16 @@ class ContentAPI extends MongoDataSource {
     paid,
     type,
     language,
-    visible = true,
+    visible = null,
     enable = true,
   }) {
-    const filter = { visible, enable };
+    const filter = { enable };
+    if (this.context?.user?.role === "USER") {
+      filter["visible"] = true;
+    }
+    if (typeof visible == "boolean" && this.context?.user?.role !== "USER") {
+      filter["visible"] = visible;
+    }
     if (paid) {
       filter["paid"] = paid;
     }

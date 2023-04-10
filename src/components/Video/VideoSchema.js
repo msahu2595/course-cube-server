@@ -36,8 +36,10 @@ const VideoSchema = gql`
     _id: ID!
     title: String!
     thumbnail: URL
+    #
     time: String!
     link: URL!
+    #
     enable: Boolean!
     createdAt: String!
     updatedAt: String!
