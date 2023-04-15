@@ -63,10 +63,11 @@ const BookmarkResolver = {
         const payload = await bookmarkAPI.bookmark({ refId, type });
         return {
           code: "200",
-          success: true,
-          message: "You are successfully bookmarked.",
+          success: payload?._id ? true : false,
+          message: `You are${
+            payload?._id ? " " : " not "
+          }successfully bookmarked.`,
           token,
-          payload,
         };
       } catch (error) {
         throw new Error(error.message, error.extensions.code);
@@ -81,10 +82,11 @@ const BookmarkResolver = {
         const payload = await bookmarkAPI.unbookmark({ refId, type });
         return {
           code: "200",
-          success: true,
-          message: "You are successfully un-bookmarked.",
+          success: payload?.deletedCount ? true : false,
+          message: `You are${
+            payload?.deletedCount ? " " : " not "
+          }successfully un-bookmarked.`,
           token,
-          payload,
         };
       } catch (error) {
         throw new Error(error.message, error.extensions.code);

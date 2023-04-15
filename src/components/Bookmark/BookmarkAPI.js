@@ -8,7 +8,7 @@ class BookmarkAPI extends MongoDataSource {
   }
 
   bookmarks({ offset, limit, userId, type }) {
-    const query = { user: userId || this.context.user._id, active: true };
+    const query = { user: userId || this.context.user._id };
     if (type) {
       query["type"] = type;
     }
@@ -22,7 +22,7 @@ class BookmarkAPI extends MongoDataSource {
 
   bookmarkedUsers({ offset, limit, refId }) {
     return this.model
-      .find({ refId, active: true })
+      .find({ refId })
       .skip(offset)
       .limit(limit)
       .populate("user")
@@ -34,23 +34,17 @@ class BookmarkAPI extends MongoDataSource {
       {
         user: this.context.user._id,
         refId,
-        type,
       },
-      { active: true },
+      { type },
       { upsert: true, new: true }
     );
   }
 
-  unbookmark({ refId, type }) {
-    return this.model.findOneAndUpdate(
-      {
-        user: this.context.user._id,
-        refId,
-        type,
-      },
-      { active: false },
-      { upsert: true, new: true }
-    );
+  unbookmark({ refId }) {
+    return this.model.deleteOne({
+      user: this.context.user._id,
+      refId: refId,
+    });
   }
 }
 

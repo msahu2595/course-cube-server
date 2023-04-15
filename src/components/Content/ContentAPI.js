@@ -36,17 +36,7 @@ class ContentAPI extends MongoDataSource {
     if (search) {
       filter["$text"] = { $search: search };
     }
-    const populateArray = ["media", "likes", "purchases"];
-    if (this.context?.user?._id) {
-      populateArray.push({
-        path: "liked",
-        match: { user: this.context?.user?._id },
-      });
-      populateArray.push({
-        path: "purchased",
-        match: { user: this.context?.user?._id },
-      });
-    }
+    const populateArray = ["media", "likes"];
     return this.model
       .find(filter)
       .sort({ createdAt: -1 })
@@ -57,7 +47,7 @@ class ContentAPI extends MongoDataSource {
   }
 
   content({ contentId }) {
-    const populateArray = ["media", "likes", "purchases"];
+    const populateArray = ["media", "likes"];
     if (this.context?.user?._id) {
       populateArray.push({
         path: "liked",
@@ -65,6 +55,10 @@ class ContentAPI extends MongoDataSource {
       });
       populateArray.push({
         path: "purchased",
+        match: { user: this.context?.user?._id },
+      });
+      populateArray.push({
+        path: "bookmarked",
         match: { user: this.context?.user?._id },
       });
     }

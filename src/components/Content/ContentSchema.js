@@ -94,6 +94,7 @@ const ContentSchema = gql`
     liked: NonNegativeInt
     purchases: NonNegativeInt
     purchased: NonNegativeInt
+    bookmarked: NonNegativeInt
   }
 
   type ContentListResponse implements ListResponse {

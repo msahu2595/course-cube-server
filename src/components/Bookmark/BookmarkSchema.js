@@ -5,8 +5,8 @@ const BookmarkSchema = gql`
     VIDEO
     TEST
     DOCUMENT
-    QUESTION
-    ANSWER
+    ARTICLE
+    POST
   }
 
   extend type Query {
@@ -42,7 +42,6 @@ const BookmarkSchema = gql`
     user: User
     refId: ID!
     type: BookmarkType!
-    active: Boolean!
     createdAt: String!
     updatedAt: String!
   }
@@ -74,7 +73,6 @@ const BookmarkSchema = gql`
     success: Boolean!
     message: String!
     token: JWT
-    payload: Bookmark
   }
 `;
 

@@ -14,9 +14,8 @@ const BookmarkSchema = new Schema(
     type: {
       required: true,
       type: String,
-      enum: ["VIDEO", "TEST", "DOCUMENT", "QUESTION", "ANSWER"],
+      enum: ["VIDEO", "TEST", "DOCUMENT", "ARTICLE", "POST"],
     },
-    active: { type: Boolean, required: true, default: true },
   },
   { timestamps: true, runValidators: true, runSettersOnQuery: true }
 );

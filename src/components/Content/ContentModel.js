@@ -150,6 +150,13 @@ ContentSchema.virtual("purchased", {
   count: true, // And only get the number of docs
 });
 
+ContentSchema.virtual("bookmarked", {
+  ref: "Bookmark", // The model to use
+  localField: "_id", // Find people where `localField`
+  foreignField: "refId", // is equal to `foreignField`
+  count: true, // And only get the number of docs
+});
+
 const ContentModel = model("Content", ContentSchema);
 
 module.exports = ContentModel;
