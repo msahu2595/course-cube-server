@@ -12,9 +12,8 @@ const LikeSchema = gql`
 
   type Like {
     _id: ID!
-    user: User
     refId: ID!
-    active: Boolean!
+    user: User
     createdAt: String!
     updatedAt: String!
   }
@@ -35,7 +34,6 @@ const LikeSchema = gql`
     success: Boolean!
     message: String!
     token: JWT
-    payload: Like
   }
 `;
 

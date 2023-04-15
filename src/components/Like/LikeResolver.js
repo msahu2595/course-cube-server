@@ -34,10 +34,9 @@ const LikeResolver = {
         const payload = await likeAPI.like({ refId });
         return {
           code: "200",
-          success: true,
-          message: "You are successfully like.",
+          success: payload?._id ? true : false,
+          message: `You are${payload?._id ? " " : " not "}successfully like.`,
           token,
-          payload,
         };
       } catch (error) {
         throw new Error(error.message, error.extensions.code);
@@ -48,10 +47,11 @@ const LikeResolver = {
         const payload = await likeAPI.unlike({ refId });
         return {
           code: "200",
-          success: true,
-          message: "You are successfully unlike.",
+          success: payload?.deletedCount ? true : false,
+          message: `You are${
+            payload?.deletedCount ? " " : " not "
+          }successfully unlike.`,
           token,
-          payload,
         };
       } catch (error) {
         throw new Error(error.message, error.extensions.code);

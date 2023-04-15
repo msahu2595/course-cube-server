@@ -11,7 +11,6 @@ const LikeSchema = new Schema(
       type: Schema.Types.ObjectId,
       required: true,
     },
-    active: { type: Boolean, required: true, default: true },
   },
   { timestamps: true, runValidators: true, runSettersOnQuery: true }
 );

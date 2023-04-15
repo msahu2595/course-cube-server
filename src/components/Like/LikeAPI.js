@@ -9,7 +9,7 @@ class LikeAPI extends MongoDataSource {
 
   likedUsers({ offset, limit, refId }) {
     return this.model
-      .find({ refId, active: true })
+      .find({ refId })
       .skip(offset)
       .limit(limit)
       .populate("user")
@@ -22,20 +22,16 @@ class LikeAPI extends MongoDataSource {
         user: this.context.user._id,
         refId: refId,
       },
-      { active: true },
+      { user: this.context.user._id, refId: refId },
       { upsert: true, new: true }
     );
   }
 
   unlike({ refId }) {
-    return this.model.findOneAndUpdate(
-      {
-        user: this.context.user._id,
-        refId: refId,
-      },
-      { active: false },
-      { upsert: true, new: true }
-    );
+    return this.model.deleteOne({
+      user: this.context.user._id,
+      refId: refId,
+    });
   }
 }
 

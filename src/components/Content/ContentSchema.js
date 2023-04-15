@@ -91,6 +91,7 @@ const ContentSchema = gql`
     updatedAt: String!
     # Populate fields
     likes: NonNegativeInt
+    liked: NonNegativeInt
     purchases: NonNegativeInt
     purchased: NonNegativeInt
   }

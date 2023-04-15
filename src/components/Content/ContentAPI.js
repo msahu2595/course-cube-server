@@ -37,7 +37,11 @@ class ContentAPI extends MongoDataSource {
       filter["$text"] = { $search: search };
     }
     const populateArray = ["media", "likes", "purchases"];
-    if (this.context?.user?.role === "USER") {
+    if (this.context?.user?._id) {
+      populateArray.push({
+        path: "liked",
+        match: { user: this.context?.user?._id },
+      });
       populateArray.push({
         path: "purchased",
         match: { user: this.context?.user?._id },
@@ -54,7 +58,11 @@ class ContentAPI extends MongoDataSource {
 
   content({ contentId }) {
     const populateArray = ["media", "likes", "purchases"];
-    if (this.context?.user?.role === "USER") {
+    if (this.context?.user?._id) {
+      populateArray.push({
+        path: "liked",
+        match: { user: this.context?.user?._id },
+      });
       populateArray.push({
         path: "purchased",
         match: { user: this.context?.user?._id },
