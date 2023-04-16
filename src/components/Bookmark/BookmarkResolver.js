@@ -100,11 +100,11 @@ const BookmarkResolver = {
     },
     unbookmark: async (
       _,
-      { refId, type },
+      { refId },
       { token, dataSources: { bookmarkAPI } }
     ) => {
       try {
-        const payload = await bookmarkAPI.unbookmark({ refId, type });
+        const payload = await bookmarkAPI.unbookmark({ refId });
         return {
           code: "200",
           success: payload?.deletedCount ? true : false,

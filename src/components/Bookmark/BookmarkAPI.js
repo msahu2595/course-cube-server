@@ -34,7 +34,7 @@ class BookmarkAPI extends MongoDataSource {
     return this.model.findOneAndUpdate(
       {
         user: this.context.user._id,
-        refId,
+        ref: refId,
       },
       { type },
       { upsert: true, new: true }
@@ -44,7 +44,7 @@ class BookmarkAPI extends MongoDataSource {
   unbookmark({ refId }) {
     return this.model.deleteOne({
       user: this.context.user._id,
-      refId: refId,
+      ref: refId,
     });
   }
 }
