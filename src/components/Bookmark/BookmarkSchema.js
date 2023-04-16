@@ -1,12 +1,15 @@
 const gql = require("graphql-tag");
 
 const BookmarkSchema = gql`
+  union Ref = Bundle | BundleContent | Content | Article | Question | Answer
+
   enum BookmarkType {
-    VIDEO
-    TEST
-    DOCUMENT
-    ARTICLE
-    POST
+    Bundle
+    BundleContent
+    Content
+    Article
+    Question
+    Answer
   }
 
   extend type Query {
@@ -40,7 +43,7 @@ const BookmarkSchema = gql`
   type Bookmark {
     _id: ID!
     user: User
-    refId: ID!
+    ref: Ref
     type: BookmarkType!
     createdAt: String!
     updatedAt: String!

@@ -8,15 +8,16 @@ class BookmarkAPI extends MongoDataSource {
   }
 
   bookmarks({ offset, limit, userId, type }) {
-    const query = { user: userId || this.context.user._id };
+    const filter = { user: userId || this.context.user._id };
     if (type) {
-      query["type"] = type;
+      filter["type"] = type;
     }
     return this.model
-      .find(query)
+      .find(filter)
+      .sort({ createdAt: -1 })
       .skip(offset)
       .limit(limit)
-      .populate("user")
+      .populate("ref")
       .exec();
   }
 
