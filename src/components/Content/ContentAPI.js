@@ -73,7 +73,7 @@ class ContentAPI extends MongoDataSource {
   // }
 
   mediaContentExists({ media }) {
-    return this.model.exists({ media });
+    return this.model.exists({ media, enable: true });
   }
 
   addContent({ contentInput }) {
