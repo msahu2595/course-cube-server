@@ -74,7 +74,7 @@ const context = async ({ req }) => {
     const refreshToken = req.headers["refresh-token"];
     const accessToken = auth && auth.split(" ")[1];
     // console.log({ refreshToken, accessToken });
-    if (accessToken == null)
+    if (!accessToken)
       return {
         user: null,
         token: null,
@@ -82,26 +82,26 @@ const context = async ({ req }) => {
         dataSources: dataSources({ user: {} }),
       };
     const user = verifyAccessToken(accessToken);
-    if (!user) {
-      // eslint-disable-next-line no-unused-vars
-      const { iat, ...verifiedUser } = verifyRefreshToken(refreshToken);
-      const savedRefreshedToken = await redis.get(verifiedUser._id);
-      if (savedRefreshedToken === refreshToken) {
-        const newAccessToken = createAccessToken(verifiedUser);
-        return {
-          user: verifiedUser,
-          token: newAccessToken,
-          redis,
-          dataSources: dataSources({ user: verifiedUser }),
-        };
-      }
-      throw new Error("Refresh token expired.");
+    if (user) {
+      return {
+        user,
+        token: null,
+        redis,
+        dataSources: dataSources({ user }),
+      };
     }
+    if (!refreshToken) throw new Error("Refresh token expired.");
+    // eslint-disable-next-line no-unused-vars
+    const { iat, ...verifiedUser } = verifyRefreshToken(refreshToken);
+    const savedRefreshedToken = await redis.get(verifiedUser._id);
+    // prettier-ignore
+    if (savedRefreshedToken !== refreshToken) throw new Error("Refresh token expired.");
+    const newAccessToken = createAccessToken(verifiedUser);
     return {
-      user,
-      token: null,
+      user: verifiedUser,
+      token: newAccessToken,
       redis,
-      dataSources: dataSources({ user }),
+      dataSources: dataSources({ user: verifiedUser }),
     };
   } catch (error) {
     console.log(error);
