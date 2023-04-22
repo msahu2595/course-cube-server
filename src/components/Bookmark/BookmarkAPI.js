@@ -7,10 +7,13 @@ class BookmarkAPI extends MongoDataSource {
     this.context = options.context;
   }
 
-  bookmarks({ offset, limit, userId, type }) {
+  bookmarks({ offset, limit, userId, type, subType }) {
     const filter = { user: userId || this.context.user._id };
     if (type) {
       filter["type"] = type;
+    }
+    if (subType) {
+      filter["subType"] = subType;
     }
     return this.model
       .find(filter)
@@ -30,13 +33,17 @@ class BookmarkAPI extends MongoDataSource {
       .exec();
   }
 
-  bookmark({ refId, type }) {
+  bookmark({ refId, type, subType }) {
+    const bookmarkInput = { type };
+    if (subType) {
+      bookmarkInput.subType = subType;
+    }
     return this.model.findOneAndUpdate(
       {
         user: this.context.user._id,
         ref: refId,
       },
-      { type },
+      bookmarkInput,
       { upsert: true, new: true }
     );
   }

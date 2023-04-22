@@ -24,6 +24,10 @@ const BookmarkSchema = new Schema(
         "Answer",
       ],
     },
+    subType: {
+      type: String,
+      enum: ["Video", "Test", "Document"],
+    },
   },
   { timestamps: true, runValidators: true, runSettersOnQuery: true }
 );

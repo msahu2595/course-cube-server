@@ -12,6 +12,12 @@ const BookmarkSchema = gql`
     Answer
   }
 
+  enum BookmarkSubType {
+    Video
+    Test
+    Document
+  }
+
   extend type Query {
     bookmarks(
       limit: Int
@@ -26,18 +32,24 @@ const BookmarkSchema = gql`
   }
 
   extend type Mutation {
-    bookmark(refId: ID!, type: BookmarkType!): BookmarkResponse
+    bookmark(
+      refId: ID!
+      type: BookmarkType!
+      subType: BookmarkSubType
+    ): BookmarkResponse
     unbookmark(refId: ID!): BookmarkResponse
   }
 
   input BookmarksFilterInput {
     userId: ID
     type: BookmarkType
+    subType: BookmarkSubType
   }
 
   type BookmarksFilterType {
     userId: ID
     type: BookmarkType
+    subType: BookmarkSubType
   }
 
   type Bookmark {
@@ -45,6 +57,7 @@ const BookmarkSchema = gql`
     user: User
     ref: Ref
     type: BookmarkType!
+    subType: BookmarkSubType
     createdAt: String!
     updatedAt: String!
   }

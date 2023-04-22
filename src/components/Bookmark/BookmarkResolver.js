@@ -81,11 +81,11 @@ const BookmarkResolver = {
   Mutation: {
     bookmark: async (
       _,
-      { refId, type },
+      { refId, type, subType = null },
       { token, dataSources: { bookmarkAPI } }
     ) => {
       try {
-        const payload = await bookmarkAPI.bookmark({ refId, type });
+        const payload = await bookmarkAPI.bookmark({ refId, type, subType });
         return {
           code: "200",
           success: payload?._id ? true : false,
