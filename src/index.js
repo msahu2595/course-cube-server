@@ -2,6 +2,7 @@ require("dotenv").config();
 
 const Redis = require("ioredis");
 const mongoose = require("mongoose");
+const { GraphQLError } = require("graphql");
 const { ApolloServer } = require("@apollo/server");
 const { startStandaloneServer } = require("@apollo/server/standalone");
 const {
@@ -90,12 +91,18 @@ const context = async ({ req }) => {
         dataSources: dataSources({ user }),
       };
     }
-    if (!refreshToken) throw new Error("Refresh token expired.");
+    if (!refreshToken)
+      throw new GraphQLError("Refresh token is null, please log in again.", {
+        extensions: { code: "FORBIDDEN", http: { status: 401 } },
+      });
     // eslint-disable-next-line no-unused-vars
     const { iat, ...verifiedUser } = verifyRefreshToken(refreshToken);
     const savedRefreshedToken = await redis.get(verifiedUser._id);
     // prettier-ignore
-    if (savedRefreshedToken !== refreshToken) throw new Error("Refresh token expired.");
+    if (savedRefreshedToken !== refreshToken) throw new GraphQLError(
+      "Refresh token is revoked/expired, please log in again.",
+      {extensions: {code: "FORBIDDEN", http: { status: 401 }}}
+    );
     const newAccessToken = createAccessToken(verifiedUser);
     return {
       user: verifiedUser,
@@ -105,7 +112,10 @@ const context = async ({ req }) => {
     };
   } catch (error) {
     console.log(error);
-    throw new Error(error.message || "You have to logged in again.");
+    throw new GraphQLError(
+      error.message || "Unexpected error, please log in again.",
+      { extensions: { code: "FORBIDDEN", http: { status: 500 } } }
+    );
   }
 };
 
