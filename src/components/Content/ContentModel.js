@@ -153,7 +153,7 @@ ContentSchema.virtual("purchased", {
 ContentSchema.virtual("bookmarked", {
   ref: "Bookmark", // The model to use
   localField: "_id", // Find people where `localField`
-  foreignField: "refId", // is equal to `foreignField`
+  foreignField: "ref", // is equal to `foreignField`
   count: true, // And only get the number of docs
 });
 
