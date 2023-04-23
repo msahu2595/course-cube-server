@@ -3,24 +3,25 @@ const { GraphQLError } = require("graphql");
 const BookmarkResolver = {
   Ref: {
     __resolveType(obj) {
-      // Only Bundle has a time field
-      if (Object.hasOwn(obj, "syllabus")) {
+      const keys = Object.keys(obj?._doc);
+      // Only Bundle has a syllabus field
+      if (keys.includes("syllabus")) {
         return "Bundle";
       }
-      // Only BundleContent has a duration field
-      if (Object.hasOwn(obj, "subjectId")) {
+      // Only BundleContent has a subjectId field
+      if (keys.includes("subjectId")) {
         return "BundleContent";
       }
-      // Only Article has a duration field
-      if (Object.hasOwn(obj, "author")) {
+      // Only Article has a author field
+      if (keys.includes("author")) {
         return "Article";
       }
-      // Only Question has a duration field
-      if (Object.hasOwn(obj, "options")) {
+      // Only Question has a options field
+      if (keys.includes("options")) {
         return "Question";
       }
-      // Only Answer has a pages field
-      if (Object.hasOwn(obj, "answer")) {
+      // Only Answer has a answer field
+      if (keys.includes("answer")) {
         return "Answer";
       }
       return "Content";
