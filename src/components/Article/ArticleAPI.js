@@ -43,7 +43,18 @@ class ArticleAPI extends MongoDataSource {
   }
 
   article({ articleId }) {
-    return this.model.findById(articleId).populate("likes").exec();
+    const populateArray = ["likes"];
+    if (this.context?.user?._id) {
+      populateArray.push({
+        path: "liked",
+        match: { user: this.context?.user?._id },
+      });
+      populateArray.push({
+        path: "bookmarked",
+        match: { user: this.context?.user?._id },
+      });
+    }
+    return this.model.findById(articleId).populate(populateArray).exec();
   }
 
   createArticle({ articleInput }) {

@@ -32,28 +32,35 @@ const ArticleSchema = gql`
   }
 
   input ArticleInput {
-    image: URL
+    subject: String!
+    tags: [String!]
+    image: URL!
     title: String!
     description: String!
     author: String!
-    tags: [String!]
     sources: [URL!]
     visible: Boolean
   }
 
   type Article {
     _id: ID!
-    image: URL
+    # Used for filter
+    subject: String!
+    tags: [String!]
+    # General fields
+    image: URL!
     title: String!
     description: String!
     author: String!
-    tags: [String!]
     sources: [URL!]
     visible: Boolean!
     enable: Boolean!
-    likes: NonNegativeInt
     createdAt: String!
     updatedAt: String!
+    # Populate fields
+    likes: NonNegativeInt
+    liked: NonNegativeInt
+    bookmarked: NonNegativeInt
   }
 
   type ArticleListResponse implements ListResponse {

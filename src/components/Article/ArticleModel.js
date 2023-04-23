@@ -2,25 +2,6 @@ const { Schema, model } = require("mongoose");
 
 const ArticleSchema = new Schema(
   {
-    image: {
-      type: String,
-      trim: true,
-    },
-    title: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    description: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    author: {
-      type: String,
-      required: true,
-      trim: true,
-    },
     tags: [
       {
         type: String,
@@ -28,6 +9,42 @@ const ArticleSchema = new Schema(
         lowercase: true,
       },
     ],
+    subject: {
+      required: true,
+      type: String,
+      trim: true,
+      lowercase: true,
+      minlength: 2,
+      maxlength: 40,
+    },
+    image: {
+      required: true,
+      type: String,
+      trim: true,
+    },
+    title: {
+      required: true,
+      type: String,
+      trim: true,
+      lowercase: true,
+      minlength: 2,
+      maxlength: 500,
+    },
+    description: {
+      type: String,
+      required: true,
+      trim: true,
+      minlength: 2,
+      maxlength: 10000,
+    },
+    author: {
+      type: String,
+      required: true,
+      trim: true,
+      lowercase: true,
+      minlength: 2,
+      maxlength: 80,
+    },
     sources: [
       {
         type: String,
@@ -44,6 +61,20 @@ ArticleSchema.virtual("likes", {
   ref: "Like", // The model to use
   localField: "_id", // Find people where `localField`
   foreignField: "refId", // is equal to `foreignField`
+  count: true, // And only get the number of docs
+});
+
+ArticleSchema.virtual("liked", {
+  ref: "Like", // The model to use
+  localField: "_id", // Find people where `localField`
+  foreignField: "refId", // is equal to `foreignField`
+  count: true, // And only get the number of docs
+});
+
+ArticleSchema.virtual("bookmarked", {
+  ref: "Bookmark", // The model to use
+  localField: "_id", // Find people where `localField`
+  foreignField: "ref", // is equal to `foreignField`
   count: true, // And only get the number of docs
 });
 
