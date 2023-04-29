@@ -7,14 +7,19 @@ const HistorySchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-    refId: {
+    ref: {
       required: true,
       type: Schema.Types.ObjectId,
+      refPath: "type",
     },
     type: {
       required: true,
       type: String,
-      enum: ["VIDEO", "TEST", "DOCUMENT", "QUESTION"],
+      enum: ["BundleContent", "Content", "Article", "Question"],
+    },
+    subType: {
+      type: String,
+      enum: ["Video", "Test", "Document"],
     },
     visible: { type: Boolean, required: true, default: true },
   },

@@ -24,12 +24,12 @@ class VideoAPI extends MongoDataSource {
     return this.model.findById(videoId).exec();
   }
 
-  videoExists({ videoId }) {
-    return this.model.exists({ _id: videoId });
+  videoExists({ videoId, ...rest }) {
+    return this.model.exists({ _id: videoId, enable: true, ...rest });
   }
 
   videoLinkExists({ link }) {
-    return this.model.exists({ link });
+    return this.model.exists({ link, enable: true });
   }
 
   addVideo({ videoInput }) {

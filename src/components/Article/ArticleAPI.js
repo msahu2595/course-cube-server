@@ -57,6 +57,10 @@ class ArticleAPI extends MongoDataSource {
     return this.model.findById(articleId).populate(populateArray).exec();
   }
 
+  articleExists({ articleId, ...rest }) {
+    return this.model.exists({ _id: articleId, enable: true, ...rest });
+  }
+
   createArticle({ articleInput }) {
     return this.model.create(articleInput);
   }

@@ -24,12 +24,12 @@ class DocumentAPI extends MongoDataSource {
     return this.model.findById(documentId).exec();
   }
 
-  documentExists({ documentId }) {
-    return this.model.exists({ _id: documentId });
+  documentExists({ documentId, ...rest }) {
+    return this.model.exists({ _id: documentId, enable: true, ...rest });
   }
 
   documentURLExists({ url }) {
-    return this.model.exists({ url });
+    return this.model.exists({ url, enable: true });
   }
 
   addDocument({ documentInput }) {

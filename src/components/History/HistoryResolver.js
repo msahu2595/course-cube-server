@@ -56,35 +56,80 @@ const HistoryResolver = {
   Mutation: {
     addHistory: async (
       _,
-      { refId, type },
-      { token, dataSources: { historyAPI } }
+      { refId, type, subType = null },
+      {
+        token,
+        dataSources: {
+          historyAPI,
+          bundleContentAPI,
+          contentAPI,
+          articleAPI,
+          questionAPI,
+        },
+      }
     ) => {
       try {
-        const payload = await historyAPI.addHistory({ refId, type });
-        return {
-          code: "200",
-          success: true,
-          message: "You are successfully added history.",
-          token,
-          payload,
-        };
+        let exists = false;
+        switch (type) {
+          case "BundleContent":
+            exists = await bundleContentAPI.bundleContentExists({
+              bundleContentId: refId,
+              type: subType,
+            });
+            break;
+          case "Content":
+            exists = await contentAPI.contentExists({
+              contentId: refId,
+              type: subType,
+            });
+            break;
+          case "Article":
+            exists = await articleAPI.testExists({
+              articleId: refId,
+            });
+            break;
+          case "Question":
+            exists = await questionAPI.questionExists({
+              questionId: refId,
+            });
+            break;
+          default:
+            break;
+        }
+        console.log("exists ==> ", exists);
+        if (exists) {
+          const payload = await historyAPI.addHistory({ refId, type, subType });
+          return {
+            code: "200",
+            success: payload?._id ? true : false,
+            message: `${
+              payload?._id ? "Added" : "Not added"
+            } into your history.`,
+            token,
+          };
+        } else {
+          throw new GraphQLError(
+            `${type} not exists, Please check & try again.`
+          );
+        }
       } catch (error) {
         throw new Error(error.message, error.extensions.code);
       }
     },
     removeHistory: async (
       _,
-      { historyId },
+      { refId },
       { token, dataSources: { historyAPI } }
     ) => {
       try {
-        const payload = await historyAPI.removeHistory({ historyId });
+        const payload = await historyAPI.removeHistory({ refId });
         return {
           code: "200",
-          success: true,
-          message: "You are successfully removed history.",
+          success: payload?._id ? true : false,
+          message: `${
+            payload?._id ? "Removed" : "Not removed"
+          } from your history.`,
           token,
-          payload,
         };
       } catch (error) {
         throw new Error(error.message, error.extensions.code);

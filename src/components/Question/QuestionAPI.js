@@ -50,6 +50,10 @@ class QuestionAPI extends MongoDataSource {
       .exec();
   }
 
+  questionExists({ questionId, ...rest }) {
+    return this.model.exists({ _id: questionId, enable: true, ...rest });
+  }
+
   createQuestion({
     title,
     description,

@@ -61,6 +61,10 @@ class BundleContentAPI extends MongoDataSource {
   //   });
   // }
 
+  bundleContentExists({ bundleContentId, ...rest }) {
+    return this.model.exists({ _id: bundleContentId, enable: true, ...rest });
+  }
+
   mediaBundleContentExists({ media }) {
     return this.model.exists({ media, enable: true });
   }

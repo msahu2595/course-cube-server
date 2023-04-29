@@ -63,8 +63,8 @@ class BundleAPI extends MongoDataSource {
     return this.model.findById(bundleId).populate(populateArray).exec();
   }
 
-  bundleExists({ bundleId }) {
-    return this.model.exists({ _id: bundleId });
+  bundleExists({ bundleId, ...rest }) {
+    return this.model.exists({ _id: bundleId, enable: true, ...rest });
   }
 
   addBundle({ bundleInput }) {

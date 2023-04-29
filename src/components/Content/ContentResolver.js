@@ -80,27 +80,31 @@ const ContentResolver = {
         if (mediaExists)
           throw new GraphQLError("Content already created using this media.");
         let exists = false;
-        if (contentInput?.type === "Video") {
-          exists = await videoAPI.videoExists({
-            videoId: contentInput?.media,
-          });
+        switch (contentInput?.type) {
+          case "Video":
+            exists = await videoAPI.videoExists({
+              videoId: contentInput?.media,
+            });
+            break;
+          case "Test":
+            exists = await testAPI.testExists({
+              testId: contentInput?.media,
+            });
+            if (exists.questions.length < 5) {
+              throw new GraphQLError(
+                "Minimum 5 questions required in given test for add content."
+              );
+            }
+            break;
+          case "Document":
+            exists = await documentAPI.documentExists({
+              documentId: contentInput?.media,
+            });
+            break;
+          default:
+            break;
         }
-        if (contentInput?.type === "Test") {
-          exists = await testAPI.testExists({
-            testId: contentInput?.media,
-          });
-          if (exists.questions.length < 5) {
-            throw new GraphQLError(
-              "Minimum 5 questions required in given test for add content."
-            );
-          }
-        }
-        if (contentInput?.type === "Document") {
-          exists = await documentAPI.documentExists({
-            documentId: contentInput?.media,
-          });
-        }
-        // console.log("exists ==> ", exists);
+        console.log("exists ==> ", exists);
         if (exists) {
           const payload = await contentAPI.addContent({ contentInput });
           return {
@@ -132,22 +136,26 @@ const ContentResolver = {
         if (mediaExists && mediaExists._id.toString() !== contentId)
           throw new GraphQLError("Another content already using this media.");
         let exists = false;
-        if (contentInput?.type === "Video") {
-          exists = await videoAPI.videoExists({
-            videoId: contentInput?.media,
-          });
+        switch (contentInput?.type) {
+          case "Video":
+            exists = await videoAPI.videoExists({
+              videoId: contentInput?.media,
+            });
+            break;
+          case "Test":
+            exists = await testAPI.testExists({
+              testId: contentInput?.media,
+            });
+            break;
+          case "Document":
+            exists = await documentAPI.documentExists({
+              documentId: contentInput?.media,
+            });
+            break;
+          default:
+            break;
         }
-        if (contentInput?.type === "Test") {
-          exists = await testAPI.testExists({
-            testId: contentInput?.media,
-          });
-        }
-        if (contentInput?.type === "Document") {
-          exists = await documentAPI.documentExists({
-            documentId: contentInput?.media,
-          });
-        }
-        // console.log("exists ==> ", exists);
+        console.log("exists ==> ", exists);
         if (exists) {
           const payload = await contentAPI.editContent({
             contentId,

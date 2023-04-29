@@ -41,6 +41,10 @@ class AnswerAPI extends MongoDataSource {
       .exec();
   }
 
+  answerExists({ answerId, ...rest }) {
+    return this.model.exists({ _id: answerId, enable: true, ...rest });
+  }
+
   createAnswer({ questionId, answer, image, link, route, params }) {
     const question = new this.model({
       user: this.context.user._id,

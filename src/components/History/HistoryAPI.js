@@ -7,40 +7,52 @@ class HistoryAPI extends MongoDataSource {
     this.context = options.context;
   }
 
-  history({ offset, limit, userId, type }) {
-    const query = { user: userId || this.context.user._id, visible: true };
+  history({ offset, limit, userId, type, subType }) {
+    const filter = { user: userId || this.context.user._id, visible: true };
     if (type) {
-      query["type"] = type;
+      filter["type"] = type;
     }
-    return this.model.find(query).skip(offset).limit(limit).exec();
+    if (subType) {
+      filter["subType"] = subType;
+    }
+    return this.model
+      .find(filter)
+      .sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(limit)
+      .populate("ref")
+      .exec();
   }
 
   historyUsers({ offset, limit, refId }) {
     return this.model
-      .find({ refId, visible: true })
+      .find({ ref: refId })
       .skip(offset)
       .limit(limit)
       .populate("user")
       .exec();
   }
 
-  addHistory({ refId, type }) {
+  addHistory({ refId, type, subType }) {
+    const historyInput = { type };
+    if (subType) {
+      historyInput.subType = subType;
+    }
     return this.model.findOneAndUpdate(
       {
         user: this.context.user._id,
-        refId,
-        type,
+        ref: refId,
       },
-      { visible: true },
+      historyInput,
       { upsert: true, new: true }
     );
   }
 
-  removeHistory({ historyId }) {
+  removeHistory({ refId }) {
     return this.model.findOneAndUpdate(
       {
-        _id: historyId,
         user: this.context.user._id,
+        ref: refId,
       },
       { visible: false },
       { upsert: true, new: true }

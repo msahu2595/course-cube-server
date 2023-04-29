@@ -26,7 +26,7 @@ class BookmarkAPI extends MongoDataSource {
 
   bookmarkedUsers({ offset, limit, refId }) {
     return this.model
-      .find({ refId })
+      .find({ ref: refId })
       .skip(offset)
       .limit(limit)
       .populate("user")

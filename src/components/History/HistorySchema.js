@@ -2,10 +2,16 @@ const gql = require("graphql-tag");
 
 const HistorySchema = gql`
   enum HistoryType {
-    VIDEO
-    TEST
-    DOCUMENT
-    QUESTION
+    BundleContent
+    Content
+    Article
+    Question
+  }
+
+  enum HistorySubType {
+    Video
+    Test
+    Document
   }
 
   extend type Query {
@@ -17,26 +23,33 @@ const HistorySchema = gql`
     historyUsers(limit: Int, offset: Int, refId: ID!): HistoryUserListResponse
   }
 
+  extend type Mutation {
+    addHistory(
+      refId: ID!
+      type: HistoryType!
+      subType: HistorySubType
+    ): HistoryResponse
+    removeHistory(refId: ID!): HistoryResponse
+  }
+
   input HistoryFilterInput {
     userId: ID
     type: HistoryType
+    subType: HistorySubType
   }
 
   type HistoryFilterType {
     userId: ID
     type: HistoryType
-  }
-
-  extend type Mutation {
-    addHistory(refId: ID!, type: HistoryType!): HistoryResponse
-    removeHistory(historyId: ID!): HistoryResponse
+    subType: HistorySubType
   }
 
   type History {
     _id: ID!
     user: User
-    refId: ID!
+    ref: Ref
     type: HistoryType!
+    subType: HistorySubType
     visible: Boolean!
     createdAt: String!
     updatedAt: String!
@@ -69,7 +82,6 @@ const HistorySchema = gql`
     success: Boolean!
     message: String!
     token: JWT
-    payload: History
   }
 `;
 

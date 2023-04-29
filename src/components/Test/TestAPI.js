@@ -24,8 +24,11 @@ class TestAPI extends MongoDataSource {
     return this.model.findById(testId).exec();
   }
 
-  testExists({ testId }) {
-    return this.model.findById(testId).select("_id questions").lean();
+  testExists({ testId, ...rest }) {
+    return this.model
+      .findOne({ _id: testId, enable: true, ...rest })
+      .select("_id questions")
+      .lean();
   }
 
   addTest({ testInput }) {
