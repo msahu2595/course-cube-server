@@ -1,5 +1,6 @@
 require("dotenv").config();
 
+const os = require("os");
 const Redis = require("ioredis");
 const mongoose = require("mongoose");
 const { GraphQLError } = require("graphql");
@@ -142,9 +143,19 @@ if (process.env.NODE_ENV !== "test") {
       port: process.env.PORT || 4000,
     },
   }).then(({ url }) => {
+    const networkInterfaces = os.networkInterfaces();
     console.log(`
-      Server is running!
-      Listening on port ${process.env.PORT}, 🚀 Server ready at ${url}
+      Server is running! Listening on port ${
+        process.env.PORT
+      }, 🚀 Server ready at
+      
+      ${url}
+      
+                or
+      
+      http://${
+        networkInterfaces?.en0?.find((en) => en?.family === "IPv4")?.address
+      }:4000/
     `);
   });
 }
