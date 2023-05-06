@@ -7,22 +7,30 @@ class LikeAPI extends MongoDataSource {
     this.context = options.context;
   }
 
-  likedUsers({ offset, limit, refId }) {
+  likedUsers({ offset, limit, refId, type }) {
+    const filter = { refId };
+    if (type) {
+      filter["type"] = type;
+    }
     return this.model
-      .find({ refId })
+      .find(filter)
       .skip(offset)
       .limit(limit)
       .populate("user")
       .exec();
   }
 
-  like({ refId }) {
+  like({ refId, type }) {
+    const likeInput = {};
+    if (type) {
+      likeInput["type"] = type;
+    }
     return this.model.findOneAndUpdate(
       {
         user: this.context.user._id,
         refId: refId,
       },
-      { user: this.context.user._id, refId: refId },
+      likeInput,
       { upsert: true, new: true }
     );
   }

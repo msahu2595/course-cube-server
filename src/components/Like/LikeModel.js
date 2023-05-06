@@ -11,6 +11,12 @@ const LikeSchema = new Schema(
       type: Schema.Types.ObjectId,
       required: true,
     },
+    type: {
+      type: String,
+      required: true,
+      enum: ["UP", "DOWN"],
+      default: "UP",
+    },
   },
   { timestamps: true, runValidators: true, runSettersOnQuery: true }
 );

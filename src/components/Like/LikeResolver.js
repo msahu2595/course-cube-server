@@ -4,7 +4,7 @@ const LikeResolver = {
   Query: {
     likedUsers: async (
       _,
-      { offset = 0, limit = 10, refId },
+      { offset = 0, limit = 10, refId, filter },
       { token, dataSources: { likeAPI } }
     ) => {
       try {
@@ -12,6 +12,7 @@ const LikeResolver = {
           offset,
           limit,
           refId,
+          ...filter,
         });
         return {
           code: 200,
@@ -21,6 +22,7 @@ const LikeResolver = {
           limit,
           offset,
           refId,
+          filter,
           payload,
         };
       } catch (error) {
@@ -29,9 +31,9 @@ const LikeResolver = {
     },
   },
   Mutation: {
-    like: async (_, { refId }, { token, dataSources: { likeAPI } }) => {
+    like: async (_, { refId, type }, { token, dataSources: { likeAPI } }) => {
       try {
-        const payload = await likeAPI.like({ refId });
+        const payload = await likeAPI.like({ refId, type });
         return {
           code: "200",
           success: payload?._id ? true : false,
