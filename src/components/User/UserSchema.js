@@ -116,6 +116,7 @@ const UserSchema = gql`
     videos: NonNegativeInt
     tests: NonNegativeInt
     documents: NonNegativeInt
+    articles: NonNegativeInt
     questions: NonNegativeInt
   }
 

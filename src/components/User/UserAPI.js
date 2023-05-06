@@ -26,24 +26,29 @@ class UserAPI extends MongoDataSource {
       .exec();
   }
 
+  // https://www.geeksforgeeks.org/mongoose-populate/
   statistics({ userId }) {
     return this.model
       .findById(userId || this.context.user._id)
       .populate({
         path: "videos",
-        match: { type: "VIDEO" },
+        match: { type: /^(Content|BundleContent)$/, subType: "Video" },
       })
       .populate({
         path: "tests",
-        match: { type: "TEST" },
+        match: { type: /^(Content|BundleContent)$/, subType: "Test" },
       })
       .populate({
         path: "documents",
-        match: { type: "DOCUMENT" },
+        match: { type: /^(Content|BundleContent)$/, subType: "Document" },
+      })
+      .populate({
+        path: "articles",
+        match: { type: "Article" },
       })
       .populate({
         path: "questions",
-        match: { type: "QUESTION" },
+        match: { type: "Question" },
       })
       .exec();
   }
