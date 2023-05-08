@@ -31,8 +31,10 @@ const { PurchaseAPI, PurchaseModel } = require("./components/Purchase");
 const { QuestionAPI, QuestionModel } = require("./components/Question");
 // Answer API
 const { AnswerAPI, AnswerModel } = require("./components/Answer");
-// Vote API
+// History API
 const { HistoryAPI, HistoryModel } = require("./components/History");
+// View API
+const { ViewAPI, ViewModel } = require("./components/View");
 // Like API
 const { LikeAPI, LikeModel } = require("./components/Like");
 // Bookmark API
@@ -60,6 +62,7 @@ const dataSources = (context) => ({
   purchaseAPI: new PurchaseAPI({ PurchaseModel, context }),
   answerAPI: new AnswerAPI({ AnswerModel, context }),
   historyAPI: new HistoryAPI({ HistoryModel, context }),
+  viewAPI: new ViewAPI({ ViewModel, context }),
   likeAPI: new LikeAPI({ LikeModel, context }),
   bookmarkAPI: new BookmarkAPI({ BookmarkModel, context }),
   notificationAPI: new NotificationAPI({ NotificationModel, context }),

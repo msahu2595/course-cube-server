@@ -17,6 +17,7 @@ const { PurchaseSchema } = require("./components/Purchase");
 const { QuestionSchema } = require("./components/Question");
 const { AnswerSchema } = require("./components/Answer");
 const { HistorySchema } = require("./components/History");
+const { ViewSchema } = require("./components/View");
 const { LikeSchema } = require("./components/Like");
 const { BookmarkSchema } = require("./components/Bookmark");
 const { NotificationSchema } = require("./components/Notification");
@@ -41,6 +42,7 @@ module.exports = [
   QuestionSchema,
   AnswerSchema,
   HistorySchema,
+  ViewSchema,
   LikeSchema,
   BookmarkSchema,
   NotificationSchema,

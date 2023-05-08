@@ -14,6 +14,7 @@ const { PurchaseModel } = require("./components/Purchase");
 const { QuestionModel } = require("./components/Question");
 const { AnswerModel } = require("./components/Answer");
 const { HistoryModel } = require("./components/History");
+const { ViewModel } = require("./components/View");
 const { LikeModel } = require("./components/Like");
 const { BookmarkModel } = require("./components/Bookmark");
 const { NotificationModel } = require("./components/Notification");
@@ -35,6 +36,7 @@ module.exports = {
   QuestionModel,
   AnswerModel,
   HistoryModel,
+  ViewModel,
   LikeModel,
   BookmarkModel,
   NotificationModel,

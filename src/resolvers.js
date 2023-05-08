@@ -16,6 +16,7 @@ const { PurchaseResolver } = require("./components/Purchase");
 const { QuestionResolver } = require("./components/Question");
 const { AnswerResolver } = require("./components/Answer");
 const { HistoryResolver } = require("./components/History");
+const { ViewResolver } = require("./components/View");
 const { LikeResolver } = require("./components/Like");
 const { BookmarkResolver } = require("./components/Bookmark");
 const { NotificationResolver } = require("./components/Notification");
@@ -39,6 +40,7 @@ module.exports = [
   QuestionResolver,
   AnswerResolver,
   HistoryResolver,
+  ViewResolver,
   LikeResolver,
   BookmarkResolver,
   NotificationResolver,
