@@ -49,11 +49,16 @@ const ContentResolver = {
     content: async (
       _,
       { contentId },
-      { token, dataSources: { contentAPI } }
+      { token, dataSources: { contentAPI, historyAPI } }
     ) => {
       try {
         const payload = await contentAPI.content({
           contentId,
+        });
+        historyAPI.addHistory({
+          refId: contentId,
+          type: "Content",
+          subType: payload.type,
         });
         return {
           code: 200,

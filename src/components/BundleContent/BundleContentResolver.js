@@ -32,11 +32,16 @@ const BundleContentResolver = {
     bundleContent: async (
       _,
       { bundleContentId },
-      { token, dataSources: { bundleContentAPI } }
+      { token, dataSources: { bundleContentAPI, historyAPI } }
     ) => {
       try {
         const payload = await bundleContentAPI.bundleContent({
           bundleContentId,
+        });
+        historyAPI.addHistory({
+          refId: bundleContentId,
+          type: "BundleContent",
+          subType: payload.type,
         });
         return {
           code: 200,
@@ -55,7 +60,8 @@ const BundleContentResolver = {
       _,
       { bundleId, bundleContentInput },
       {
-        token, dataSources: {
+        token,
+        dataSources: {
           bundleContentAPI,
           bundleAPI,
           videoAPI,
@@ -66,8 +72,7 @@ const BundleContentResolver = {
     ) => {
       try {
         const bundleExists = await bundleAPI.bundleExists({ bundleId });
-        if (!bundleExists)
-          throw new GraphQLError("Bundle id does not exists.");
+        if (!bundleExists) throw new GraphQLError("Bundle id does not exists.");
         let exists = false;
         if (bundleContentInput?.type === "Video") {
           exists = await videoAPI.videoExists({
@@ -110,7 +115,10 @@ const BundleContentResolver = {
     editBundleContent: async (
       _,
       { bundleContentId, bundleContentInput },
-      { token, dataSources: { bundleContentAPI, videoAPI, testAPI, documentAPI } }
+      {
+        token,
+        dataSources: { bundleContentAPI, videoAPI, testAPI, documentAPI },
+      }
     ) => {
       try {
         let exists = false;

@@ -38,14 +38,17 @@ class HistoryAPI extends MongoDataSource {
     if (subType) {
       historyInput.subType = subType;
     }
-    return this.model.findOneAndUpdate(
-      {
-        user: this.context.user._id,
-        ref: refId,
-      },
-      historyInput,
-      { upsert: true, new: true }
-    );
+    this.model
+      .findOneAndUpdate(
+        {
+          user: this.context.user._id,
+          ref: refId,
+        },
+        historyInput,
+        { upsert: true, new: true }
+      )
+      .then(() => {})
+      .catch(() => {});
   }
 
   removeHistory({ refId }) {

@@ -29,10 +29,18 @@ const ArticleResolver = {
         throw new GraphQLError(error.message);
       }
     },
-    article: async (_, { articleId }, { token, dataSources: { articleAPI } }) => {
+    article: async (
+      _,
+      { articleId },
+      { token, dataSources: { articleAPI, historyAPI } }
+    ) => {
       try {
         const payload = await articleAPI.article({
           articleId,
+        });
+        historyAPI.addHistory({
+          refId: articleId,
+          type: "Article",
         });
         return {
           code: 200,

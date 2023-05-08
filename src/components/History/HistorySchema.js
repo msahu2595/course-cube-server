@@ -24,11 +24,6 @@ const HistorySchema = gql`
   }
 
   extend type Mutation {
-    addHistory(
-      refId: ID!
-      type: HistoryType!
-      subType: HistorySubType
-    ): HistoryResponse
     removeHistory(refId: ID!): HistoryResponse
   }
 
