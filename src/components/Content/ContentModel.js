@@ -136,8 +136,8 @@ ContentSchema.virtual("liked", {
   count: true, // And only get the number of docs
 });
 
-ContentSchema.virtual("purchases", {
-  ref: "Purchase", // The model to use
+ContentSchema.virtual("views", {
+  ref: "View", // The model to use
   localField: "_id", // Find people where `localField`
   foreignField: "refId", // is equal to `foreignField`
   count: true, // And only get the number of docs

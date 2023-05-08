@@ -92,7 +92,7 @@ const ContentSchema = gql`
     # Populate fields
     likes: NonNegativeInt
     liked: NonNegativeInt
-    purchases: NonNegativeInt
+    views: NonNegativeInt
     purchased: NonNegativeInt
     bookmarked: NonNegativeInt
   }
