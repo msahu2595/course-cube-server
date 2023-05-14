@@ -12,7 +12,6 @@ const FollowSchema = new Schema(
       required: true,
       ref: "User",
     },
-    active: { type: Boolean, required: true },
   },
   { timestamps: true, runValidators: true, runSettersOnQuery: true }
 );

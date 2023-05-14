@@ -55,28 +55,20 @@ const FollowResolver = {
     follow: async (
       _,
       { followingId },
-      { token, dataSources: { followAPI, notificationAPI }, user: { _id: followerId } }
+      { token, dataSources: { followAPI }, user: { _id: followerId } }
     ) => {
       try {
         if (followerId === followingId) {
           throw new GraphQLError("You can't follow or un-follow yourself.");
         }
         const payload = await followAPI.follow({ followingId });
-        const { following } = payload;
-        notificationAPI.createNotification({
-          userId: followingId,
-          image: following?.image,
-          title: `${following?.firstName} followed you`,
-          message: "You can also follow him.",
-          route: "UserProfileScreen",
-          params: { userId: followingId },
-        });
         return {
           code: "200",
-          success: true,
-          message: "You are successfully followed.",
+          success: payload?._id ? true : false,
+          message: `You are successfully${
+            payload?._id ? " " : " not "
+          }followed.`,
           token,
-          payload,
         };
       } catch (error) {
         throw new Error(error.message, error.extensions.code);
@@ -94,10 +86,11 @@ const FollowResolver = {
         const payload = await followAPI.unFollow({ followingId });
         return {
           code: "200",
-          success: true,
-          message: "You are successfully un-followed.",
+          success: payload?.deletedCount ? true : false,
+          message: `You are successfully${
+            payload?.deletedCount ? " " : " not "
+          }un-followed.`,
           token,
-          payload,
         };
       } catch (error) {
         throw new Error(error.message, error.extensions.code);

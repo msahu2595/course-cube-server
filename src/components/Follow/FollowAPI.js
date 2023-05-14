@@ -26,27 +26,21 @@ class FollowAPI extends MongoDataSource {
   }
 
   follow({ followingId }) {
-    return this.model
-      .findOneAndUpdate(
-        {
-          follower: this.context.user._id,
-          following: followingId,
-        },
-        { active: true },
-        { upsert: true, new: true }
-      )
-      .populate("following");
-  }
-
-  unFollow({ followingId }) {
     return this.model.findOneAndUpdate(
       {
         follower: this.context.user._id,
         following: followingId,
       },
-      { active: false },
+      {},
       { upsert: true, new: true }
     );
+  }
+
+  unFollow({ followingId }) {
+    return this.model.deleteOne({
+      follower: this.context.user._id,
+      following: followingId,
+    });
   }
 }
 
