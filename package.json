@@ -32,6 +32,7 @@
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "mongoose": "^6.7.4",
+    "superagent": "^8.0.9",
     "youtube-dl-exec": "^2.2.3"
   },
   "devDependencies": {

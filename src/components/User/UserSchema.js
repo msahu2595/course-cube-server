@@ -39,9 +39,15 @@ const UserSchema = gql`
   type Mutation {
     googleLogIn(
       idToken: String!
-      acceptTnC: Boolean!
       FCMToken: String
-      webLogin: Boolean
+      platform: Platform!
+      acceptTnC: Boolean!
+    ): UserResponse
+    whatsAppLogIn(
+      waId: String!
+      FCMToken: String
+      platform: Platform!
+      acceptTnC: Boolean!
     ): UserResponse
     # appleLogIn(idToken: String!, acceptTnC: Boolean!, FCMToken: String): UserResponse
     editProfile(userInput: UserInput!): UserResponse
@@ -50,10 +56,10 @@ const UserSchema = gql`
   }
 
   input UserInput {
-    phoneNumber: PhoneNumber
     fullName: String
-    picture: URL
     gender: Gender
+    picture: URL
+    # Info
     about: String
     education: String
     workAt: String
@@ -62,6 +68,7 @@ const UserSchema = gql`
     instagram: String
     twitter: String
     linkedin: String
+    # Address
     pincode: PostalCode
     country: String
     state: String
@@ -70,14 +77,16 @@ const UserSchema = gql`
     area: String
     street: String
     landmark: String
+    # Other
     FCMToken: String
   }
 
   type User {
     _id: ID!
-    email: EmailAddress!
+    email: EmailAddress
     emailVerified: Boolean!
-    phoneNumber: PhoneNumber
+    mobile: PhoneNumber
+    mobileVerified: Boolean!
     fullName: String
     gender: Gender
     picture: URL
@@ -102,7 +111,7 @@ const UserSchema = gql`
     # Other
     role: Role!
     FCMToken: Void
-    platform: Platform
+    platform: Platform!
     acceptTnC: Boolean!
     createdAt: String!
     updatedAt: String!
@@ -126,6 +135,7 @@ const UserSchema = gql`
   enum Platform {
     android
     ios
+    web
   }
 
   type UserStatistics {

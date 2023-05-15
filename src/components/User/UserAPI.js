@@ -70,35 +70,28 @@ class UserAPI extends MongoDataSource {
       .exec();
   }
 
-  async logIn({
-    email,
-    emailVerified,
-    fullName,
-    picture,
-    acceptTnC,
-    FCMToken,
-    platform,
-  }) {
-    const payload = await this.model.findOne({ email }).exec();
-    if (!payload?.length) {
-      return this.model
-        .findOneAndUpdate(
-          {
-            email,
-          },
-          {
-            emailVerified,
-            fullName,
-            picture,
-            acceptTnC,
-            FCMToken,
-            platform,
-          },
-          { upsert: true, new: true }
-        )
+  async logIn({ email, mobile, ...rest }) {
+    if (email || mobile) {
+      const filter = {};
+      if (email) {
+        filter["email"] = email;
+      } else {
+        filter["mobile"] = mobile;
+      }
+      const payload = await this.model
+        .findOne(filter)
+        .populate(["followers", "followings"])
         .exec();
+      if (!payload?.length) {
+        return this.model
+          .findOneAndUpdate(filter, rest, { upsert: true, new: true })
+          .populate(["followers", "followings"])
+          .exec();
+      }
+      return payload[0];
+    } else {
+      throw new Error("Please provide valid email or mobile number.");
     }
-    return payload[0];
   }
 
   editProfile({ userInput }) {
