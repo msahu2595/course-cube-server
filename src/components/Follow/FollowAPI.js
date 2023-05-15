@@ -12,7 +12,7 @@ class FollowAPI extends MongoDataSource {
       .find({ following: userId || this.context.user._id })
       .skip(offset)
       .limit(limit)
-      .populate("follower")
+      .populate({ path: "follower", populate: ["followers", "activities"] })
       .exec();
   }
 
@@ -21,7 +21,7 @@ class FollowAPI extends MongoDataSource {
       .find({ follower: userId || this.context.user._id })
       .skip(offset)
       .limit(limit)
-      .populate("following")
+      .populate({ path: "following", populate: ["followers", "activities"] })
       .exec();
   }
 
