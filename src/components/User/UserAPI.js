@@ -7,22 +7,34 @@ class UserAPI extends MongoDataSource {
     this.context = options.context;
   }
 
-  user({ userId }) {
+  users({ offset, limit, search, role, gender, platform }) {
+    const filter = {};
+    if (role) {
+      filter["role"] = role;
+    }
+    if (gender) {
+      filter["gender"] = gender;
+    }
+    if (platform) {
+      filter["platform"] = platform;
+    }
+    if (search) {
+      filter["$text"] = { $search: search };
+    }
+    const populateArray = ["followers", "activities"];
     return this.model
-      .findById(userId || this.context.user._id)
-      .populate("followers")
-      .populate("followings")
+      .find(filter)
+      .sort({ createdAt: -1 })
+      .skip(offset)
+      .limit(limit)
+      .populate(populateArray)
       .exec();
   }
 
-  leaderboard({ offset, limit }) {
+  user({ userId }) {
     return this.model
-      .find()
-      .populate({ path: "followers" })
-      .populate({ path: "history" })
-      .sort({ followers: "asc", history: "desc" })
-      .skip(offset)
-      .limit(limit)
+      .findById(userId || this.context.user._id)
+      .populate(["followers", "followings"])
       .exec();
   }
 
@@ -30,6 +42,7 @@ class UserAPI extends MongoDataSource {
   statistics({ userId }) {
     return this.model
       .findById(userId || this.context.user._id)
+      .select("_id")
       .populate({
         path: "videos",
         match: { type: /^(Content|BundleContent)$/, subType: "Video" },
@@ -46,10 +59,14 @@ class UserAPI extends MongoDataSource {
         path: "articles",
         match: { type: "Article" },
       })
-      .populate({
-        path: "questions",
-        match: { type: "Question" },
-      })
+      .exec();
+  }
+
+  usersFromIds({ userIds }) {
+    const populateArray = ["followers", "activities"];
+    return this.model
+      .find({ _id: { $in: userIds } })
+      .populate(populateArray)
       .exec();
   }
 

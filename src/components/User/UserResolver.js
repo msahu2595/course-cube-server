@@ -17,6 +17,33 @@ const UserResolver = {
     },
   },
   Query: {
+    users: async (
+      _,
+      { offset = 0, limit = 10, search, filter },
+      { token, dataSources: { userAPI } }
+    ) => {
+      try {
+        const payload = await userAPI.users({
+          offset,
+          limit,
+          search,
+          ...filter,
+        });
+        return {
+          code: 200,
+          success: true,
+          message: "Successfully get users.",
+          token,
+          limit,
+          offset,
+          search,
+          filter,
+          payload,
+        };
+      } catch (error) {
+        throw new GraphQLError(error.message);
+      }
+    },
     user: async (_, { userId }, { dataSources: { userAPI }, user, token }) => {
       if (!user) throw new Error("Authentication token required.");
       try {
@@ -52,14 +79,47 @@ const UserResolver = {
         throw new GraphQLError(error.message);
       }
     },
-    leaderboard: async (
+    weeklyLeaderboard: async (
       _,
       { offset = 0, limit = 10 },
-      { dataSources: { userAPI }, user, token }
+      { dataSources: { historyAPI, userAPI }, user, token }
     ) => {
       if (!user) throw new Error("Authentication token required.");
       try {
-        const payload = await userAPI.leaderboard({ offset, limit });
+        const userIdsWithCount = await historyAPI.weeklyLeaderboardUserIds({
+          offset,
+          limit,
+        });
+        const payload = await userAPI.usersFromIds({
+          userIds: userIdsWithCount.map((user) => user._id),
+        });
+        return {
+          code: "200",
+          success: true,
+          message: "Successful",
+          token,
+          offset,
+          limit,
+          payload,
+        };
+      } catch (error) {
+        throw new GraphQLError(error.message);
+      }
+    },
+    monthlyLeaderboard: async (
+      _,
+      { offset = 0, limit = 10 },
+      { dataSources: { historyAPI, userAPI }, user, token }
+    ) => {
+      if (!user) throw new Error("Authentication token required.");
+      try {
+        const userIdsWithCount = await historyAPI.monthlyLeaderboardUserIds({
+          offset,
+          limit,
+        });
+        const payload = await userAPI.usersFromIds({
+          userIds: userIdsWithCount.map((user) => user._id),
+        });
         return {
           code: "200",
           success: true,

@@ -18,9 +18,22 @@ const UserSchema = gql`
   }
 
   type Query {
+    users(
+      offset: Int
+      limit: Int
+      search: String
+      filter: UsersFilterInput
+    ): UserListResponse
     user(userId: ID): UserResponse
     statistics(userId: ID): UserStatisticsResponse
-    leaderboard(limit: Int, offset: Int): UserListResponse
+    weeklyLeaderboard(limit: Int, offset: Int): UserListResponse
+    monthlyLeaderboard(limit: Int, offset: Int): UserListResponse
+  }
+
+  input UsersFilterInput {
+    role: Role
+    gender: Gender
+    platform: Platform
   }
 
   type Mutation {
@@ -65,9 +78,10 @@ const UserSchema = gql`
     email: EmailAddress!
     emailVerified: Boolean!
     phoneNumber: PhoneNumber
-    fullName: String # @capitalize
-    picture: URL
+    fullName: String
     gender: Gender
+    picture: URL
+    # Info
     about: String
     education: String
     workAt: String
@@ -76,6 +90,7 @@ const UserSchema = gql`
     instagram: String
     twitter: String
     linkedin: String
+    # Address
     pincode: PostalCode
     country: String
     state: String
@@ -84,15 +99,17 @@ const UserSchema = gql`
     area: String
     street: String
     landmark: String
+    # Other
+    role: Role!
     FCMToken: Void
     platform: Platform
     acceptTnC: Boolean!
-    role: Role!
-    followers: Int
-    followings: Int
-    history: Int
-    createdAt: DateTime!
-    updatedAt: DateTime!
+    createdAt: String!
+    updatedAt: String!
+    # Populate fields
+    followers: NonNegativeInt
+    followings: NonNegativeInt
+    activities: NonNegativeInt
   }
 
   enum Gender {
@@ -117,7 +134,6 @@ const UserSchema = gql`
     tests: NonNegativeInt
     documents: NonNegativeInt
     articles: NonNegativeInt
-    questions: NonNegativeInt
   }
 
   type UserListResponse implements ListResponse {
@@ -127,7 +143,7 @@ const UserSchema = gql`
     token: JWT
     limit: Int!
     offset: Int!
-    payload: [User!]
+    payload: [User]
   }
 
   type UserResponse implements Response {

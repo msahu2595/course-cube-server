@@ -1,3 +1,4 @@
+const moment = require("moment");
 const { MongoDataSource } = require("apollo-datasource-mongodb");
 
 class HistoryAPI extends MongoDataSource {
@@ -31,6 +32,62 @@ class HistoryAPI extends MongoDataSource {
       .limit(limit)
       .populate("user")
       .exec();
+  }
+
+  weeklyLeaderboardUserIds({ offset, limit }) {
+    return this.model.aggregate([
+      {
+        $match: {
+          updatedAt: {
+            $gte: new Date(
+              `${moment()
+                .subtract(1, "weeks")
+                .startOf("week")
+                .format("YYYY-MM-DD")}`
+            ),
+            $lte: new Date(
+              `${moment()
+                .subtract(1, "weeks")
+                .endOf("week")
+                .format("YYYY-MM-DD")}`
+            ),
+          },
+        },
+      },
+      {
+        $sortByCount: "$user",
+      },
+      { $skip: offset },
+      { $limit: limit },
+    ]);
+  }
+
+  monthlyLeaderboardUserIds({ offset, limit }) {
+    return this.model.aggregate([
+      {
+        $match: {
+          updatedAt: {
+            $gte: new Date(
+              `${moment()
+                .subtract(1, "months")
+                .startOf("month")
+                .format("YYYY-MM-DD")}`
+            ),
+            $lte: new Date(
+              `${moment()
+                .subtract(1, "months")
+                .endOf("month")
+                .format("YYYY-MM-DD")}`
+            ),
+          },
+        },
+      },
+      {
+        $sortByCount: "$user",
+      },
+      { $skip: offset },
+      { $limit: limit },
+    ]);
   }
 
   addHistory({ refId, type, subType }) {

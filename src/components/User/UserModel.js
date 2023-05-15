@@ -14,7 +14,6 @@ const UserSchema = new Schema(
     phoneNumber: { type: String },
     fullName: {
       type: String,
-      lowercase: true,
       trim: true,
       minlength: 2,
       maxlength: 80,
@@ -64,7 +63,7 @@ UserSchema.virtual("followings", {
   count: true, // And only get the number of docs
 });
 
-UserSchema.virtual("history", {
+UserSchema.virtual("activities", {
   ref: "History", // The model to use
   localField: "_id", // Find people where `localField`
   foreignField: "user", // is equal to `foreignField`
@@ -93,13 +92,6 @@ UserSchema.virtual("documents", {
 });
 
 UserSchema.virtual("articles", {
-  ref: "History", // The model to use
-  localField: "_id", // Find people where `localField`
-  foreignField: "user", // is equal to `foreignField`
-  count: true, // And only get the number of docs
-});
-
-UserSchema.virtual("questions", {
   ref: "History", // The model to use
   localField: "_id", // Find people where `localField`
   foreignField: "user", // is equal to `foreignField`
