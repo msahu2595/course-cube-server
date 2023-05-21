@@ -20,7 +20,7 @@ const UserSchema = new Schema(
     },
     gender: { type: String, enum: ["MALE", "FEMALE", "UNKNOWN"] },
     picture: { type: String, trim: true },
-    about: { type: String, trim: true, maxlength: 200 },
+    about: { type: String, trim: true, minlength: 7, maxlength: 320 },
     userVerified: { type: Boolean, default: false },
     education: { type: String, maxlength: 80 },
     workAt: { type: String, maxlength: 80 },

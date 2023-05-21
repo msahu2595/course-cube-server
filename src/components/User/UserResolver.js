@@ -226,6 +226,9 @@ const UserResolver = {
       if (!user) throw new Error("Authentication token required.");
       try {
         const payload = await userAPI.createProfile({ userInput });
+        if (!payload) {
+          throw new GraphQLError("User has already created his profile.");
+        }
         const accessToken = createAccessToken(payload.toJSON());
         const refreshToken = createRefreshToken(payload.toJSON());
         redis.set(payload._id, refreshToken, "ex", 604800000);
@@ -249,6 +252,9 @@ const UserResolver = {
       if (!user) throw new Error("Authentication token required.");
       try {
         const payload = await userAPI.editProfile({ userInput });
+        if (!payload) {
+          throw new GraphQLError("User has not created his profile.");
+        }
         const accessToken = createAccessToken(payload.toJSON());
         const refreshToken = createRefreshToken(payload.toJSON());
         redis.set(payload._id, refreshToken, "ex", 604800000);
