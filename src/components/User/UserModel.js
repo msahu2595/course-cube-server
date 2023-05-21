@@ -21,6 +21,7 @@ const UserSchema = new Schema(
     gender: { type: String, enum: ["MALE", "FEMALE", "THIRD"] },
     picture: { type: String, trim: true },
     about: { type: String, trim: true, maxlength: 200 },
+    userVerified: { type: Boolean, default: false },
     education: { type: String, maxlength: 80 },
     workAt: { type: String, maxlength: 80 },
     workAs: { type: String, maxlength: 80 },

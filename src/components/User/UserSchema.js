@@ -50,17 +50,23 @@ const UserSchema = gql`
       acceptTnC: Boolean!
     ): UserResponse
     # appleLogIn(idToken: String!, acceptTnC: Boolean!, FCMToken: String): UserResponse
-    editProfile(userInput: UserInput!): UserResponse
+    createProfile(userInput: CreateProfileInput!): UserResponse
+    editProfile(userInput: EditProfileInput!): UserResponse
     assignRole(userId: ID!, role: Role!): UserResponse
     logout: UserResponse
   }
 
-  input UserInput {
-    fullName: String
-    gender: Gender
+  input CreateProfileInput {
+    fullName: String!
+    gender: Gender!
     picture: URL
+    about: String!
+  }
+
+  input EditProfileInput {
+    picture: URL
+    about: String!
     # Info
-    about: String
     education: String
     workAt: String
     workAs: String
@@ -77,8 +83,6 @@ const UserSchema = gql`
     area: String
     street: String
     landmark: String
-    # Other
-    FCMToken: String
   }
 
   type User {
@@ -87,11 +91,12 @@ const UserSchema = gql`
     emailVerified: Boolean!
     mobile: PhoneNumber
     mobileVerified: Boolean!
-    fullName: String
+    fullName: String!
     gender: Gender
     picture: URL
-    # Info
     about: String
+    userVerified: Boolean!
+    # Info
     education: String
     workAt: String
     workAs: String

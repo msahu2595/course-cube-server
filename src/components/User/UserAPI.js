@@ -94,11 +94,25 @@ class UserAPI extends MongoDataSource {
     }
   }
 
+  createProfile({ userInput }) {
+    return this.model
+      .findOneAndUpdate(
+        {
+          _id: this.context.user._id,
+          userVerified: false,
+        },
+        { ...userInput, userVerified: true },
+        { new: true }
+      )
+      .exec();
+  }
+
   editProfile({ userInput }) {
     return this.model
       .findOneAndUpdate(
         {
           _id: this.context.user._id,
+          userVerified: true,
         },
         userInput,
         { new: true }

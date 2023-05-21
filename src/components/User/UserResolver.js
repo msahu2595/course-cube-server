@@ -218,6 +218,29 @@ const UserResolver = {
         throw new GraphQLError(error.message);
       }
     },
+    createProfile: async (
+      _,
+      { userInput },
+      { redis, dataSources: { userAPI }, user }
+    ) => {
+      if (!user) throw new Error("Authentication token required.");
+      try {
+        const payload = await userAPI.createProfile({ userInput });
+        const accessToken = createAccessToken(payload.toJSON());
+        const refreshToken = createRefreshToken(payload.toJSON());
+        redis.set(payload._id, refreshToken, "ex", 604800000);
+        return {
+          code: "200",
+          success: true,
+          message: "Your profile created successfully.",
+          token: accessToken,
+          refresh: refreshToken,
+          payload,
+        };
+      } catch (error) {
+        throw new GraphQLError(error.message);
+      }
+    },
     editProfile: async (
       _,
       { userInput },
@@ -225,9 +248,7 @@ const UserResolver = {
     ) => {
       if (!user) throw new Error("Authentication token required.");
       try {
-        const payload = await userAPI.editProfile({
-          userInput,
-        });
+        const payload = await userAPI.editProfile({ userInput });
         const accessToken = createAccessToken(payload.toJSON());
         const refreshToken = createRefreshToken(payload.toJSON());
         redis.set(payload._id, refreshToken, "ex", 604800000);
@@ -252,10 +273,7 @@ const UserResolver = {
         throw new GraphQLError("You are not authorized.");
       }
       try {
-        const payload = await userAPI.assignRole({
-          userId,
-          role,
-        });
+        const payload = await userAPI.assignRole({ userId, role });
         return {
           code: "200",
           success: true,
