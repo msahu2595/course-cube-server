@@ -129,7 +129,7 @@ const UserSchema = gql`
   enum Gender {
     MALE
     FEMALE
-    THIRD
+    UNKNOWN
   }
 
   enum Role {
