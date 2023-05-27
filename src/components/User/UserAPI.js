@@ -82,13 +82,13 @@ class UserAPI extends MongoDataSource {
         .findOne(filter)
         .populate(["followers", "followings"])
         .exec();
-      if (!payload?.length) {
+      if (!payload) {
         return this.model
           .findOneAndUpdate(filter, rest, { upsert: true, new: true })
           .populate(["followers", "followings"])
           .exec();
       }
-      return payload[0];
+      return payload;
     } else {
       throw new Error("Please provide valid email or mobile number.");
     }
