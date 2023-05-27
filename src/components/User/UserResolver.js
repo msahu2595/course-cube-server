@@ -172,7 +172,6 @@ const UserResolver = {
           payload,
         };
       } catch (error) {
-        console.log(error);
         throw new GraphQLError(error.message);
       }
     },
@@ -214,7 +213,6 @@ const UserResolver = {
           payload,
         };
       } catch (error) {
-        console.log(error);
         throw new GraphQLError(error.message);
       }
     },
