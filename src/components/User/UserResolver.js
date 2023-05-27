@@ -299,7 +299,6 @@ const UserResolver = {
           .post(process.env.CFI_UPLOAD_URL)
           .set("Authorization", `Bearer ${process.env.CFI_API_TOKEN}`);
         const response = JSON.parse(text);
-        console.log(response);
         if (!response?.success) {
           throw new GraphQLError("Got error on upload image, try again.");
         }
@@ -321,7 +320,6 @@ const UserResolver = {
           .delete(process.env.CFI_DELETE_URL + imageId)
           .set("Authorization", `Bearer ${process.env.CFI_API_TOKEN}`);
         const response = JSON.parse(text);
-        console.log(response);
         if (!response?.success) {
           throw new GraphQLError("Got error on delete image, try again.");
         }
