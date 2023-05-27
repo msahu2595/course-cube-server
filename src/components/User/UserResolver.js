@@ -292,6 +292,49 @@ const UserResolver = {
         throw new GraphQLError(error.message);
       }
     },
+    uploadImage: async (_, __, { dataSources: user, token }) => {
+      if (!user) throw new Error("Authentication token required.");
+      try {
+        const { text = "{}" } = await superagent
+          .post(process.env.CFI_UPLOAD_URL)
+          .set("Authorization", `Bearer ${process.env.CFI_API_TOKEN}`);
+        const response = JSON.parse(text);
+        console.log(response);
+        if (!response?.success) {
+          throw new GraphQLError("Got error on upload image, try again.");
+        }
+        return {
+          code: "200",
+          success: response?.success,
+          message: "Upload URL will expire after 30 minutes if unused.",
+          token,
+          payload: response?.result,
+        };
+      } catch (error) {
+        throw new GraphQLError(error.message);
+      }
+    },
+    deleteImage: async (_, { imageId }, { dataSources: user, token }) => {
+      if (!user) throw new Error("Authentication token required.");
+      try {
+        const { text = "{}" } = await superagent
+          .delete(process.env.CFI_DELETE_URL + imageId)
+          .set("Authorization", `Bearer ${process.env.CFI_API_TOKEN}`);
+        const response = JSON.parse(text);
+        console.log(response);
+        if (!response?.success) {
+          throw new GraphQLError("Got error on delete image, try again.");
+        }
+        return {
+          code: "200",
+          success: true,
+          message: "Image successfully deleted.",
+          token,
+        };
+      } catch (error) {
+        throw new GraphQLError(error.message);
+      }
+    },
     logout: async (_, __, { user, redis }) => {
       try {
         const res = await redis.del(user._id);

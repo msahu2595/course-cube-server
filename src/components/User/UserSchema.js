@@ -54,6 +54,8 @@ const UserSchema = gql`
     editProfile(userInput: EditProfileInput!): UserResponse
     assignRole(userId: ID!, role: Role!): UserResponse
     logout: UserResponse
+    uploadImage: ImageResponse
+    deleteImage(imageId: ID!): ImageResponse
   }
 
   input CreateProfileInput {
@@ -151,6 +153,11 @@ const UserSchema = gql`
     articles: NonNegativeInt
   }
 
+  type Image {
+    id: ID!
+    uploadURL: URL!
+  }
+
   type UserListResponse implements ListResponse {
     code: String!
     success: Boolean!
@@ -176,6 +183,14 @@ const UserSchema = gql`
     message: String!
     token: JWT
     payload: UserStatistics
+  }
+
+  type ImageResponse implements Response {
+    code: String!
+    success: Boolean!
+    message: String!
+    token: JWT
+    payload: Image
   }
 `;
 
