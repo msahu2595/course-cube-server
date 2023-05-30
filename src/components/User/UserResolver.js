@@ -290,7 +290,7 @@ const UserResolver = {
         throw new GraphQLError(error.message);
       }
     },
-    uploadImage: async (_, __, { dataSources: user, token }) => {
+    uploadImage: async (_, __, { user, token }) => {
       if (!user) throw new Error("Authentication token required.");
       try {
         const { text = "{}" } = await superagent
@@ -311,7 +311,7 @@ const UserResolver = {
         throw new GraphQLError(error.message);
       }
     },
-    deleteImage: async (_, { imageId }, { dataSources: user, token }) => {
+    deleteImage: async (_, { imageId }, { user, token }) => {
       if (!user) throw new Error("Authentication token required.");
       try {
         const { text = "{}" } = await superagent

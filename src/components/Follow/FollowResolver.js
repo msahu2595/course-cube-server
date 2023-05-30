@@ -2,12 +2,51 @@ const { GraphQLError } = require("graphql");
 
 const FollowResolver = {
   Query: {
+    follower: async (
+      _,
+      { userId },
+      { user, token, dataSources: { followAPI } }
+    ) => {
+      try {
+        if (!user) throw new Error("Authentication token required.");
+        const payload = await followAPI.follower({ userId });
+        return {
+          code: "200",
+          success: true,
+          message: `This user is${payload?._id ? " " : " not "} your follower.`,
+          token,
+          payload: payload?._id ? true : false,
+        };
+      } catch (error) {
+        throw new GraphQLError(error.message);
+      }
+    },
+    following: async (
+      _,
+      { userId },
+      { user, token, dataSources: { followAPI } }
+    ) => {
+      try {
+        if (!user) throw new Error("Authentication token required.");
+        const payload = await followAPI.following({ userId });
+        return {
+          code: "200",
+          success: true,
+          message: `You are${payload?._id ? " " : " not "}following this user.`,
+          token,
+          payload: payload?._id ? true : false,
+        };
+      } catch (error) {
+        throw new GraphQLError(error.message);
+      }
+    },
     followerList: async (
       _,
       { offset = 0, limit = 10, userId },
-      { token, dataSources: { followAPI } }
+      { user, token, dataSources: { followAPI } }
     ) => {
       try {
+        if (!user) throw new Error("Authentication token required.");
         const payload = await followAPI.followerList({
           offset,
           limit,
@@ -29,9 +68,10 @@ const FollowResolver = {
     followingList: async (
       _,
       { offset = 0, limit = 10, userId },
-      { token, dataSources: { followAPI } }
+      { user, token, dataSources: { followAPI } }
     ) => {
       try {
+        if (!user) throw new Error("Authentication token required.");
         const payload = await followAPI.followingList({
           offset,
           limit,
@@ -55,20 +95,22 @@ const FollowResolver = {
     follow: async (
       _,
       { followingId },
-      { token, dataSources: { followAPI }, user: { _id: followerId } }
+      { user, token, dataSources: { followAPI } }
     ) => {
       try {
-        if (followerId === followingId) {
+        if (!user) throw new Error("Authentication token required.");
+        if (user._id === followingId) {
           throw new GraphQLError("You can't follow or un-follow yourself.");
         }
         const payload = await followAPI.follow({ followingId });
         return {
           code: "200",
-          success: payload?._id ? true : false,
+          success: true,
           message: `You are successfully${
             payload?._id ? " " : " not "
           }followed.`,
           token,
+          payload: payload?._id ? true : false,
         };
       } catch (error) {
         throw new Error(error.message, error.extensions.code);
@@ -77,20 +119,22 @@ const FollowResolver = {
     unFollow: async (
       _,
       { followingId },
-      { token, dataSources: { followAPI }, user: { _id: followerId } }
+      { user, token, dataSources: { followAPI } }
     ) => {
       try {
-        if (followerId === followingId) {
+        if (!user) throw new Error("Authentication token required.");
+        if (user._id === followingId) {
           throw new GraphQLError("You can't follow or un-follow yourself.");
         }
         const payload = await followAPI.unFollow({ followingId });
         return {
           code: "200",
-          success: payload?.deletedCount ? true : false,
+          success: true,
           message: `You are successfully${
             payload?.deletedCount ? " " : " not "
           }un-followed.`,
           token,
+          payload: payload?.deletedCount ? true : false,
         };
       } catch (error) {
         throw new Error(error.message, error.extensions.code);

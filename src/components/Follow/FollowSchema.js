@@ -2,6 +2,8 @@ const gql = require("graphql-tag");
 
 const FollowSchema = gql`
   extend type Query {
+    follower(userId: ID!): FollowResponse
+    following(userId: ID!): FollowResponse
     followerList(limit: Int, offset: Int, userId: ID): FollowListResponse
     followingList(limit: Int, offset: Int, userId: ID): FollowListResponse
   }
@@ -34,6 +36,7 @@ const FollowSchema = gql`
     success: Boolean!
     message: String!
     token: JWT
+    payload: Boolean!
   }
 `;
 

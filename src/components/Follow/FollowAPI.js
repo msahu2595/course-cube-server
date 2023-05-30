@@ -7,6 +7,20 @@ class FollowAPI extends MongoDataSource {
     this.context = options.context;
   }
 
+  follower({ userId }) {
+    return this.model.exists({
+      follower: userId,
+      following: this.context.user._id,
+    });
+  }
+
+  following({ userId }) {
+    return this.model.exists({
+      follower: this.context.user._id,
+      following: userId,
+    });
+  }
+
   followerList({ offset, limit, userId }) {
     return this.model
       .find({ following: userId || this.context.user._id })
