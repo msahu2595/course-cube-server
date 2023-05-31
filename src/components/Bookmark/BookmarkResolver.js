@@ -117,7 +117,7 @@ const BookmarkResolver = {
             });
             break;
           case "Article":
-            exists = await articleAPI.testExists({
+            exists = await articleAPI.articleExists({
               articleId: refId,
             });
             break;
