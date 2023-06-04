@@ -63,6 +63,23 @@ const UserSchema = gql`
     gender: Gender!
     picture: URL
     about: String!
+    # Info
+    education: String
+    workAt: String
+    workAs: String
+    facebook: String
+    instagram: String
+    twitter: String
+    linkedin: String
+    # Address
+    pincode: PostalCode
+    country: String
+    state: String
+    district: String
+    cityVillage: String
+    area: String
+    street: String
+    landmark: String
   }
 
   input EditProfileInput {
