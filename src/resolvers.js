@@ -8,6 +8,7 @@ const { BundleContentResolver } = require("./components/BundleContent");
 const { ContentResolver } = require("./components/Content");
 const { VideoResolver } = require("./components/Video");
 const { TestResolver } = require("./components/Test");
+const { TestQuestionResolver } = require("./components/TestQuestion");
 const { DocumentResolver } = require("./components/Document");
 const { HeadlineResolver } = require("./components/Headline");
 const { ArticleResolver } = require("./components/Article");
@@ -31,6 +32,7 @@ module.exports = [
   ContentResolver,
   VideoResolver,
   TestResolver,
+  TestQuestionResolver,
   DocumentResolver,
   HeadlineResolver,
   ArticleResolver,

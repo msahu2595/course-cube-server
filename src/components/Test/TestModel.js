@@ -22,17 +22,11 @@ const TestSchema = new Schema(
       type: String,
       trim: true,
     },
-    questions: [
-      {
-        question: { type: String, required: true },
-        image: String,
-        passage: String,
-        options: [{ type: String, required: true }],
-        answerIndex: { type: Number, required: true },
-        mark: { type: Number, required: true },
-        negativeMark: { type: Number, required: true, default: 0 },
-      },
-    ],
+    questions: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
     totalMarks: {
       type: Number,
       required: true,

@@ -9,6 +9,7 @@ const { BundleContentSchema } = require("./components/BundleContent");
 const { ContentSchema } = require("./components/Content");
 const { VideoSchema } = require("./components/Video");
 const { TestSchema } = require("./components/Test");
+const { TestQuestionSchema } = require("./components/TestQuestion");
 const { DocumentSchema } = require("./components/Document");
 const { HeadlineSchema } = require("./components/Headline");
 const { ArticleSchema } = require("./components/Article");
@@ -34,6 +35,7 @@ module.exports = [
   ContentSchema,
   VideoSchema,
   TestSchema,
+  TestQuestionSchema,
   DocumentSchema,
   ArticleSchema,
   WebsiteSchema,

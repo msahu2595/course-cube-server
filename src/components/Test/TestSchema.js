@@ -23,15 +23,6 @@ const TestSchema = gql`
     addTest(testInput: TestInput!): TestResponse
     editTest(testId: ID!, testInput: TestInput!): TestResponse
     deleteTest(testId: ID!): TestResponse
-    addTestQuestion(
-      testId: ID!
-      questionInput: TestQuestionInput!
-    ): TestResponse
-    editTestQuestion(
-      questionId: ID!
-      questionInput: TestQuestionEditInput!
-    ): TestResponse
-    deleteTestQuestion(questionId: ID!): TestResponse
   }
 
   input TestInput {
@@ -41,26 +32,6 @@ const TestSchema = gql`
     duration: Duration!
   }
 
-  input TestQuestionInput {
-    question: String!
-    image: URL
-    passage: String
-    options: [String!]!
-    answerIndex: NonNegativeInt!
-    mark: PositiveFloat!
-    negativeMark: NonPositiveFloat
-  }
-
-  input TestQuestionEditInput {
-    question: String
-    image: URL
-    passage: String
-    options: [String!]
-    answerIndex: NonNegativeInt
-    mark: PositiveFloat
-    negativeMark: NonPositiveFloat
-  }
-
   type Test {
     _id: ID!
     title: String!
@@ -68,23 +39,12 @@ const TestSchema = gql`
     #
     instructions: String!
     duration: Duration!
-    questions: [TestQuestion!]
+    questions: NonNegativeInt!
     totalMarks: NonNegativeFloat!
     #
     enable: Boolean!
     createdAt: String!
     updatedAt: String!
-  }
-
-  type TestQuestion {
-    _id: ID!
-    question: String!
-    image: URL
-    passage: String
-    options: [String!]!
-    answerIndex: NonNegativeInt!
-    mark: PositiveFloat!
-    negativeMark: NonPositiveFloat!
   }
 
   type TestListResponse implements ListResponse {

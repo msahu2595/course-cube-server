@@ -95,7 +95,7 @@ const ContentResolver = {
             exists = await testAPI.testExists({
               testId: contentInput?.media,
             });
-            if (exists.questions.length < 5) {
+            if (exists.questions < 5) {
               throw new GraphQLError(
                 "Minimum 5 questions required in given test for add content."
               );

@@ -47,42 +47,6 @@ class TestAPI extends MongoDataSource {
       .findByIdAndUpdate(testId, { enable: false }, { new: true })
       .exec();
   }
-
-  addTestQuestion({ testId, questionInput }) {
-    return this.model
-      .findByIdAndUpdate(
-        testId,
-        { $push: { questions: questionInput } },
-        { new: true }
-      )
-      .exec();
-  }
-
-  editTestQuestion({ questionId, questionInput }) {
-    const updateData = {};
-    Object.keys(questionInput).map((key) => {
-      updateData[`questions.$.${key}`] = questionInput[key];
-    });
-    return this.model
-      .findOneAndUpdate(
-        { "questions._id": questionId },
-        {
-          $set: updateData,
-        },
-        { new: true }
-      )
-      .exec();
-  }
-
-  deleteTestQuestion({ questionId }) {
-    return this.model
-      .findOneAndUpdate(
-        { "questions._id": questionId },
-        { $pull: { questions: { _id: questionId } } },
-        { new: true }
-      )
-      .exec();
-  }
 }
 
 module.exports = TestAPI;
