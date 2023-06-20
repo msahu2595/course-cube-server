@@ -1,6 +1,16 @@
 const { GraphQLError } = require("graphql");
 
 const TestResolver = {
+  Test: {
+    questions: (parent) =>
+      parent?.questions?.filter((ques) => ques.enable).length,
+    totalMarks: (parent) =>
+      parent?.questions?.reduce(
+        (accumulator, question) =>
+          question.enable ? accumulator + question.mark : accumulator,
+        0
+      ),
+  },
   Query: {
     tests: async (
       _,
@@ -43,6 +53,31 @@ const TestResolver = {
         };
       } catch (error) {
         console.log(error);
+        throw new GraphQLError(error.message);
+      }
+    },
+    testQuestions: async (
+      _,
+      { offset = 0, limit = 10, testId },
+      { token, dataSources: { testAPI } }
+    ) => {
+      try {
+        const { questions: payload } = await testAPI.testQuestions({
+          offset,
+          limit,
+          testId,
+        });
+        return {
+          code: 200,
+          success: true,
+          message: "Successfully get test questions.",
+          token,
+          limit,
+          offset,
+          testId,
+          payload,
+        };
+      } catch (error) {
         throw new GraphQLError(error.message);
       }
     },
@@ -108,6 +143,77 @@ const TestResolver = {
           code: "200",
           success: true,
           message: "Test deleted successfully.",
+          token,
+          payload,
+        };
+      } catch (error) {
+        throw new GraphQLError(error.message);
+      }
+    },
+    addTestQuestion: async (
+      _,
+      { testId, questionInput },
+      { token, dataSources: { testAPI } }
+    ) => {
+      try {
+        const { questions } = await testAPI.addTestQuestion({
+          testId,
+          questionInput,
+        });
+        const payload = questions.at(-1);
+        return {
+          code: "200",
+          success: true,
+          message: "Test question added successfully.",
+          token,
+          payload,
+        };
+      } catch (error) {
+        console.log(error);
+        throw new GraphQLError(error.message);
+      }
+    },
+    editTestQuestion: async (
+      _,
+      { questionId, questionInput },
+      { token, dataSources: { testAPI } }
+    ) => {
+      try {
+        const { questions } = await testAPI.editTestQuestion({
+          questionId,
+          questionInput,
+        });
+        const payload = questions?.find(
+          (question) => question?._id == questionId
+        );
+        return {
+          code: "200",
+          success: true,
+          message: "Test question edited successfully.",
+          token,
+          payload,
+        };
+      } catch (error) {
+        throw new GraphQLError(error.message);
+      }
+    },
+    deleteTestQuestion: async (
+      _,
+      { questionId, invalid },
+      { token, dataSources: { testAPI } }
+    ) => {
+      try {
+        const { questions } = await testAPI.deleteTestQuestion({
+          questionId,
+          invalid,
+        });
+        const payload = questions?.find(
+          (question) => question?._id == questionId
+        );
+        return {
+          code: "200",
+          success: true,
+          message: "Test question deleted successfully.",
           token,
           payload,
         };

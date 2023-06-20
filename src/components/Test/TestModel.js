@@ -6,7 +6,6 @@ const TestSchema = new Schema(
       required: true,
       type: String,
       trim: true,
-      lowercase: true,
     },
     thumbnail: {
       type: String,
@@ -22,17 +21,56 @@ const TestSchema = new Schema(
       type: String,
       trim: true,
     },
-    questions: {
-      type: Number,
-      required: true,
-      default: 0,
-    },
-    totalMarks: {
-      type: Number,
-      required: true,
-      default: 0,
-    },
-    enable: { type: Boolean, required: true, default: true },
+    questions: [
+      {
+        question: {
+          required: true,
+          type: String,
+          trim: true,
+        },
+        image: {
+          type: String,
+          trim: true,
+        },
+        passage: {
+          type: String,
+          trim: true,
+        },
+        options: {
+          required: true,
+          type: [{ required: true, type: String, trim: true }],
+        },
+        answerIndex: {
+          required: true,
+          type: Number,
+        },
+        mark: {
+          required: true,
+          type: Number,
+        },
+        negativeMark: {
+          required: true,
+          type: Number,
+          default: 0,
+        },
+        position: {
+          required: true,
+          type: Number,
+          default: 1,
+        },
+        invalid: {
+          required: true,
+          type: Boolean,
+          default: false,
+        },
+        enable: {
+          required: true,
+          type: Boolean,
+          default: true,
+        },
+      },
+    ],
+    enable: { required: true, type: Boolean, default: true },
   },
   { timestamps: true, runValidators: true, runSettersOnQuery: true }
 );

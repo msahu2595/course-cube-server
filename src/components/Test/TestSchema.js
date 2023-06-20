@@ -9,6 +9,11 @@ const TestSchema = gql`
       filter: TestsFilterInput
     ): TestListResponse
     test(testId: ID!): TestResponse
+    testQuestions(
+      offset: Int
+      limit: Int
+      testId: ID!
+    ): TestQuestionListResponse
   }
 
   input TestsFilterInput {
@@ -23,6 +28,15 @@ const TestSchema = gql`
     addTest(testInput: TestInput!): TestResponse
     editTest(testId: ID!, testInput: TestInput!): TestResponse
     deleteTest(testId: ID!): TestResponse
+    addTestQuestion(
+      testId: ID!
+      questionInput: TestQuestionInput!
+    ): TestQuestionResponse
+    editTestQuestion(
+      questionId: ID!
+      questionInput: TestQuestionEditInput!
+    ): TestQuestionResponse
+    deleteTestQuestion(questionId: ID!, invalid: Boolean!): TestQuestionResponse
   }
 
   input TestInput {
@@ -32,6 +46,25 @@ const TestSchema = gql`
     duration: Duration!
   }
 
+  input TestQuestionInput {
+    question: String!
+    image: URL
+    passage: String
+    options: [String!]!
+    answerIndex: NonNegativeInt!
+    mark: PositiveFloat!
+    negativeMark: NonNegativeFloat
+    position: PositiveInt!
+  }
+
+  input TestQuestionEditInput {
+    image: URL
+    passage: String
+    answerIndex: NonNegativeInt!
+    mark: PositiveFloat!
+    negativeMark: NonNegativeFloat
+  }
+
   type Test {
     _id: ID!
     title: String!
@@ -39,12 +72,30 @@ const TestSchema = gql`
     #
     instructions: String!
     duration: Duration!
+    enable: Boolean!
+    #
     questions: NonNegativeInt!
     totalMarks: NonNegativeFloat!
     #
-    enable: Boolean!
     createdAt: String!
     updatedAt: String!
+  }
+
+  type TestQuestion {
+    _id: ID!
+    #
+    question: String!
+    image: URL
+    passage: String
+    options: [String!]!
+    #
+    answerIndex: NonNegativeInt!
+    mark: PositiveFloat!
+    negativeMark: NonPositiveFloat!
+    #
+    position: PositiveInt!
+    invalid: Boolean!
+    enable: Boolean!
   }
 
   type TestListResponse implements ListResponse {
@@ -65,6 +116,25 @@ const TestSchema = gql`
     message: String!
     token: JWT
     payload: Test
+  }
+
+  type TestQuestionListResponse implements ListResponse {
+    code: String!
+    success: Boolean!
+    message: String!
+    token: JWT
+    offset: Int!
+    limit: Int!
+    testId: ID!
+    payload: [TestQuestion]
+  }
+
+  type TestQuestionResponse implements Response {
+    code: String!
+    success: Boolean!
+    message: String!
+    token: JWT
+    payload: TestQuestion
   }
 `;
 
