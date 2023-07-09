@@ -6,8 +6,8 @@ const { BundleContentModel } = require("./components/BundleContent");
 const { ContentModel } = require("./components/Content");
 const { VideoModel } = require("./components/Video");
 const { TestModel } = require("./components/Test");
-const { TestQuestionModel } = require("./components/TestQuestion");
 const { DocumentModel } = require("./components/Document");
+const { ExamModel } = require("./components/Exam");
 const { HeadlineModel } = require("./components/Headline");
 const { ArticleModel } = require("./components/Article");
 const { WebsiteModel } = require("./components/Website");
@@ -29,8 +29,8 @@ module.exports = {
   ContentModel,
   VideoModel,
   TestModel,
-  TestQuestionModel,
   DocumentModel,
+  ExamModel,
   HeadlineModel,
   ArticleModel,
   WebsiteModel,

@@ -1,6 +1,11 @@
 const { Schema, model } = require("mongoose");
 
-const TestQuestionSchema = new Schema({
+const ExamQuestionSchema = new Schema({
+  testQuestion: {
+    required: true,
+    type: Schema.Types.ObjectId,
+    ref: "TestQuestion",
+  },
   question: {
     required: true,
     type: String,
@@ -18,9 +23,10 @@ const TestQuestionSchema = new Schema({
     required: true,
     type: [{ required: true, type: String, trim: true }],
   },
-  answerIndex: {
+  answeredIndex: {
     required: true,
     type: Number,
+    default: -1,
   },
   mark: {
     required: true,
@@ -31,25 +37,20 @@ const TestQuestionSchema = new Schema({
     type: Number,
     default: 0,
   },
-  position: {
-    required: true,
-    type: Number,
-    default: 1,
-  },
-  invalid: {
-    required: true,
-    type: Boolean,
-    default: false,
-  },
-  enable: {
-    required: true,
-    type: Boolean,
-    default: true,
-  },
 });
 
-const TestSchema = new Schema(
+const ExamSchema = new Schema(
   {
+    user: {
+      required: true,
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+    test: {
+      required: true,
+      type: Schema.Types.ObjectId,
+      ref: "Test",
+    },
     title: {
       required: true,
       type: String,
@@ -69,14 +70,12 @@ const TestSchema = new Schema(
       type: String,
       trim: true,
     },
-    questions: [TestQuestionSchema],
-    enable: { required: true, type: Boolean, default: true },
+    questions: [ExamQuestionSchema],
+    submitted: { type: Boolean, required: true, default: false },
   },
   { timestamps: true, runValidators: true, runSettersOnQuery: true }
 );
 
-const TestModel = model("Test", TestSchema);
+const ExamModel = model("Exam", ExamSchema);
 
-model("TestQuestion", TestQuestionSchema);
-
-module.exports = TestModel;
+module.exports = ExamModel;

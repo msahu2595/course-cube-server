@@ -72,11 +72,11 @@ const TestSchema = gql`
     #
     instructions: String!
     duration: Duration!
-    enable: Boolean!
     #
     questions: NonNegativeInt!
     totalMarks: NonNegativeFloat!
     #
+    enable: Boolean!
     createdAt: String!
     updatedAt: String!
   }
@@ -91,7 +91,7 @@ const TestSchema = gql`
     #
     answerIndex: NonNegativeInt!
     mark: PositiveFloat!
-    negativeMark: NonPositiveFloat!
+    negativeMark: NonNegativeFloat!
     #
     position: PositiveInt!
     invalid: Boolean!
