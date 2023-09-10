@@ -1,10 +1,8 @@
 {
-    "cSpell.words": [
-        "Bhavesh",
-        "Gajpal",
-        "unbookmark"
-    ],
-    "workbench.colorCustomizations": {
-        "activityBar.background": "#228b22",
-    }
+  "cSpell.words": ["Bhavesh", "Gajpal", "unbookmark"],
+  "workbench.colorCustomizations": {
+    "activityBar.background": "#183D3D",
+    "titleBar.activeBackground": "#5C8374",
+    "titleBar.activeForeground": "#040D12"
+  }
 }
