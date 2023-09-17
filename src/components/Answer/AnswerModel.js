@@ -32,7 +32,6 @@ const AnswerSchema = new Schema(
     params: { type: Schema.Types.Mixed },
     message: {
       type: String,
-      lowercase: true,
       trim: true,
       minlength: 1,
       maxlength: 500,

@@ -13,13 +13,11 @@ const NotificationSchema = new Schema(
     title: {
       type: String,
       trim: true,
-      lowercase: true,
       maxlength: 80,
     },
     message: {
       type: String,
       trim: true,
-      lowercase: true,
       maxlength: 160,
     },
     type: {

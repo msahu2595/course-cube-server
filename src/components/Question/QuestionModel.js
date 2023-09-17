@@ -10,14 +10,12 @@ const QuestionSchema = new Schema(
     title: {
       type: String,
       required: true,
-      lowercase: true,
       trim: true,
       minlength: 1,
       maxlength: 150,
     },
     description: {
       type: String,
-      lowercase: true,
       trim: true,
       minlength: 1,
       maxlength: 1000,
@@ -29,7 +27,6 @@ const QuestionSchema = new Schema(
     options: [
       {
         type: String,
-        lowercase: true,
         trim: true,
         minlength: 1,
         maxlength: 80,
@@ -56,7 +53,6 @@ const QuestionSchema = new Schema(
     params: { type: Schema.Types.Mixed },
     message: {
       type: String,
-      lowercase: true,
       trim: true,
       minlength: 1,
       maxlength: 500,

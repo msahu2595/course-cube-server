@@ -46,7 +46,6 @@ const ContentSchema = new Schema(
       required: true,
       type: String,
       trim: true,
-      lowercase: true,
       minlength: 2,
       maxlength: 200,
     },
@@ -82,7 +81,6 @@ const ContentSchema = new Schema(
     highlight: {
       type: String,
       trim: true,
-      lowercase: true,
       minlength: 2,
       maxlength: 200,
     },
@@ -103,7 +101,6 @@ const ContentSchema = new Schema(
     index: {
       type: String,
       trim: true,
-      lowercase: true,
       minlength: 2,
       maxlength: 2000,
     },
@@ -111,7 +108,6 @@ const ContentSchema = new Schema(
       type: String,
       required: true,
       trim: true,
-      lowercase: true,
       minlength: 2,
       maxlength: 2000,
     },

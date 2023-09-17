@@ -34,7 +34,6 @@ const PurchaseSchema = new Schema(
       required: true,
       type: String,
       trim: true,
-      lowercase: true,
       minlength: 2,
       maxlength: 80,
     },
