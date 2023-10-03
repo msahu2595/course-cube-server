@@ -41,16 +41,22 @@ class ExamAPI extends MongoDataSource {
       .exec();
   }
 
-  result({ examId }) {
-    return this.model.findOne({ _id: examId, submitted: true }).exec();
+  result({ contentId, testId }) {
+    return this.model
+      .findOne({ content: contentId, test: testId, submitted: true })
+      .exec();
   }
 
   examExists({ examId, ...rest }) {
     return this.model.exists({ _id: examId, ...rest });
   }
 
-  examAttempted({ testId }) {
-    return this.model.exists({ user: this.context.user._id, test: testId });
+  examAttempted({ contentId, testId }) {
+    return this.model.exists({
+      user: this.context.user._id,
+      content: contentId,
+      test: testId,
+    });
   }
 
   addExam({ examInput }) {

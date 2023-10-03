@@ -51,6 +51,11 @@ const ExamSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "Test",
     },
+    content: {
+      required: true,
+      type: Schema.Types.ObjectId,
+      ref: "Content",
+    },
     title: {
       required: true,
       type: String,

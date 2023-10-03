@@ -9,35 +9,39 @@ const ExamSchema = gql`
       filter: ExamsFilterInput
     ): ExamListResponse
     userExams(offset: Int, limit: Int, search: String): ExamListResponse
-    result(examId: ID!): ExamResponse
+    examAttempted(contentId: ID!, testId: ID!): ExamBooleanResponse
+    result(contentId: ID!, testId: ID!): ExamResponse
   }
 
   input ExamsFilterInput {
     userId: ID
     testId: ID
+    contentId: ID
     submitted: Boolean
   }
 
   type ExamsFilterType {
     userId: ID
     testId: ID
+    contentId: ID
     submitted: Boolean
   }
 
   extend type Mutation {
-    attemptExam(testId: ID!): ExamResponse
+    attemptExam(contentId: ID!): ExamResponse
     addAnswer(
       examId: ID!
       questionId: ID!
       answeredIndex: NonNegativeInt!
-    ): ExamAnswerResponse
-    removeAnswer(examId: ID!, questionId: ID!): ExamAnswerResponse
+    ): ExamIntResponse
+    removeAnswer(examId: ID!, questionId: ID!): ExamIntResponse
     submitExam(examId: ID!): ExamResponse
   }
 
   type ExamList {
     user: User
     test: Test
+    content: Content
     #
     _id: ID!
     title: String!
@@ -57,6 +61,7 @@ const ExamSchema = gql`
   type Exam {
     user: User
     test: Test
+    content: Content
     #
     _id: ID!
     title: String!
@@ -108,12 +113,20 @@ const ExamSchema = gql`
     payload: Exam
   }
 
-  type ExamAnswerResponse implements Response {
+  type ExamBooleanResponse implements Response {
     code: String!
     success: Boolean!
     message: String!
     token: JWT
     payload: Boolean!
+  }
+
+  type ExamIntResponse implements Response {
+    code: String!
+    success: Boolean!
+    message: String!
+    token: JWT
+    payload: Int!
   }
 `;
 

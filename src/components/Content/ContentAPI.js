@@ -79,6 +79,10 @@ class ContentAPI extends MongoDataSource {
     return this.model.findById(contentId).populate(populateArray).exec();
   }
 
+  contentById(id) {
+    return this.model.findById(id).exec();
+  }
+
   // addContent({ contentInput }) {
   //   const content = new this.model(contentInput);
   //   return content.save((err, content) => {

@@ -94,13 +94,30 @@ const ExamResolver = {
         throw new GraphQLError(error.message);
       }
     },
+    examAttempted: async (
+      _,
+      { contentId, testId },
+      { token, dataSources: { examAPI } }
+    ) => {
+      const examAttempted = await examAPI.examAttempted({
+        contentId,
+        testId,
+      });
+      return {
+        code: "200",
+        success: true,
+        message: `Exam ${examAttempted ? "attempted." : "not attempted."}`,
+        token,
+        payload: examAttempted ? true : false,
+      };
+    },
     result: async (
       _,
-      { examId },
+      { contentId, testId },
       { token, dataSources: { examAPI, testAPI } }
     ) => {
       try {
-        const payload = await examAPI.result({ examId });
+        const payload = await examAPI.result({ contentId, testId });
         if (!payload) throw new GraphQLError("Exam does not exist.");
         const test = await testAPI.test({ testId: payload?.test });
         if (!test) throw new GraphQLError("Test does not exist.");
@@ -128,15 +145,24 @@ const ExamResolver = {
   Mutation: {
     attemptExam: async (
       _,
-      { testId },
-      { token, dataSources: { testAPI, examAPI } }
+      { contentId },
+      { token, dataSources: { contentAPI, testAPI, examAPI } }
     ) => {
       try {
-        const examAttempted = await examAPI.examAttempted({ testId });
+        const content = await contentAPI.contentById(contentId);
+        if (!content) throw new GraphQLError("Content is not valid!");
+        const { title, image: thumbnail, media: testId, type } = content;
+        if (type !== "Test")
+          throw new GraphQLError("Content type is not Test.");
+        const examAttempted = await examAPI.examAttempted({
+          contentId,
+          testId,
+        });
         if (examAttempted) throw new GraphQLError("Exam already attempted!");
         const test = await testAPI.test({ testId });
         if (!test) throw new GraphQLError("Test is not valid!");
-        const questions = test?.questions
+        const { instructions, duration, questions: testQuestions } = test;
+        const questions = testQuestions
           ?.filter((ques) => ques.enable)
           ?.map((ques) => {
             const examQuestion = {
@@ -155,15 +181,14 @@ const ExamResolver = {
             return examQuestion;
           });
         const examInput = {
-          test: test?._id,
-          title: test?.title,
-          instructions: test?.instructions,
-          duration: test?.duration,
+          test: testId,
+          content: contentId,
+          title,
+          thumbnail,
+          instructions,
+          duration,
           questions,
         };
-        if (test?.thumbnail) {
-          examInput.thumbnail = test?.thumbnail;
-        }
         const payload = await examAPI.addExam({ examInput });
         if (!payload) throw new GraphQLError("Some issue on attempt exam!");
         const date = moment().add(moment.duration(payload?.duration)).toDate();
@@ -203,7 +228,7 @@ const ExamResolver = {
           success: true,
           message: "Answer successfully added.",
           token,
-          payload: true,
+          payload: answeredIndex,
         };
       } catch (error) {
         throw new GraphQLError(error.message);
@@ -229,7 +254,7 @@ const ExamResolver = {
           success: true,
           message: "Answer successfully removed.",
           token,
-          payload: true,
+          payload: -1,
         };
       } catch (error) {
         throw new GraphQLError(error.message);
