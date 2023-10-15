@@ -1,5 +1,5 @@
 const { typeDefs: scalarTypeDefs } = require("graphql-scalars");
-const ScalarsSchema = require("./components/Scalars/ScalarsSchema");
+const { ScalarsSchema } = require("./components/Scalars");
 const DirectivesSchema = require("./components/Directives/DirectivesSchema");
 const { UserSchema } = require("./components/User");
 const { FollowSchema } = require("./components/Follow");
