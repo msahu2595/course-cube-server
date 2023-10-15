@@ -1,11 +1,18 @@
 require("dotenv").config();
 
 const os = require("os");
+const http = require("http");
+const cors = require("cors");
 const Redis = require("ioredis");
+const express = require("express");
 const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
 const { GraphQLError } = require("graphql");
 const { ApolloServer } = require("@apollo/server");
-const { startStandaloneServer } = require("@apollo/server/standalone");
+const { expressMiddleware } = require("@apollo/server/express4");
+const {
+  ApolloServerPluginDrainHttpServer,
+} = require("@apollo/server/plugin/drainHttpServer");
 const {
   ApolloServerPluginLandingPageLocalDefault,
   ApolloServerPluginLandingPageProductionDefault,
@@ -64,7 +71,7 @@ mongoose.connection.on("error", (error) => {
 
 // creates a mongoose connection once. NOT for every request with self executing function.
 (async () => {
-  await mongoose.connect(process.env.MONGO_URI);
+  mongoose.connect(process.env.MONGO_URI);
 })();
 
 // the function that sets up the global context for each resolver, using the req
@@ -120,7 +127,15 @@ const context = async ({ req }) => {
   }
 };
 
-// Set up Apollo Server
+// Required logic for integrating with Express
+const app = express();
+// Our httpServer handles incoming requests to our Express app.
+// Below, we tell Apollo Server to "drain" this httpServer,
+// enabling our servers to shut down gracefully.
+const httpServer = http.createServer(app);
+
+// Same ApolloServer initialization as before, plus the drain plugin
+// for our httpServer.
 const server = new ApolloServer({
   typeDefs,
   resolvers,
@@ -128,37 +143,51 @@ const server = new ApolloServer({
   includeStacktraceInErrorResponses: true,
   introspection: true,
   plugins: [
+    ApolloServerPluginDrainHttpServer({ httpServer }),
     process.env.NODE_ENV === "production"
       ? ApolloServerPluginLandingPageProductionDefault({ embed: true })
       : ApolloServerPluginLandingPageLocalDefault({ embed: true }),
   ],
 });
 
-// Start our server if we're not in a test env.
-// if we're in a test env, we'll manually start it in a test
-if (process.env.NODE_ENV !== "test") {
-  startStandaloneServer(server, {
-    context,
-    listen: {
-      port: process.env.PORT || 4000,
-    },
-  }).then(({ url }) => {
+(async () => {
+  // Ensure we wait for our server to start
+  await server.start();
+
+  // Set up our Express middleware to handle CORS, body parsing,
+  // and our expressMiddleware function.
+  app.use(
+    "/",
+    cors(),
+    bodyParser.json(),
+    // expressMiddleware accepts the same arguments:
+    // an Apollo Server instance and optional configuration options
+    expressMiddleware(server, { context })
+  );
+
+  // Start our server if we're not in a test env.
+  // if we're in a test env, we'll manually start it in a test
+  if (process.env.NODE_ENV !== "test") {
+    await new Promise((resolve) =>
+      httpServer.listen({ port: process.env.PORT || 4000 }, resolve)
+    );
+
     const networkInterfaces = os.networkInterfaces();
     console.log(`
       Server is running! Listening on port ${
         process.env.PORT
       }, 🚀 Server ready at
-      
-      ${url}
-      
+
+      http://localhost:${process.env.PORT || 4000}/
+
                 or
-      
+
       http://${
         networkInterfaces?.en0?.find((en) => en?.family === "IPv4")?.address
       }:4000/
     `);
-  });
-}
+  }
+})();
 
 // export all the important pieces for integration/e2e tests to use
 module.exports = {
