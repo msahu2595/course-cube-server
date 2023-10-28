@@ -31,10 +31,10 @@ class UserAPI extends MongoDataSource {
       .exec();
   }
 
-  user({ userId }) {
+  user(props) {
     return this.model
-      .findById(userId || this.context.user._id)
-      .populate(["followers", "followings"])
+      .findById(props?.userId || this.context.user._id)
+      .populate(props?.populate || [])
       .exec();
   }
 
@@ -127,6 +127,26 @@ class UserAPI extends MongoDataSource {
           _id: userId,
         },
         { role },
+        { new: true }
+      )
+      .exec();
+  }
+
+  addProfileImage({ picture }) {
+    return this.model
+      .findOneAndUpdate(
+        { _id: this.context.user._id },
+        { picture },
+        { new: true }
+      )
+      .exec();
+  }
+
+  removeProfileImage() {
+    return this.model
+      .findOneAndUpdate(
+        { _id: this.context.user._id },
+        { picture: "" },
         { new: true }
       )
       .exec();

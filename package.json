@@ -36,6 +36,7 @@
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "mongoose": "^6.7.4",
+    "multer": "^1.4.5-lts.1",
     "node-schedule": "^2.1.1",
     "superagent": "^8.0.9",
     "youtube-dl-exec": "^2.2.3"

@@ -53,15 +53,14 @@ const UserSchema = gql`
     createProfile(userInput: CreateProfileInput!): UserResponse
     editProfile(userInput: EditProfileInput!): UserResponse
     assignRole(userId: ID!, role: Role!): UserResponse
+    addProfileImage(picture: String!): UserResponse
+    removeProfileImage: UserResponse
     logout: UserResponse
-    uploadImage: ImageResponse
-    deleteImage(imageId: ID!): ImageResponse
   }
 
   input CreateProfileInput {
     fullName: String!
     gender: Gender!
-    picture: URL
     about: String!
     # Info
     education: String
@@ -83,7 +82,6 @@ const UserSchema = gql`
   }
 
   input EditProfileInput {
-    picture: URL
     about: String!
     # Info
     education: String
@@ -112,7 +110,7 @@ const UserSchema = gql`
     mobileVerified: Boolean!
     fullName: String!
     gender: Gender
-    picture: URL
+    picture: String
     about: String
     userVerified: Boolean!
     # Info
@@ -170,11 +168,6 @@ const UserSchema = gql`
     articles: NonNegativeInt
   }
 
-  type Image {
-    id: ID!
-    uploadURL: URL!
-  }
-
   type UserListResponse implements ListResponse {
     code: String!
     success: Boolean!
@@ -200,14 +193,6 @@ const UserSchema = gql`
     message: String!
     token: JWT
     payload: UserStatistics
-  }
-
-  type ImageResponse implements Response {
-    code: String!
-    success: Boolean!
-    message: String!
-    token: JWT
-    payload: Image
   }
 `;
 

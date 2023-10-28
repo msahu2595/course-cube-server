@@ -1,9 +1,13 @@
 require("dotenv").config();
 
 const os = require("os");
+const fs = require("fs");
 const http = require("http");
 const cors = require("cors");
 const Redis = require("ioredis");
+const multer = require("multer");
+const moment = require("moment");
+const crypto = require("crypto");
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
@@ -127,6 +131,25 @@ const context = async ({ req }) => {
   }
 };
 
+// Required logic for uploading files with Express
+var storage = multer.diskStorage({
+  destination: function (_, __, cb) {
+    const path = "./assets/tmp";
+    if (!fs.existsSync(path)) {
+      fs.mkdirSync(path, { recursive: true });
+    }
+    cb(null, path);
+  },
+  filename: function (req, file, cb) {
+    cb(
+      null,
+      `CC-${moment().unix()}-${req?.user?._id || "UNKNOWN"}-${crypto
+        .randomBytes(16)
+        .toString("hex")}.${file?.mimetype?.split("/")?.[1] || "tmp"}`
+    );
+  },
+});
+const upload = multer({ storage: storage });
 // Required logic for integrating with Express
 const app = express();
 // Our httpServer handles incoming requests to our Express app.
@@ -156,14 +179,58 @@ const server = new ApolloServer({
 
   // Set up our Express middleware to handle CORS, body parsing,
   // and our expressMiddleware function.
-  app.use(
-    "/",
-    cors(),
-    bodyParser.json(),
-    // expressMiddleware accepts the same arguments:
-    // an Apollo Server instance and optional configuration options
-    expressMiddleware(server, { context })
-  );
+  app.use(cors());
+  app.use(bodyParser.json());
+  app.use("/assets", express.static("assets"));
+  app.use("/graphql", expressMiddleware(server, { context }));
+
+  app.get("/", (req, res) => {
+    res.send("Hello CourseQube!");
+  });
+
+  async function authentication(req, _, next) {
+    try {
+      // simple auth check on every request
+      const auth = req.headers["authorization"];
+      const refreshToken = req.headers["refresh-token"];
+      const accessToken = auth && auth.split(" ")[1];
+      if (!accessToken) throw new Error("Required authentication token.");
+      const user = verifyAccessToken(accessToken);
+      if (user) {
+        req.user = user;
+        next();
+      } else {
+        if (!refreshToken) throw new Error("Required refresh token.");
+        // eslint-disable-next-line no-unused-vars
+        const { iat, ...verifiedUser } = verifyRefreshToken(refreshToken);
+        const savedRefreshedToken = await redis.get(verifiedUser._id);
+        if (savedRefreshedToken !== refreshToken)
+          throw new Error(
+            "Refresh token is revoked/expired, please log in again."
+          );
+        req.user = verifiedUser;
+        next();
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  app.post("/upload", authentication, upload.single("file"), (req, res) => {
+    res.send(req.file);
+  });
+
+  app.delete("/upload", authentication, (req, res) => {
+    try {
+      if (!req.body?.file) throw new Error("File path is missing!!");
+      if (!req.body?.file?.startsWith("assets/"))
+        throw new Error("File path is invalid!!");
+      fs.unlinkSync(`./${req.body?.file}`);
+      res.send({ message: "Successfully deleted." });
+    } catch (error) {
+      throw new Error(error?.message || "Something bad happened!!");
+    }
+  });
 
   // Start our server if we're not in a test env.
   // if we're in a test env, we'll manually start it in a test
@@ -178,13 +245,13 @@ const server = new ApolloServer({
         process.env.PORT
       }, 🚀 Server ready at
 
-      http://localhost:${process.env.PORT || 4000}/
+      http://localhost:${process.env.PORT || 4000}
 
                 or
 
       http://${
         networkInterfaces?.en0?.find((en) => en?.family === "IPv4")?.address
-      }:4000/
+      }:4000
     `);
   }
 })();

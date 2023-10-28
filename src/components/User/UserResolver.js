@@ -1,5 +1,6 @@
 const superagent = require("superagent");
 const { GraphQLError } = require("graphql");
+const fileHandler = require("../../libs/fileHandler");
 const verifyIdToken = require("../../libs/verifyIdToken");
 const {
   createAccessToken,
@@ -45,16 +46,18 @@ const UserResolver = {
         throw new GraphQLError(error.message);
       }
     },
-    user: async (_, { userId }, { dataSources: { userAPI }, user, token }) => {
+    user: async (_, { userId }, { token, dataSources: { userAPI }, user }) => {
       if (!user) throw new Error("Authentication token required.");
       try {
-        const payload = await userAPI.user({ userId });
+        const payload = await userAPI.user({
+          userId,
+          populate: ["followers", "followings"],
+        });
         return {
           code: "200",
           success: true,
           message: "Successful",
           token,
-          refresh: null,
           payload,
         };
       } catch (error) {
@@ -64,7 +67,7 @@ const UserResolver = {
     statistics: async (
       _,
       { userId },
-      { dataSources: { userAPI }, user, token }
+      { token, dataSources: { userAPI }, user }
     ) => {
       if (!user) throw new Error("Authentication token required.");
       try {
@@ -83,7 +86,7 @@ const UserResolver = {
     weeklyLeaderboard: async (
       _,
       { offset = 0, limit = 10 },
-      { dataSources: { historyAPI, userAPI }, user, token }
+      { token, dataSources: { historyAPI, userAPI }, user }
     ) => {
       if (!user) throw new Error("Authentication token required.");
       try {
@@ -110,7 +113,7 @@ const UserResolver = {
     monthlyLeaderboard: async (
       _,
       { offset = 0, limit = 10 },
-      { dataSources: { historyAPI, userAPI }, user, token }
+      { token, dataSources: { historyAPI, userAPI }, user }
     ) => {
       if (!user) throw new Error("Authentication token required.");
       try {
@@ -149,13 +152,11 @@ const UserResolver = {
           email,
           email_verified: emailVerified,
           name: fullName,
-          picture,
         } = await verifyIdToken(idToken, platform);
         const payload = await userAPI.logIn({
           email,
           emailVerified,
           fullName,
-          picture,
           FCMToken,
           platform,
           acceptTnC,
@@ -219,7 +220,7 @@ const UserResolver = {
     createProfile: async (
       _,
       { userInput },
-      { redis, dataSources: { userAPI }, user }
+      { token, dataSources: { userAPI }, user }
     ) => {
       if (!user) throw new Error("Authentication token required.");
       try {
@@ -227,15 +228,11 @@ const UserResolver = {
         if (!payload) {
           throw new GraphQLError("User has already created his profile.");
         }
-        const accessToken = createAccessToken(payload.toJSON());
-        const refreshToken = createRefreshToken(payload.toJSON());
-        redis.set(payload._id, refreshToken, "ex", 604800000);
         return {
           code: "200",
           success: true,
           message: "Your profile created successfully.",
-          token: accessToken,
-          refresh: refreshToken,
+          token,
           payload,
         };
       } catch (error) {
@@ -245,7 +242,7 @@ const UserResolver = {
     editProfile: async (
       _,
       { userInput },
-      { redis, dataSources: { userAPI }, user }
+      { token, dataSources: { userAPI }, user }
     ) => {
       if (!user) throw new Error("Authentication token required.");
       try {
@@ -253,15 +250,11 @@ const UserResolver = {
         if (!payload) {
           throw new GraphQLError("User has not created his profile.");
         }
-        const accessToken = createAccessToken(payload.toJSON());
-        const refreshToken = createRefreshToken(payload.toJSON());
-        redis.set(payload._id, refreshToken, "ex", 604800000);
         return {
           code: "200",
           success: true,
           message: "Your profile edited successfully.",
-          token: accessToken,
-          refresh: refreshToken,
+          token,
           payload,
         };
       } catch (error) {
@@ -271,7 +264,7 @@ const UserResolver = {
     assignRole: async (
       _,
       { userId, role },
-      { dataSources: { userAPI }, user, token }
+      { token, dataSources: { userAPI }, user }
     ) => {
       if (user?.role !== "ADMIN") {
         throw new GraphQLError("You are not authorized.");
@@ -283,49 +276,65 @@ const UserResolver = {
           success: true,
           message: `Your role changed to "${role}".`,
           token,
-          refresh: null,
           payload,
         };
       } catch (error) {
         throw new GraphQLError(error.message);
       }
     },
-    uploadImage: async (_, __, { user, token }) => {
+    addProfileImage: async (
+      _,
+      { picture },
+      { token, dataSources: { userAPI }, user }
+    ) => {
       if (!user) throw new Error("Authentication token required.");
       try {
-        const { text = "{}" } = await superagent
-          .post(process.env.CFI_UPLOAD_URL)
-          .set("Authorization", `Bearer ${process.env.CFI_API_TOKEN}`);
-        const response = JSON.parse(text);
-        if (!response?.success) {
-          throw new GraphQLError("Got error on upload image, try again.");
+        const userPayload = await userAPI.user();
+        if (userPayload?.picture) {
+          await fileHandler
+            .remove({ filePath: userPayload?.picture })
+            .catch((error) => {
+              console.log(error?.message || "Something wrong happened!!");
+            });
         }
+        const newPicture = await fileHandler.moveFromTmp({
+          filePath: picture,
+          folderName: "avatar",
+        });
+        const payload = await userAPI.addProfileImage({ picture: newPicture });
         return {
-          code: "200",
-          success: response?.success,
-          message: "Upload URL will expire after 30 minutes if unused.",
+          code: 200,
+          success: true,
+          message: "Your profile picture added successfully.",
           token,
-          payload: response?.result,
+          payload,
         };
       } catch (error) {
         throw new GraphQLError(error.message);
       }
     },
-    deleteImage: async (_, { imageId }, { user, token }) => {
+    removeProfileImage: async (
+      _,
+      __,
+      { token, dataSources: { userAPI }, user }
+    ) => {
       if (!user) throw new Error("Authentication token required.");
       try {
-        const { text = "{}" } = await superagent
-          .delete(process.env.CFI_DELETE_URL + imageId)
-          .set("Authorization", `Bearer ${process.env.CFI_API_TOKEN}`);
-        const response = JSON.parse(text);
-        if (!response?.success) {
-          throw new GraphQLError("Got error on delete image, try again.");
+        const userPayload = await userAPI.user();
+        if (userPayload?.picture) {
+          await fileHandler
+            .remove({ filePath: userPayload?.picture })
+            .catch((error) => {
+              console.log(error?.message || "Something wrong happened!!");
+            });
         }
+        const payload = await userAPI.removeProfileImage();
         return {
-          code: "200",
+          code: 200,
           success: true,
-          message: "Image successfully deleted.",
+          message: "Your profile picture removed successfully.",
           token,
+          payload,
         };
       } catch (error) {
         throw new GraphQLError(error.message);
