@@ -57,7 +57,7 @@ class TestAPI extends MongoDataSource {
 
   addTestQuestion({ testId, position, questionInput }) {
     const questions = { $each: [questionInput] };
-    if (position) {
+    if (typeof position === "number" && position > -1) {
       questions.$position = position;
     }
     return this.model
