@@ -55,13 +55,13 @@ class TestAPI extends MongoDataSource {
       .exec();
   }
 
-  addTestQuestion({ testId, questionInput }) {
+  addTestQuestion({ testId, position, questionInput }) {
+    const questions = { $each: [questionInput] };
+    if (position) {
+      questions.$position = position;
+    }
     return this.model
-      .findByIdAndUpdate(
-        testId,
-        { $push: { questions: questionInput } },
-        { new: true }
-      )
+      .findByIdAndUpdate(testId, { $push: { questions } }, { new: true })
       .exec();
   }
 

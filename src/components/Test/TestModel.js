@@ -31,11 +31,6 @@ const TestQuestionSchema = new Schema({
     type: Number,
     default: 0,
   },
-  position: {
-    required: true,
-    type: Number,
-    default: 1,
-  },
   invalid: {
     required: true,
     type: Boolean,

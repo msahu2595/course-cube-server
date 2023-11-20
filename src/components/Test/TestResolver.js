@@ -152,12 +152,13 @@ const TestResolver = {
     },
     addTestQuestion: async (
       _,
-      { testId, questionInput },
+      { testId, position, questionInput },
       { token, dataSources: { testAPI } }
     ) => {
       try {
         const { questions } = await testAPI.addTestQuestion({
           testId,
+          position,
           questionInput,
         });
         const payload = questions.at(-1);

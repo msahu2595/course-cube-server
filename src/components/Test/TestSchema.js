@@ -30,6 +30,7 @@ const TestSchema = gql`
     deleteTest(testId: ID!): TestResponse
     addTestQuestion(
       testId: ID!
+      position: NonNegativeInt
       questionInput: TestQuestionInput!
     ): TestQuestionResponse
     editTestQuestion(
@@ -54,7 +55,6 @@ const TestSchema = gql`
     answerIndex: NonNegativeInt!
     mark: PositiveFloat!
     negativeMark: NonNegativeFloat
-    position: PositiveInt!
   }
 
   input TestQuestionEditInput {
@@ -93,7 +93,6 @@ const TestSchema = gql`
     mark: PositiveFloat!
     negativeMark: NonNegativeFloat!
     #
-    position: PositiveInt!
     invalid: Boolean!
     enable: Boolean!
   }
