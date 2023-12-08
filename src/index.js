@@ -185,7 +185,9 @@ const server = new ApolloServer({
   app.use("/graphql", expressMiddleware(server, { context }));
 
   app.get("/", (req, res) => {
-    res.send("Hello CourseQube!");
+    res.send(
+      "<body><p>Hello CourseQube!</p><a href='/graphql'>GraphQL</a></body>"
+    );
   });
 
   async function authentication(req, _, next) {
