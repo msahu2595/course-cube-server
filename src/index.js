@@ -190,26 +190,48 @@ const server = new ApolloServer({
     );
   });
 
-  async function authentication(req, _, next) {
+  async function authentication(req, res, next) {
     try {
       // simple auth check on every request
       const auth = req.headers["authorization"];
       const refreshToken = req.headers["refresh-token"];
       const accessToken = auth && auth.split(" ")[1];
-      if (!accessToken) throw new Error("Required authentication token.");
+      if (!accessToken) {
+        if (req.xhr) {
+          res.status(401).json({ message: "Required authentication token." });
+          return;
+        } else {
+          throw new Error("Required authentication token.");
+        }
+      }
       const user = verifyAccessToken(accessToken);
       if (user) {
         req.user = user;
         next();
       } else {
-        if (!refreshToken) throw new Error("Required refresh token.");
+        if (!refreshToken) {
+          if (req.xhr) {
+            res.status(401).json({ message: "Required refresh token." });
+            return;
+          } else {
+            throw new Error("Required refresh token.");
+          }
+        }
         // eslint-disable-next-line no-unused-vars
         const { iat, ...verifiedUser } = verifyRefreshToken(refreshToken);
         const savedRefreshedToken = await redis.get(verifiedUser._id);
-        if (savedRefreshedToken !== refreshToken)
-          throw new Error(
-            "Refresh token is revoked/expired, please log in again."
-          );
+        if (savedRefreshedToken !== refreshToken) {
+          if (req.xhr) {
+            res.status(401).json({
+              message: "Refresh token is revoked/expired, please log in again.",
+            });
+            return;
+          } else {
+            throw new Error(
+              "Refresh token is revoked/expired, please log in again."
+            );
+          }
+        }
         req.user = verifiedUser;
         next();
       }
