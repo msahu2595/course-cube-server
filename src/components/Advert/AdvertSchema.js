@@ -33,7 +33,7 @@ const AdvertSchema = gql`
   }
 
   input AdvertInput {
-    image: URL!
+    image: String!
     type: AdvertType!
     link: URL
     route: String
@@ -42,7 +42,7 @@ const AdvertSchema = gql`
 
   type Advert {
     _id: ID!
-    image: URL!
+    image: String!
     type: AdvertType!
     link: URL
     route: String

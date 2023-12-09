@@ -1,4 +1,5 @@
 const { GraphQLError } = require("graphql");
+const fileHandler = require("../../libs/fileHandler");
 
 const AdvertResolver = {
   Query: {
@@ -34,6 +35,10 @@ const AdvertResolver = {
       { token, dataSources: { advertAPI } }
     ) => {
       try {
+        advertInput.image = await fileHandler.moveFromTmp({
+          filePath: advertInput.image,
+          folderName: "advert",
+        });
         const payload = await advertAPI.createAdvert({ advertInput });
         return {
           code: "200",
