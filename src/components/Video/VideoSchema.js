@@ -29,13 +29,13 @@ const VideoSchema = gql`
 
   input VideoInput {
     title: String!
-    thumbnail: URL
+    thumbnail: String
   }
 
   type Video {
     _id: ID!
     title: String!
-    thumbnail: URL
+    thumbnail: String
     #
     time: String!
     link: URL!
@@ -67,7 +67,7 @@ const VideoSchema = gql`
 
   type URLData {
     title: String
-    thumbnail: URL
+    thumbnail: String
     time: String
   }
 

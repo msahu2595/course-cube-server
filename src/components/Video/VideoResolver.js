@@ -1,4 +1,5 @@
 const { GraphQLError } = require("graphql");
+const fileHandler = require("../../libs/fileHandler");
 const { getVideoDetails, getVideoUrls } = require("../../libs/getVideoData");
 
 const VideoResolver = {
@@ -123,6 +124,16 @@ const VideoResolver = {
       { token, dataSources: { videoAPI } }
     ) => {
       try {
+        if (videoInput.thumbnail) {
+          const video = await videoAPI.video({ videoId });
+          videoInput.thumbnail = await fileHandler.moveFromTmp({
+            filePath: videoInput.thumbnail,
+            folderName: "video",
+          });
+          if (/^assets\/video\/.*$/gm.test(video.thumbnail)) {
+            fileHandler.remove({ filePath: video.thumbnail });
+          }
+        }
         const payload = await videoAPI.editVideo({
           videoId,
           videoInput,
@@ -157,6 +168,10 @@ const VideoResolver = {
               contentExists ? "Content" : "Course content"
             } is using this video, Please remove from that before deleting this.`
           );
+        const video = await videoAPI.video({ videoId });
+        if (/^assets\/video\/.*$/gm.test(video.thumbnail)) {
+          fileHandler.remove({ filePath: video.thumbnail });
+        }
         const payload = await videoAPI.deleteVideo({ videoId });
         return {
           code: "200",
