@@ -28,13 +28,20 @@ const AdvertSchema = gql`
 
   extend type Mutation {
     createAdvert(advertInput: AdvertInput!): AdvertResponse
-    editAdvert(advertId: ID!, advertInput: AdvertInput!): AdvertResponse
+    editAdvert(advertId: ID!, advertInput: AdvertEditInput!): AdvertResponse
     deleteAdvert(advertId: ID!): AdvertResponse
   }
 
   input AdvertInput {
     image: String!
     type: AdvertType!
+    link: URL
+    route: String
+    params: JSONObject
+  }
+
+  input AdvertEditInput {
+    image: String
     link: URL
     route: String
     params: JSONObject

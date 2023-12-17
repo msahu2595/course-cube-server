@@ -247,7 +247,7 @@ const server = new ApolloServer({
   app.delete("/upload", authentication, (req, res) => {
     try {
       if (!req.body?.file) throw new Error("File path is missing!!");
-      if (!req.body?.file?.startsWith("assets/"))
+      if (!req.body?.file?.startsWith("assets/tmp/"))
         throw new Error("File path is invalid!!");
       fs.unlinkSync(`./${req.body?.file}`);
       res.send({ message: "Successfully deleted." });

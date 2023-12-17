@@ -58,6 +58,14 @@ const AdvertResolver = {
       { token, dataSources: { advertAPI } }
     ) => {
       try {
+        if (advertInput.image) {
+          const advert = await advertAPI.advert({ advertId });
+          advertInput.image = await fileHandler.moveFromTmp({
+            filePath: advertInput.image,
+            folderName: "advert",
+          });
+          fileHandler.remove({ filePath: advert.image });
+        }
         const payload = await advertAPI.editAdvert({
           advertId,
           advertInput,
@@ -79,6 +87,10 @@ const AdvertResolver = {
       { token, dataSources: { advertAPI } }
     ) => {
       try {
+        const advert = await advertAPI.advert({ advertId });
+        if (advert.image) {
+          fileHandler.remove({ filePath: advert.image });
+        }
         const payload = await advertAPI.deleteAdvert({ advertId });
         return {
           code: "200",

@@ -20,6 +20,10 @@ class AdvertAPI extends MongoDataSource {
       .exec();
   }
 
+  advert({ advertId }) {
+    return this.model.findById(advertId).exec();
+  }
+
   createAdvert({ advertInput }) {
     return this.model.create(advertInput);
   }
