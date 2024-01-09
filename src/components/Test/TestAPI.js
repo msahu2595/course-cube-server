@@ -31,6 +31,12 @@ class TestAPI extends MongoDataSource {
       .exec();
   }
 
+  testQuestion({ questionId }) {
+    return this.model
+      .findOne({ "questions._id": questionId }, { "questions.$": 1 })
+      .then((doc) => doc.questions[0]);
+  }
+
   testExists({ testId, ...rest }) {
     return this.model
       .findOne({ _id: testId, enable: true, ...rest })

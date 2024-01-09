@@ -42,14 +42,14 @@ const TestSchema = gql`
 
   input TestInput {
     title: String!
-    thumbnail: URL
+    thumbnail: String
     instructions: String!
     duration: Duration!
   }
 
   input TestQuestionInput {
     question: String!
-    image: URL
+    image: String
     passage: String
     options: [String!]!
     answerIndex: NonNegativeInt!
@@ -58,7 +58,7 @@ const TestSchema = gql`
   }
 
   input TestQuestionEditInput {
-    image: URL
+    image: String
     passage: String
     answerIndex: NonNegativeInt!
     mark: PositiveFloat!
@@ -68,7 +68,7 @@ const TestSchema = gql`
   type Test {
     _id: ID!
     title: String!
-    thumbnail: URL
+    thumbnail: String
     #
     instructions: String!
     duration: Duration!
@@ -85,7 +85,7 @@ const TestSchema = gql`
     _id: ID!
     #
     question: String!
-    image: URL
+    image: String
     passage: String
     options: [String!]!
     #

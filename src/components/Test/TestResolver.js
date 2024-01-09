@@ -1,4 +1,5 @@
 const { GraphQLError } = require("graphql");
+const fileHandler = require("../../libs/fileHandler");
 
 const TestResolver = {
   Test: {
@@ -85,6 +86,12 @@ const TestResolver = {
   Mutation: {
     addTest: async (_, { testInput }, { token, dataSources: { testAPI } }) => {
       try {
+        if (testInput.thumbnail) {
+          testInput.thumbnail = await fileHandler.moveFromTmp({
+            filePath: testInput.thumbnail,
+            folderName: "test",
+          });
+        }
         const payload = await testAPI.addTest({ testInput });
         return {
           code: "200",
@@ -104,6 +111,16 @@ const TestResolver = {
       { token, dataSources: { testAPI } }
     ) => {
       try {
+        if (testInput.thumbnail) {
+          const test = await testAPI.test({ testId });
+          testInput.thumbnail = await fileHandler.moveFromTmp({
+            filePath: testInput.thumbnail,
+            folderName: "test",
+          });
+          if (/^assets\/test\/.*$/gm.test(test.thumbnail)) {
+            fileHandler.remove({ filePath: test.thumbnail });
+          }
+        }
         const payload = await testAPI.editTest({
           testId,
           testInput,
@@ -138,6 +155,10 @@ const TestResolver = {
               contentExists ? "Content" : "Course content"
             } is using this test, Please remove from that before deleting this.`
           );
+        const test = await testAPI.test({ testId });
+        if (/^assets\/test\/.*$/gm.test(test.thumbnail)) {
+          fileHandler.remove({ filePath: test.thumbnail });
+        }
         const payload = await testAPI.deleteTest({ testId });
         return {
           code: "200",
@@ -156,6 +177,12 @@ const TestResolver = {
       { token, dataSources: { testAPI } }
     ) => {
       try {
+        if (questionInput.image) {
+          questionInput.image = await fileHandler.moveFromTmp({
+            filePath: questionInput.image,
+            folderName: "testQuestion",
+          });
+        }
         const { questions } = await testAPI.addTestQuestion({
           testId,
           position,
@@ -180,6 +207,16 @@ const TestResolver = {
       { token, dataSources: { testAPI } }
     ) => {
       try {
+        if (questionInput.image) {
+          const testQuestion = await testAPI.testQuestion({ questionId });
+          questionInput.image = await fileHandler.moveFromTmp({
+            filePath: questionInput.image,
+            folderName: "testQuestion",
+          });
+          if (/^assets\/testQuestion\/.*$/gm.test(testQuestion.image)) {
+            fileHandler.remove({ filePath: testQuestion.image });
+          }
+        }
         const { questions } = await testAPI.editTestQuestion({
           questionId,
           questionInput,
@@ -204,6 +241,10 @@ const TestResolver = {
       { token, dataSources: { testAPI } }
     ) => {
       try {
+        const testQuestion = await testAPI.testQuestion({ questionId });
+        if (/^assets\/testQuestion\/.*$/gm.test(testQuestion.image)) {
+          fileHandler.remove({ filePath: testQuestion.image });
+        }
         const { questions } = await testAPI.deleteTestQuestion({
           questionId,
           invalid,
