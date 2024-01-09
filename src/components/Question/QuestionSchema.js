@@ -39,7 +39,7 @@ const QuestionSchema = gql`
   input QuestionInput {
     title: String!
     description: String
-    image: URL
+    image: String
     options: [String!]
     answerIndex: PositiveInt
     tags: [String!]
@@ -59,7 +59,7 @@ const QuestionSchema = gql`
     user: User
     title: String!
     description: String
-    image: URL
+    image: String
     options: [String!]
     answerIndex: PositiveInt
     tags: [String!]

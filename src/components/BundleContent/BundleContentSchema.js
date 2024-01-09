@@ -42,7 +42,7 @@ const BundleContentSchema = gql`
   input BundleContentInput {
     subjectId: ID
     subject: String!
-    image: URL!
+    image: String!
     title: String!
     media: ID!
     type: MediaType!
@@ -57,7 +57,7 @@ const BundleContentSchema = gql`
     subjectId: ID
     subject: String!
     # General fields
-    image: URL!
+    image: String!
     title: String!
     media: Media
     type: MediaType!
