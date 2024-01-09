@@ -42,6 +42,7 @@ const ContentSchema = gql`
       contentInput: ContentEditInput!
     ): ContentResponse
     deleteContent(contentId: ID!): ContentResponse
+    copyImage(imagePath: String!): ImageResponse
   }
 
   input ContentInput {
@@ -140,6 +141,14 @@ const ContentSchema = gql`
     message: String!
     token: JWT
     payload: Content
+  }
+
+  type ImageResponse implements Response {
+    code: String!
+    success: Boolean!
+    message: String!
+    token: JWT
+    payload: String!
   }
 `;
 

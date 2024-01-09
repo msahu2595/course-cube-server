@@ -221,6 +221,27 @@ const ContentResolver = {
         throw new GraphQLError(error.message);
       }
     },
+    copyImage: async (_, { imagePath }, { token, user }) => {
+      if (!user) throw new Error("Authentication token required.");
+      try {
+        if (!/^assets\/.*$/gm.test(imagePath)) {
+          throw new GraphQLError("Image path is invalid.");
+        }
+        const payload = await fileHandler.copyToTmp({
+          filePath: imagePath,
+          userId: user._id,
+        });
+        return {
+          code: "200",
+          success: true,
+          message: "Image copied successfully.",
+          token,
+          payload,
+        };
+      } catch (error) {
+        throw new GraphQLError(error.message);
+      }
+    },
   },
 };
 

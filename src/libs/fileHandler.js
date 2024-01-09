@@ -1,5 +1,13 @@
+const {
+  stat,
+  unlink,
+  rename,
+  copyFile,
+  constants,
+} = require("node:fs/promises");
+const moment = require("moment");
+const crypto = require("crypto");
 const { existsSync, mkdirSync } = require("node:fs");
-const { rename, stat, unlink } = require("node:fs/promises");
 
 const fileHandler = {
   moveFromTmp: async ({ filePath, folderName }) => {
@@ -17,6 +25,28 @@ const fileHandler = {
       return newFilePath;
     } catch (error) {
       throw new Error(error?.message || "Got error on moving file.");
+    }
+  },
+  copyToTmp: async ({ filePath, userId }) => {
+    try {
+      if (!existsSync(`./${filePath}`)) {
+        throw new Error("File not exists.");
+      }
+      const newFilePath = `assets/tmp/CC-${moment().unix()}-${
+        userId || "UNKNOWN"
+      }-${crypto.randomBytes(16).toString("hex")}.${
+        filePath.split(".")?.[1] || "tmp"
+      }`;
+      await copyFile(
+        `./${filePath}`,
+        `./${newFilePath}`,
+        constants.COPYFILE_EXCL
+      );
+      const stats = await stat(`./${newFilePath}`);
+      console.log(`stats: ${JSON.stringify(stats)}`);
+      return newFilePath;
+    } catch (error) {
+      throw new Error(error?.message || "Got error on copy file.");
     }
   },
   remove: async ({ filePath }) => {
