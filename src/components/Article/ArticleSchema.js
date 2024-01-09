@@ -27,17 +27,31 @@ const ArticleSchema = gql`
 
   extend type Mutation {
     createArticle(articleInput: ArticleInput!): ArticleResponse
-    editArticle(articleId: ID!, articleInput: ArticleInput!): ArticleResponse
+    editArticle(
+      articleId: ID!
+      articleInput: ArticleEditInput!
+    ): ArticleResponse
     deleteArticle(articleId: ID!): ArticleResponse
   }
 
   input ArticleInput {
     subject: String!
     tags: [String!]
-    image: URL!
+    image: String!
     title: String!
     description: String!
     author: String!
+    sources: [URL!]
+    visible: Boolean
+  }
+
+  input ArticleEditInput {
+    subject: String
+    tags: [String!]
+    image: String
+    title: String
+    description: String
+    author: String
     sources: [URL!]
     visible: Boolean
   }
@@ -48,7 +62,7 @@ const ArticleSchema = gql`
     subject: String!
     tags: [String!]
     # General fields
-    image: URL!
+    image: String!
     title: String!
     description: String!
     author: String!

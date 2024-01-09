@@ -1,4 +1,5 @@
 const { GraphQLError } = require("graphql");
+const fileHandler = require("../../libs/fileHandler");
 
 const ArticleResolver = {
   Query: {
@@ -61,6 +62,12 @@ const ArticleResolver = {
       { token, dataSources: { articleAPI } }
     ) => {
       try {
+        if (articleInput.image) {
+          articleInput.image = await fileHandler.moveFromTmp({
+            filePath: articleInput.image,
+            folderName: "article",
+          });
+        }
         const payload = await articleAPI.createArticle({ articleInput });
         return {
           code: "200",
@@ -80,6 +87,16 @@ const ArticleResolver = {
       { token, dataSources: { articleAPI } }
     ) => {
       try {
+        if (articleInput.image) {
+          const article = await articleAPI.article({ articleId });
+          articleInput.image = await fileHandler.moveFromTmp({
+            filePath: articleInput.image,
+            folderName: "article",
+          });
+          if (/^assets\/article\/.*$/gm.test(article.image)) {
+            fileHandler.remove({ filePath: article.image });
+          }
+        }
         const payload = await articleAPI.editArticle({
           articleId,
           articleInput,
@@ -101,6 +118,10 @@ const ArticleResolver = {
       { token, dataSources: { articleAPI } }
     ) => {
       try {
+        const article = await articleAPI.article({ articleId });
+        if (/^assets\/article\/.*$/gm.test(article.image)) {
+          fileHandler.remove({ filePath: article.image });
+        }
         const payload = await articleAPI.deleteArticle({ articleId });
         return {
           code: "200",
