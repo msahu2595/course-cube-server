@@ -1,4 +1,5 @@
 const { GraphQLError } = require("graphql");
+const fileHandler = require("../../libs/fileHandler");
 
 const HeadlineResolver = {
   Query: {
@@ -35,6 +36,12 @@ const HeadlineResolver = {
       { token, dataSources: { headlineAPI } }
     ) => {
       try {
+        if (headlineInput.image) {
+          headlineInput.image = await fileHandler.moveFromTmp({
+            filePath: headlineInput.image,
+            folderName: "headline",
+          });
+        }
         const payload = await headlineAPI.createHeadline({ headlineInput });
         return {
           code: "200",
@@ -54,6 +61,16 @@ const HeadlineResolver = {
       { token, dataSources: { headlineAPI } }
     ) => {
       try {
+        if (headlineInput.image) {
+          const headline = await headlineAPI.headline({ headlineId });
+          headlineInput.image = await fileHandler.moveFromTmp({
+            filePath: headlineInput.image,
+            folderName: "headline",
+          });
+          if (/^assets\/headline\/.*$/gm.test(headline.image)) {
+            fileHandler.remove({ filePath: headline.image });
+          }
+        }
         const payload = await headlineAPI.editHeadline({
           headlineId,
           headlineInput,
@@ -75,6 +92,10 @@ const HeadlineResolver = {
       { token, dataSources: { headlineAPI } }
     ) => {
       try {
+        const headline = await headlineAPI.headline({ headlineId });
+        if (/^assets\/headline\/.*$/gm.test(headline.image)) {
+          fileHandler.remove({ filePath: headline.image });
+        }
         const payload = await headlineAPI.deleteHeadline({ headlineId });
         return {
           code: "200",

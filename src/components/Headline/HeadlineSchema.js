@@ -28,7 +28,7 @@ const HeadlineSchema = gql`
   }
 
   input HeadlineInput {
-    image: URL
+    image: String
     description: String!
     link: URL
     route: String
@@ -37,7 +37,7 @@ const HeadlineSchema = gql`
 
   type Headline {
     _id: ID!
-    image: URL
+    image: String
     description: String!
     link: URL
     route: String

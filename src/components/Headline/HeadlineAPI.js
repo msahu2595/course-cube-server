@@ -20,6 +20,10 @@ class HeadlineAPI extends MongoDataSource {
       .exec();
   }
 
+  headline({ headlineId }) {
+    return this.model.findById(headlineId).exec();
+  }
+
   createHeadline({ headlineInput }) {
     return this.model.create(headlineInput);
   }
