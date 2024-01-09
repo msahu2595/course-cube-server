@@ -1,4 +1,5 @@
 const { GraphQLError } = require("graphql");
+const fileHandler = require("../../libs/fileHandler");
 
 const ContentResolver = {
   Media: {
@@ -111,6 +112,12 @@ const ContentResolver = {
         }
         console.log("exists ==> ", exists);
         if (exists) {
+          if (contentInput.image) {
+            contentInput.image = await fileHandler.moveFromTmp({
+              filePath: contentInput.image,
+              folderName: "content",
+            });
+          }
           const payload = await contentAPI.addContent({ contentInput });
           return {
             code: "200",
@@ -162,6 +169,16 @@ const ContentResolver = {
         }
         console.log("exists ==> ", exists);
         if (exists) {
+          if (contentInput.image) {
+            const content = await contentAPI.contentById(contentId);
+            contentInput.image = await fileHandler.moveFromTmp({
+              filePath: contentInput.image,
+              folderName: "content",
+            });
+            if (/^assets\/content\/.*$/gm.test(content.image)) {
+              fileHandler.remove({ filePath: content.image });
+            }
+          }
           const payload = await contentAPI.editContent({
             contentId,
             contentInput,
@@ -188,6 +205,10 @@ const ContentResolver = {
       { token, dataSources: { contentAPI } }
     ) => {
       try {
+        const content = await contentAPI.contentById(contentId);
+        if (/^assets\/content\/.*$/gm.test(content.image)) {
+          fileHandler.remove({ filePath: content.image });
+        }
         const payload = await contentAPI.deleteContent({ contentId });
         return {
           code: "200",

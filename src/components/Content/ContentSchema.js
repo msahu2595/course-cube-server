@@ -37,7 +37,10 @@ const ContentSchema = gql`
 
   extend type Mutation {
     addContent(contentInput: ContentInput!): ContentResponse
-    editContent(contentId: ID!, contentInput: ContentInput!): ContentResponse
+    editContent(
+      contentId: ID!
+      contentInput: ContentEditInput!
+    ): ContentResponse
     deleteContent(contentId: ID!): ContentResponse
   }
 
@@ -46,7 +49,7 @@ const ContentSchema = gql`
     exams: [String!]
     tags: [String!]
     subject: String!
-    image: URL!
+    image: String!
     title: String!
     media: ID!
     type: MediaType!
@@ -63,6 +66,28 @@ const ContentSchema = gql`
     visible: Boolean
   }
 
+  input ContentEditInput {
+    categories: [String!]
+    exams: [String!]
+    tags: [String!]
+    subject: String
+    image: String
+    title: String
+    media: ID
+    type: MediaType
+    paid: Boolean
+    price: NonNegativeInt
+    offer: NonNegativeInt
+    offerType: OfferType
+    highlight: String
+    instructors: [String!]
+    language: LanguageType
+    index: String
+    description: String
+    validity: Duration
+    visible: Boolean
+  }
+
   type Content {
     _id: ID!
     # Used for filter
@@ -71,7 +96,7 @@ const ContentSchema = gql`
     tags: [String!]
     subject: String!
     # General fields
-    image: URL!
+    image: String!
     title: String!
     media: Media
     type: MediaType!
