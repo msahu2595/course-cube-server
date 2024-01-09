@@ -30,7 +30,7 @@ const DocumentSchema = gql`
 
   input DocumentInput {
     title: String!
-    thumbnail: URL
+    thumbnail: String
     url: URL!
     pages: PositiveInt!
   }
@@ -38,7 +38,7 @@ const DocumentSchema = gql`
   type Document {
     _id: ID!
     title: String!
-    thumbnail: URL
+    thumbnail: String
     #
     url: URL!
     pages: PositiveInt!

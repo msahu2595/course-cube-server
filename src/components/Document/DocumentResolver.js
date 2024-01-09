@@ -1,4 +1,5 @@
 const { GraphQLError } = require("graphql");
+const fileHandler = require("../../libs/fileHandler");
 
 const DocumentResolver = {
   Query: {
@@ -61,6 +62,12 @@ const DocumentResolver = {
           url: documentInput.url,
         });
         if (documentExists) throw new GraphQLError("Document already added.");
+        if (documentInput.thumbnail) {
+          documentInput.thumbnail = await fileHandler.moveFromTmp({
+            filePath: documentInput.thumbnail,
+            folderName: "document",
+          });
+        }
         const payload = await documentAPI.addDocument({ documentInput });
         return {
           code: "200",
@@ -80,6 +87,16 @@ const DocumentResolver = {
       { token, dataSources: { documentAPI } }
     ) => {
       try {
+        if (documentInput.thumbnail) {
+          const document = await documentAPI.document({ documentId });
+          documentInput.thumbnail = await fileHandler.moveFromTmp({
+            filePath: documentInput.thumbnail,
+            folderName: "document",
+          });
+          if (/^assets\/document\/.*$/gm.test(document.thumbnail)) {
+            fileHandler.remove({ filePath: document.thumbnail });
+          }
+        }
         const payload = await documentAPI.editDocument({
           documentId,
           documentInput,
@@ -114,6 +131,10 @@ const DocumentResolver = {
               contentExists ? "Content" : "Course content"
             } is using this document, Please remove from that before deleting this.`
           );
+        const document = await documentAPI.document({ documentId });
+        if (/^assets\/document\/.*$/gm.test(document.thumbnail)) {
+          fileHandler.remove({ filePath: document.thumbnail });
+        }
         const payload = await documentAPI.deleteDocument({ documentId });
         return {
           code: "200",
