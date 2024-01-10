@@ -68,6 +68,12 @@ const DocumentResolver = {
             folderName: "document",
           });
         }
+        if (documentInput.url) {
+          documentInput.url = await fileHandler.moveFromTmp({
+            filePath: documentInput.url,
+            folderName: "file",
+          });
+        }
         const payload = await documentAPI.addDocument({ documentInput });
         return {
           code: "200",
@@ -87,14 +93,25 @@ const DocumentResolver = {
       { token, dataSources: { documentAPI } }
     ) => {
       try {
-        if (documentInput.thumbnail) {
+        if (documentInput.thumbnail || documentInput.url) {
           const document = await documentAPI.document({ documentId });
-          documentInput.thumbnail = await fileHandler.moveFromTmp({
-            filePath: documentInput.thumbnail,
-            folderName: "document",
-          });
-          if (/^assets\/document\/.*$/gm.test(document.thumbnail)) {
-            fileHandler.remove({ filePath: document.thumbnail });
+          if (documentInput.thumbnail) {
+            documentInput.thumbnail = await fileHandler.moveFromTmp({
+              filePath: documentInput.thumbnail,
+              folderName: "document",
+            });
+            if (/^assets\/document\/.*$/gm.test(document.thumbnail)) {
+              fileHandler.remove({ filePath: document.thumbnail });
+            }
+          }
+          if (documentInput.url) {
+            documentInput.url = await fileHandler.moveFromTmp({
+              filePath: documentInput.url,
+              folderName: "file",
+            });
+            if (/^assets\/file\/.*$/gm.test(document.url)) {
+              fileHandler.remove({ filePath: document.url });
+            }
           }
         }
         const payload = await documentAPI.editDocument({
@@ -134,6 +151,9 @@ const DocumentResolver = {
         const document = await documentAPI.document({ documentId });
         if (/^assets\/document\/.*$/gm.test(document.thumbnail)) {
           fileHandler.remove({ filePath: document.thumbnail });
+        }
+        if (/^assets\/file\/.*$/gm.test(document.url)) {
+          fileHandler.remove({ filePath: document.url });
         }
         const payload = await documentAPI.deleteDocument({ documentId });
         return {

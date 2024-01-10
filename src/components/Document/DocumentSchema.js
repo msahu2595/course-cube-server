@@ -23,7 +23,7 @@ const DocumentSchema = gql`
     addDocument(documentInput: DocumentInput!): DocumentResponse
     editDocument(
       documentId: ID!
-      documentInput: DocumentInput!
+      documentInput: DocumentEditInput!
     ): DocumentResponse
     deleteDocument(documentId: ID!): DocumentResponse
   }
@@ -31,8 +31,15 @@ const DocumentSchema = gql`
   input DocumentInput {
     title: String!
     thumbnail: String
-    url: URL!
+    url: String!
     pages: PositiveInt!
+  }
+
+  input DocumentEditInput {
+    title: String
+    thumbnail: String
+    url: String
+    pages: PositiveInt
   }
 
   type Document {
@@ -40,7 +47,7 @@ const DocumentSchema = gql`
     title: String!
     thumbnail: String
     #
-    url: URL!
+    url: String!
     pages: PositiveInt!
     #
     enable: Boolean!

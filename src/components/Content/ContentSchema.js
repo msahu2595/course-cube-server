@@ -74,8 +74,8 @@ const ContentSchema = gql`
     subject: String
     image: String
     title: String
-    media: ID
-    type: MediaType
+    media: ID!
+    type: MediaType!
     paid: Boolean
     price: NonNegativeInt
     offer: NonNegativeInt
