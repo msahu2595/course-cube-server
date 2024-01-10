@@ -1,5 +1,5 @@
 const {
-  stat,
+  // stat,
   unlink,
   rename,
   copyFile,
@@ -7,7 +7,8 @@ const {
 } = require("node:fs/promises");
 const moment = require("moment");
 const crypto = require("crypto");
-const { existsSync, mkdirSync } = require("node:fs");
+const fetch = require("node-fetch");
+const { existsSync, mkdirSync, createWriteStream } = require("node:fs");
 
 const fileHandler = {
   moveFromTmp: async ({ filePath, folderName }) => {
@@ -20,10 +21,11 @@ const fileHandler = {
         `assets/${folderName}`
       );
       await rename(`./${filePath}`, `./${newFilePath}`);
-      await stat(`./${newFilePath}`);
+      // const stats = await stat(`./${newFilePath}`);
       // console.log(`stats: ${JSON.stringify(stats)}`);
       return newFilePath;
     } catch (error) {
+      // console.log(error);
       throw new Error(error?.message || "Got error on moving file.");
     }
   },
@@ -42,11 +44,43 @@ const fileHandler = {
         `./${newFilePath}`,
         constants.COPYFILE_EXCL
       );
-      const stats = await stat(`./${newFilePath}`);
-      console.log(`stats: ${JSON.stringify(stats)}`);
+      // const stats = await stat(`./${newFilePath}`);
+      // console.log(`stats: ${JSON.stringify(stats)}`);
       return newFilePath;
     } catch (error) {
+      // console.log(error);
       throw new Error(error?.message || "Got error on copy file.");
+    }
+  },
+  downloadToTmp: async ({ url, userId }) => {
+    try {
+      const newFilePath = await new Promise((resolve, reject) => {
+        const filePath = `assets/tmp/CC-${moment().unix()}-${
+          userId || "UNKNOWN"
+        }-${crypto.randomBytes(16).toString("hex")}.${
+          url.split(".").pop() || "tmp"
+        }`;
+        fetch(url)
+          .then((res) => {
+            res.body
+              .pipe(createWriteStream(`./${filePath}`))
+              .on("close", () => {
+                resolve(filePath);
+              })
+              .on("error", (error) => {
+                reject(error?.message || "Got error on download file.");
+              });
+          })
+          .catch((error) => {
+            reject(error?.message || "Got error while fetching url.");
+          });
+      });
+      // const stats = await stat(`./${newFilePath}`);
+      // console.log(`stats: ${JSON.stringify(stats)}`);
+      return newFilePath;
+    } catch (error) {
+      // console.log(error);
+      throw new Error(error?.message || "Got error on download file.");
     }
   },
   remove: async ({ filePath }) => {
@@ -54,6 +88,7 @@ const fileHandler = {
       await unlink(`./${filePath}`);
       // console.log(`successfully deleted "./${filePath}"`);
     } catch (error) {
+      // console.log(error);
       throw new Error(error?.message || "Got error on moving file.");
     }
   },

@@ -91,20 +91,25 @@ const VideoResolver = {
     addVideo: async (
       _,
       { videoLink: link },
-      { token, dataSources: { videoAPI } }
+      { token, dataSources: { videoAPI }, user }
     ) => {
       try {
         const videoExists = await videoAPI.videoLinkExists({ link });
         if (videoExists) throw new GraphQLError("Video already added.");
         const output = await getVideoDetails(link);
-        const [title, thumbnail, time] = output.split("\n");
+        let [title, thumbnail, time] = output.split("\n");
+        if (thumbnail) {
+          const filePath = await fileHandler.downloadToTmp({
+            url: thumbnail,
+            userId: user?._id,
+          });
+          thumbnail = await fileHandler.moveFromTmp({
+            filePath,
+            folderName: "video",
+          });
+        }
         const payload = await videoAPI.addVideo({
-          videoInput: {
-            title,
-            thumbnail,
-            time,
-            link,
-          },
+          videoInput: { title, thumbnail, time, link },
         });
         return {
           code: "200",
@@ -114,7 +119,6 @@ const VideoResolver = {
           payload,
         };
       } catch (error) {
-        console.log(error);
         throw new GraphQLError(error.message);
       }
     },
