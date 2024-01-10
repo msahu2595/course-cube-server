@@ -10,7 +10,10 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon src/index.js",
+    "env:push": "npx dotenv-vault@latest push",
+    "env:pull": "npx dotenv-vault@latest pull",
+    "env:open": "npx dotenv-vault@latest open"
   },
   "repository": {
     "type": "git",
@@ -28,7 +31,7 @@
     "apollo-datasource-mongodb": "^0.5.4",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
-    "dotenv": "^16.0.3",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "google-auth-library": "^8.7.0",
     "graphql": "^16.6.0",
