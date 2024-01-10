@@ -1,4 +1,3 @@
-const superagent = require("superagent");
 const { GraphQLError } = require("graphql");
 const fileHandler = require("../../libs/fileHandler");
 const verifyIdToken = require("../../libs/verifyIdToken");
@@ -157,47 +156,6 @@ const UserResolver = {
           email,
           emailVerified,
           fullName,
-          FCMToken,
-          platform,
-          acceptTnC,
-        });
-        const accessToken = createAccessToken(payload.toJSON());
-        const refreshToken = createRefreshToken(payload.toJSON());
-        redis.set(payload._id, refreshToken, "ex", 604800000);
-        return {
-          code: "200",
-          success: true,
-          message: "You are successfully registered.",
-          token: accessToken,
-          refresh: refreshToken,
-          payload,
-        };
-      } catch (error) {
-        throw new GraphQLError(error.message);
-      }
-    },
-    whatsAppLogIn: async (
-      _,
-      { waId, FCMToken, platform, acceptTnC },
-      { redis, dataSources: { userAPI } }
-    ) => {
-      try {
-        if (!acceptTnC) {
-          throw new GraphQLError("Please accept terms & conditions.");
-        }
-        const { text = "{}" } = await superagent
-          .post(process.env.OTPLESS_AUTH_LINK)
-          .set("clientId", process.env.OTPLESS_CLIENT_ID)
-          .set("clientSecret", process.env.OTPLESS_CLIENT_SECRET)
-          .send({ waId });
-        const response = JSON.parse(text);
-        if (!response?.success) {
-          throw new GraphQLError("Got error on whatsapp login, try again.");
-        }
-        const payload = await userAPI.logIn({
-          mobile: `+${response?.data?.userMobile}`,
-          mobileVerified: true,
-          fullName: response?.data?.userName,
           FCMToken,
           platform,
           acceptTnC,

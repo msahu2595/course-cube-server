@@ -43,13 +43,8 @@ const UserSchema = gql`
       platform: Platform!
       acceptTnC: Boolean!
     ): UserResponse
-    whatsAppLogIn(
-      waId: String!
-      FCMToken: String
-      platform: Platform!
-      acceptTnC: Boolean!
-    ): UserResponse
-    # appleLogIn(idToken: String!, acceptTnC: Boolean!, FCMToken: String): UserResponse
+    # whatsAppLogIn(waId: String!, FCMToken: String, platform: Platform!, acceptTnC: Boolean!): UserResponse
+    # appleLogIn(idToken: String!, FCMToken: String, platform: Platform!, acceptTnC: Boolean!): UserResponse
     createProfile(userInput: CreateProfileInput!): UserResponse
     editProfile(userInput: EditProfileInput!): UserResponse
     assignRole(userId: ID!, role: Role!): UserResponse
