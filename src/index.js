@@ -275,7 +275,7 @@ const server = new ApolloServer({
 
       http://${
         networkInterfaces?.en0?.find((en) => en?.family === "IPv4")?.address
-      }:4000
+      }:${process.env.PORT || 4000}
     `);
   }
 })();
