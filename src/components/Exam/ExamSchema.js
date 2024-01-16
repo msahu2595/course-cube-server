@@ -45,7 +45,7 @@ const ExamSchema = gql`
     #
     _id: ID!
     title: String!
-    thumbnail: URL
+    thumbnail: String
     #
     instructions: String!
     duration: Duration!
@@ -65,7 +65,7 @@ const ExamSchema = gql`
     #
     _id: ID!
     title: String!
-    thumbnail: URL
+    thumbnail: String
     #
     instructions: String!
     duration: Duration!
@@ -84,7 +84,7 @@ const ExamSchema = gql`
     testQuestion: TestQuestion
     #
     question: String!
-    image: URL
+    image: String
     passage: String
     options: [String!]!
     #
