@@ -25,6 +25,7 @@ const DocumentSchema = gql`
       documentId: ID!
       documentInput: DocumentEditInput!
     ): DocumentResponse
+    removeDocumentThumbnail(documentId: ID!): DocumentResponse
     deleteDocument(documentId: ID!): DocumentResponse
   }
 

@@ -136,6 +136,32 @@ const TestResolver = {
         throw new GraphQLError(error.message);
       }
     },
+    removeTestThumbnail: async (
+      _,
+      { testId },
+      { token, dataSources: { testAPI } }
+    ) => {
+      try {
+        const test = await testAPI.test({ testId });
+        if(!test.thumbnail) throw new GraphQLError("Test thumbnail not found.");
+        if (/^assets\/test\/.*$/gm.test(test.thumbnail)) {
+          fileHandler.remove({ filePath: test.thumbnail });
+        }
+        const payload = await testAPI.editTest({
+          testId,
+          testInput: { thumbnail: "" },
+        });
+        return {
+          code: "200",
+          success: true,
+          message: "Test thumbnail removed successfully.",
+          token,
+          payload,
+        };
+      } catch (error) {
+        throw new GraphQLError(error.message);
+      }
+    },
     deleteTest: async (
       _,
       { testId },
@@ -151,8 +177,7 @@ const TestResolver = {
           });
         if (contentExists || bundleContentExists)
           throw new GraphQLError(
-            `${
-              contentExists ? "Content" : "Course content"
+            `${contentExists ? "Content" : "Course content"
             } is using this test, Please remove from that before deleting this.`
           );
         const test = await testAPI.test({ testId });
@@ -228,6 +253,35 @@ const TestResolver = {
           code: "200",
           success: true,
           message: "Test question edited successfully.",
+          token,
+          payload,
+        };
+      } catch (error) {
+        throw new GraphQLError(error.message);
+      }
+    },
+    removeTestQuestionImage: async (
+      _,
+      { questionId },
+      { token, dataSources: { testAPI } }
+    ) => {
+      try {
+        const testQuestion = await testAPI.testQuestion({ questionId });
+        if(!testQuestion.image) throw new GraphQLError("Test question image not found.");
+        if (/^assets\/testQuestion\/.*$/gm.test(testQuestion.image)) {
+          fileHandler.remove({ filePath: testQuestion.image });
+        }
+        const { questions } = await testAPI.editTestQuestion({
+          questionId,
+          questionInput: { image: "" },
+        });
+        const payload = questions?.find(
+          (question) => question?._id == questionId
+        );
+        return {
+          code: "200",
+          success: true,
+          message: "Test question image removed successfully.",
           token,
           payload,
         };

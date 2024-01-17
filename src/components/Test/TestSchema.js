@@ -27,6 +27,7 @@ const TestSchema = gql`
   extend type Mutation {
     addTest(testInput: TestInput!): TestResponse
     editTest(testId: ID!, testInput: TestInput!): TestResponse
+    removeTestThumbnail(testId: ID!): TestResponse
     deleteTest(testId: ID!): TestResponse
     addTestQuestion(
       testId: ID!
@@ -37,6 +38,7 @@ const TestSchema = gql`
       questionId: ID!
       questionInput: TestQuestionEditInput!
     ): TestQuestionResponse
+    removeTestQuestionImage(questionId: ID!): TestQuestionResponse
     deleteTestQuestion(questionId: ID!, invalid: Boolean!): TestQuestionResponse
   }
 

@@ -153,6 +153,32 @@ const VideoResolver = {
         throw new GraphQLError(error.message);
       }
     },
+    removeVideoThumbnail: async (
+      _,
+      { videoId },
+      { token, dataSources: { videoAPI } }
+    ) => {
+      try {
+        const video = await videoAPI.video({ videoId });
+        if(!video.thumbnail) throw new GraphQLError("Video thumbnail not found.");
+        if (/^assets\/video\/.*$/gm.test(video.thumbnail)) {
+          fileHandler.remove({ filePath: video.thumbnail });
+        }
+        const payload = await videoAPI.editVideo({
+          videoId,
+          videoInput: { thumbnail: "" },
+        });
+        return {
+          code: "200",
+          success: true,
+          message: "Video thumbnail removed successfully.",
+          token,
+          payload,
+        };
+      } catch (error) {
+        throw new GraphQLError(error.message);
+      }
+    },
     deleteVideo: async (
       _,
       { videoId },
@@ -168,8 +194,7 @@ const VideoResolver = {
           });
         if (contentExists || bundleContentExists)
           throw new GraphQLError(
-            `${
-              contentExists ? "Content" : "Course content"
+            `${contentExists ? "Content" : "Course content"
             } is using this video, Please remove from that before deleting this.`
           );
         const video = await videoAPI.video({ videoId });

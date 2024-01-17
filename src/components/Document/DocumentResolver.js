@@ -129,6 +129,32 @@ const DocumentResolver = {
         throw new GraphQLError(error.message);
       }
     },
+    removeDocumentThumbnail: async (
+      _,
+      { documentId },
+      { token, dataSources: { documentAPI } }
+    ) => {
+      try {
+        const document = await documentAPI.document({ documentId });
+        if(!document.thumbnail) throw new GraphQLError("Document thumbnail not found.");
+        if (/^assets\/document\/.*$/gm.test(document.thumbnail)) {
+          fileHandler.remove({ filePath: document.thumbnail });
+        }
+        const payload = await documentAPI.editDocument({
+          documentId,
+          documentInput: { thumbnail: "" },
+        });
+        return {
+          code: "200",
+          success: true,
+          message: "Document thumbnail removed successfully.",
+          token,
+          payload,
+        };
+      } catch (error) {
+        throw new GraphQLError(error.message);
+      }
+    },
     deleteDocument: async (
       _,
       { documentId },
@@ -144,8 +170,7 @@ const DocumentResolver = {
           });
         if (contentExists || bundleContentExists)
           throw new GraphQLError(
-            `${
-              contentExists ? "Content" : "Course content"
+            `${contentExists ? "Content" : "Course content"
             } is using this document, Please remove from that before deleting this.`
           );
         const document = await documentAPI.document({ documentId });
