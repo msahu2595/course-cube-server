@@ -174,7 +174,7 @@ const context = async ({ req }) => {
       dataSources: dataSources({ user: verifiedUser }),
     };
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     throw new GraphQLError(
       error.message || "Unexpected error, please log in again.",
       { extensions: { code: "FORBIDDEN", http: { status: 500 } } }
@@ -243,19 +243,19 @@ const server = new ApolloServer({
     upload(req, res, err => {
       if (err instanceof multer.MulterError) {
         // A Multer error occurred when uploading.
-        console.log("A Multer error occurred when uploading.", err);
+        // console.log("A Multer error occurred when uploading.", err);
         next(err);
       } else if (err) {
         // An unknown error occurred when uploading.
-        console.log("An unknown error occurred when uploading.", err);
+        // console.log("An unknown error occurred when uploading.", err);
         next(err);
       }
       // Everything went fine.
-      console.log("Everything went fine.");
+      // console.log("Everything went fine.");
       next()
     })
   }, (req, res) => {
-    console.log("File sucessfully uploaded.")
+    // console.log("File sucessfully uploaded.")
     res.send(req.file);
   });
   app.delete("/upload", authentication, (req, res) => {
