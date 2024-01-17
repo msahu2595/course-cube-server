@@ -78,6 +78,57 @@ mongoose.connection.on("error", (error) => {
   mongoose.connect(process.env.MONGO_URI);
 })();
 
+// the function that sets up the authentication context for file upload & delete api, using the req
+async function authentication(req, res, next) {
+  try {
+    // simple auth check on every request
+    const auth = req.headers["authorization"];
+    const refreshToken = req.headers["refresh-token"];
+    const accessToken = auth && auth.split(" ")[1];
+    if (!accessToken) {
+      if (req.xhr) {
+        res.status(401).json({ message: "Required authentication token." });
+        return;
+      } else {
+        throw new Error("Required authentication token.");
+      }
+    }
+    const user = verifyAccessToken(accessToken);
+    if (user) {
+      req.user = user;
+      next();
+    } else {
+      if (!refreshToken) {
+        if (req.xhr) {
+          res.status(401).json({ message: "Required refresh token." });
+          return;
+        } else {
+          throw new Error("Required refresh token.");
+        }
+      }
+      // eslint-disable-next-line no-unused-vars
+      const { iat, ...verifiedUser } = verifyRefreshToken(refreshToken);
+      const savedRefreshedToken = await redis.get(verifiedUser._id);
+      if (savedRefreshedToken !== refreshToken) {
+        if (req.xhr) {
+          res.status(401).json({
+            message: "Refresh token is revoked/expired, please log in again.",
+          });
+          return;
+        } else {
+          throw new Error(
+            "Refresh token is revoked/expired, please log in again."
+          );
+        }
+      }
+      req.user = verifiedUser;
+      next();
+    }
+  } catch (error) {
+    next(error);
+  }
+}
+
 // the function that sets up the global context for each resolver, using the req
 // eslint-disable-next-line no-unused-vars
 const context = async ({ req }) => {
@@ -113,7 +164,7 @@ const context = async ({ req }) => {
     // prettier-ignore
     if (savedRefreshedToken !== refreshToken) throw new GraphQLError(
       "Refresh token is revoked/expired, please log in again.",
-      {extensions: {code: "FORBIDDEN", http: { status: 401 }}}
+      { extensions: { code: "FORBIDDEN", http: { status: 401 } } }
     );
     const newAccessToken = createAccessToken(verifiedUser);
     return {
@@ -132,7 +183,7 @@ const context = async ({ req }) => {
 };
 
 // Required logic for uploading files with Express
-var storage = multer.diskStorage({
+const storage = multer.diskStorage({
   destination: function (_, __, cb) {
     const path = "./assets/tmp";
     if (!fs.existsSync(path)) {
@@ -149,7 +200,8 @@ var storage = multer.diskStorage({
     );
   },
 });
-const upload = multer({ storage: storage });
+const upload = multer({ storage: storage }).single("file");
+
 // Required logic for integrating with Express
 const app = express();
 // Our httpServer handles incoming requests to our Express app.
@@ -180,70 +232,32 @@ const server = new ApolloServer({
   // Set up our Express middleware to handle CORS, body parsing,
   // and our expressMiddleware function.
   app.use(cors());
-  app.use(bodyParser.json());
+  app.use(bodyParser.json({ limit: "50mb" }));
+  app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
+
+  // Created api for root, graphql, file serving, uploading & deleting
   app.use("/assets", express.static("assets"));
   app.use("/graphql", expressMiddleware(server, { context }));
-
-  app.get("/", (req, res) => {
-    res.send(
-      "<body><p>Hello CourseQube!</p><a href='/graphql'>GraphQL</a></body>"
-    );
-  });
-
-  async function authentication(req, res, next) {
-    try {
-      // simple auth check on every request
-      const auth = req.headers["authorization"];
-      const refreshToken = req.headers["refresh-token"];
-      const accessToken = auth && auth.split(" ")[1];
-      if (!accessToken) {
-        if (req.xhr) {
-          res.status(401).json({ message: "Required authentication token." });
-          return;
-        } else {
-          throw new Error("Required authentication token.");
-        }
+  app.get("/", (_, res) => { res.send("<body><p>Hello CourseQube!</p><a href='/graphql'>GraphQL</a></body>") });
+  app.post("/upload", authentication, (req, res, next) => {
+    upload(req, res, err => {
+      if (err instanceof multer.MulterError) {
+        // A Multer error occurred when uploading.
+        console.log("A Multer error occurred when uploading.", err);
+        next(err);
+      } else if (err) {
+        // An unknown error occurred when uploading.
+        console.log("An unknown error occurred when uploading.", err);
+        next(err);
       }
-      const user = verifyAccessToken(accessToken);
-      if (user) {
-        req.user = user;
-        next();
-      } else {
-        if (!refreshToken) {
-          if (req.xhr) {
-            res.status(401).json({ message: "Required refresh token." });
-            return;
-          } else {
-            throw new Error("Required refresh token.");
-          }
-        }
-        // eslint-disable-next-line no-unused-vars
-        const { iat, ...verifiedUser } = verifyRefreshToken(refreshToken);
-        const savedRefreshedToken = await redis.get(verifiedUser._id);
-        if (savedRefreshedToken !== refreshToken) {
-          if (req.xhr) {
-            res.status(401).json({
-              message: "Refresh token is revoked/expired, please log in again.",
-            });
-            return;
-          } else {
-            throw new Error(
-              "Refresh token is revoked/expired, please log in again."
-            );
-          }
-        }
-        req.user = verifiedUser;
-        next();
-      }
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  app.post("/upload", authentication, upload.single("file"), (req, res) => {
+      // Everything went fine.
+      console.log("Everything went fine.");
+      next()
+    })
+  }, (req, res) => {
+    console.log("File sucessfully uploaded.")
     res.send(req.file);
   });
-
   app.delete("/upload", authentication, (req, res) => {
     try {
       if (!req.body?.file) throw new Error("File path is missing!!");
@@ -265,16 +279,14 @@ const server = new ApolloServer({
 
     const networkInterfaces = os.networkInterfaces();
     console.log(`
-      Server is running! Listening on port ${
-        process.env.PORT
+      Server is running! Listening on port ${process.env.PORT
       }, 🚀 Server ready at
 
       http://localhost:${process.env.PORT || 4000}
 
                 or
 
-      http://${
-        networkInterfaces?.en0?.find((en) => en?.family === "IPv4")?.address
+      http://${networkInterfaces?.en0?.find((en) => en?.family === "IPv4")?.address
       }:${process.env.PORT || 4000}
     `);
   }
