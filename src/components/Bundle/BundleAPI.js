@@ -37,9 +37,17 @@ class BundleAPI extends MongoDataSource {
       filter["$text"] = { $search: search };
     }
     const populateArray = ["likes", "purchases"];
-    if (this.context?.user?.role === "USER") {
+    if (this.context?.user?._id) {
+      populateArray.push({
+        path: "liked",
+        match: { user: this.context?.user?._id },
+      });
       populateArray.push({
         path: "purchased",
+        match: { user: this.context?.user?._id },
+      });
+      populateArray.push({
+        path: "bookmarked",
         match: { user: this.context?.user?._id },
       });
     }
@@ -54,13 +62,25 @@ class BundleAPI extends MongoDataSource {
 
   bundle({ bundleId }) {
     const populateArray = ["likes", "purchases"];
-    if (this.context?.user?.role === "USER") {
+    if (this.context?.user?._id) {
+      populateArray.push({
+        path: "liked",
+        match: { user: this.context?.user?._id },
+      });
       populateArray.push({
         path: "purchased",
         match: { user: this.context?.user?._id },
       });
+      populateArray.push({
+        path: "bookmarked",
+        match: { user: this.context?.user?._id },
+      });
     }
     return this.model.findById(bundleId).populate(populateArray).exec();
+  }
+
+  bundleById(id) {
+    return this.model.findById(id).exec();
   }
 
   bundleExists({ bundleId, ...rest }) {

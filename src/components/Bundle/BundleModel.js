@@ -138,6 +138,13 @@ BundleSchema.virtual("likes", {
   count: true, // And only get the number of docs
 });
 
+BundleSchema.virtual("liked", {
+  ref: "Like", // The model to use
+  localField: "_id", // Find people where `localField`
+  foreignField: "refId", // is equal to `foreignField`
+  count: true, // And only get the number of docs
+});
+
 BundleSchema.virtual("purchases", {
   ref: "Purchase", // The model to use
   localField: "_id", // Find people where `localField`
@@ -149,6 +156,13 @@ BundleSchema.virtual("purchased", {
   ref: "Purchase", // The model to use
   localField: "_id", // Find people where `localField`
   foreignField: "refId", // is equal to `foreignField`
+  count: true, // And only get the number of docs
+});
+
+BundleSchema.virtual("bookmarked", {
+  ref: "Bookmark", // The model to use
+  localField: "_id", // Find people where `localField`
+  foreignField: "ref", // is equal to `foreignField`
   count: true, // And only get the number of docs
 });
 

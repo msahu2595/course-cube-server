@@ -1,4 +1,5 @@
 const { GraphQLError } = require("graphql");
+const fileHandler = require("../../libs/fileHandler");
 
 const BundleResolver = {
   Query: {
@@ -53,6 +54,12 @@ const BundleResolver = {
       { token, dataSources: { bundleAPI } }
     ) => {
       try {
+        if (bundleInput.image) {
+          bundleInput.image = await fileHandler.moveFromTmp({
+            filePath: bundleInput.image,
+            folderName: "bundle",
+          });
+        }
         const payload = await bundleAPI.addBundle({ bundleInput });
         return {
           code: "200",
@@ -72,6 +79,16 @@ const BundleResolver = {
       { token, dataSources: { bundleAPI } }
     ) => {
       try {
+        if (bundleInput.image) {
+          const bundle = await bundleAPI.bundleById(bundleId);
+          bundleInput.image = await fileHandler.moveFromTmp({
+            filePath: bundleInput.image,
+            folderName: "bundle",
+          });
+          if (/^assets\/bundle\/.*$/gm.test(bundle.image)) {
+            fileHandler.remove({ filePath: bundle.image });
+          }
+        }
         const payload = await bundleAPI.editBundle({
           bundleId,
           bundleInput,
@@ -93,6 +110,10 @@ const BundleResolver = {
       { token, dataSources: { bundleAPI } }
     ) => {
       try {
+        const bundle = await bundleAPI.bundleById(bundleId);
+        if (/^assets\/bundle\/.*$/gm.test(bundle.image)) {
+          fileHandler.remove({ filePath: bundle.image });
+        }
         const payload = await bundleAPI.deleteBundle({ bundleId });
         return {
           code: "200",

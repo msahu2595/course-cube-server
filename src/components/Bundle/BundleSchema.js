@@ -29,23 +29,23 @@ const BundleSchema = gql`
 
   input BundlesFilterInput {
     paid: Boolean
-    language: LanguageType
     type: BundleType
+    language: LanguageType
     visible: Boolean
     enable: Boolean
   }
 
   type BundlesFilterType {
     paid: Boolean
-    language: LanguageType
     type: BundleType
+    language: LanguageType
     visible: Boolean
     enable: Boolean
   }
 
   extend type Mutation {
     addBundle(bundleInput: BundleInput!): BundleResponse
-    editBundle(bundleId: ID!, bundleInput: BundleInput!): BundleResponse
+    editBundle(bundleId: ID!, bundleInput: BundleEditInput!): BundleResponse
     deleteBundle(bundleId: ID!): BundleResponse
   }
 
@@ -53,8 +53,8 @@ const BundleSchema = gql`
     categories: [String!]
     exams: [String!]
     tags: [String!]
-    subject: String
-    image: URL!
+    subject: String!
+    image: String!
     title: String!
     syllabus: [SyllabusInput]
     type: BundleType!
@@ -71,6 +71,28 @@ const BundleSchema = gql`
     visible: Boolean
   }
 
+  input BundleEditInput {
+    categories: [String!]
+    exams: [String!]
+    tags: [String!]
+    subject: String
+    image: String
+    title: String
+    syllabus: [SyllabusInput]
+    type: BundleType!
+    paid: Boolean
+    price: NonNegativeInt
+    offer: NonNegativeInt
+    offerType: OfferType
+    highlight: String
+    instructors: [String!]
+    language: LanguageType
+    index: String
+    description: String
+    validity: Duration
+    visible: Boolean
+  }
+
   input SyllabusInput {
     subjectId: ID
     name: String!
@@ -83,9 +105,9 @@ const BundleSchema = gql`
     categories: [String!]
     exams: [String!]
     tags: [String!]
-    subject: String
+    subject: String!
     # General fields
-    image: URL!
+    image: String!
     title: String!
     syllabus: JSON
     type: BundleType!
@@ -105,8 +127,10 @@ const BundleSchema = gql`
     updatedAt: String!
     # Populate fields
     likes: NonNegativeInt
+    liked: NonNegativeInt
     purchases: NonNegativeInt
     purchased: NonNegativeInt
+    bookmarked: NonNegativeInt
   }
 
   type BundleListResponse implements ListResponse {
