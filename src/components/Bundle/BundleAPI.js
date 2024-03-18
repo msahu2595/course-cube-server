@@ -113,6 +113,109 @@ class BundleAPI extends MongoDataSource {
       .select("-syllabus")
       .exec();
   }
+
+  getSyllabus(subjectIds, edit) {
+    let syllabus = "";
+    if (!subjectIds || subjectIds.length < 1) {
+      return syllabus;
+    }
+    subjectIds.forEach((_, index) => {
+      if (index < 1) {
+        if (edit && index == subjectIds.length - 1) {
+          syllabus += ".$";
+        } else {
+          syllabus += ".$.syllabus";
+        }
+      } else {
+        if (edit && index == subjectIds.length - 1) {
+          syllabus += `.$[syllabus${index}]`;
+        } else {
+          syllabus += `.$[syllabus${index}].syllabus`;
+        }
+      }
+    });
+    return syllabus;
+  }
+
+  getSyllabusFilter(subjectIds) {
+    const syllabusFilter = {};
+    if (!subjectIds || subjectIds.length < 1) {
+      return syllabusFilter;
+    }
+    subjectIds.forEach((subjectId, index) => {
+      let key = "";
+      for (let i = index; i >= 0; i--) {
+        if (i === index) {
+          key += "syllabus";
+        } else {
+          key += ".syllabus";
+        }
+      }
+      syllabusFilter[`${key}.subjectId`] = subjectId;
+    });
+    return syllabusFilter;
+  }
+
+  getSyllabusArrayFilter(subjectIds) {
+    const arrayFilters = [];
+    if (!subjectIds || subjectIds.length < 2) {
+      return arrayFilters;
+    }
+    subjectIds.forEach((subjectId, index) => {
+      if (index > 0) {
+        arrayFilters.push({ [`syllabus${index}.subjectId`]: subjectId });
+      }
+    });
+    return arrayFilters;
+  }
+
+  addBundleSyllabus({ bundleId, syllabusInput }) {
+    const subjectIds = syllabusInput?.subjectIds
+      ? syllabusInput.subjectIds
+      : [];
+    const syllabus = this.getSyllabus(subjectIds);
+    const syllabusFilter = this.getSyllabusFilter(subjectIds);
+    const arrayFilters = this.getSyllabusArrayFilter(subjectIds);
+    return this.model.updateOne(
+      { _id: bundleId, ...syllabusFilter },
+      {
+        $push: { [`syllabus${syllabus}`]: { name: syllabusInput.subjectName } },
+      },
+      { arrayFilters: [...arrayFilters] }
+    );
+  }
+
+  editBundleSyllabus({ bundleId, syllabusInput }) {
+    const subjectIds = syllabusInput?.subjectIds
+      ? [...syllabusInput.subjectIds, syllabusInput.subjectId]
+      : [syllabusInput.subjectId];
+    const syllabus = this.getSyllabus(subjectIds, true);
+    const syllabusFilter = this.getSyllabusFilter(subjectIds);
+    const arrayFilters = this.getSyllabusArrayFilter(subjectIds);
+    return this.model.updateOne(
+      { _id: bundleId, ...syllabusFilter },
+      { $set: { [`syllabus${syllabus}.name`]: syllabusInput.subjectName } },
+      { arrayFilters: [...arrayFilters] }
+    );
+  }
+
+  deleteBundleSyllabus({ bundleId, syllabusInput }) {
+    const subjectIds = syllabusInput?.subjectIds
+      ? syllabusInput.subjectIds
+      : [];
+    const syllabus = this.getSyllabus(subjectIds);
+    const syllabusFilter = this.getSyllabusFilter(subjectIds);
+    const arrayFilters = this.getSyllabusArrayFilter(subjectIds);
+    return this.model.updateOne(
+      { _id: bundleId, ...syllabusFilter },
+      {
+        $pull: {
+          [`syllabus${syllabus}`]: { subjectId: syllabusInput.subjectId },
+        },
+      },
+      { arrayFilters: [...arrayFilters] }
+    );
+  }
 }
 
 module.exports = BundleAPI;

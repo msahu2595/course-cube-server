@@ -146,6 +146,70 @@ const BundleResolver = {
         throw new GraphQLError(error.message);
       }
     },
+    addBundleSyllabus: async (
+      _,
+      { bundleId, syllabusInput },
+      { token, dataSources: { bundleAPI } }
+    ) => {
+      try {
+        const payload = await bundleAPI.addBundleSyllabus({
+          bundleId,
+          syllabusInput,
+        });
+        return {
+          code: "200",
+          success: true,
+          message: "Bundle syllabus added successfully.",
+          token,
+          payload,
+        };
+      } catch (error) {
+        console.log(error);
+        throw new GraphQLError(error.message);
+      }
+    },
+    editBundleSyllabus: async (
+      _,
+      { bundleId, syllabusInput },
+      { token, dataSources: { bundleAPI } }
+    ) => {
+      try {
+        const payload = await bundleAPI.editBundleSyllabus({
+          bundleId,
+          syllabusInput,
+        });
+        return {
+          code: "200",
+          success: true,
+          message: "Bundle syllabus edited successfully.",
+          token,
+          payload,
+        };
+      } catch (error) {
+        throw new GraphQLError(error.message);
+      }
+    },
+    deleteBundleSyllabus: async (
+      _,
+      { bundleId, syllabusInput },
+      { token, dataSources: { bundleAPI } }
+    ) => {
+      try {
+        const payload = await bundleAPI.deleteBundleSyllabus({
+          bundleId,
+          syllabusInput,
+        });
+        return {
+          code: "200",
+          success: true,
+          message: "Bundle syllabus deleted successfully.",
+          token,
+          payload,
+        };
+      } catch (error) {
+        throw new GraphQLError(error.message);
+      }
+    },
   },
 };
 

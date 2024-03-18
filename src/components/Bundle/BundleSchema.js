@@ -48,6 +48,34 @@ const BundleSchema = gql`
     addBundle(bundleInput: BundleInput!): BundleResponse
     editBundle(bundleId: ID!, bundleInput: BundleEditInput!): BundleResponse
     deleteBundle(bundleId: ID!): BundleResponse
+    addBundleSyllabus(
+      bundleId: ID!
+      syllabusInput: BundleSyllabusInput!
+    ): SyllabusResponse
+    editBundleSyllabus(
+      bundleId: ID!
+      syllabusInput: BundleSyllabusEditInput!
+    ): SyllabusResponse
+    deleteBundleSyllabus(
+      bundleId: ID!
+      syllabusInput: BundleSyllabusDeleteInput!
+    ): SyllabusResponse
+  }
+
+  input BundleSyllabusInput {
+    subjectName: String!
+    subjectIds: [ID!]
+  }
+
+  input BundleSyllabusEditInput {
+    subjectId: ID!
+    subjectName: String!
+    subjectIds: [ID!]
+  }
+
+  input BundleSyllabusDeleteInput {
+    subjectId: ID!
+    subjectIds: [ID!]
   }
 
   input BundleInput {
