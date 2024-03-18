@@ -15,7 +15,7 @@ SyllabusSchema.add({
     minlength: 1,
     maxlength: 80,
   },
-  items: [SyllabusSchema],
+  syllabus: [SyllabusSchema],
 });
 
 const BundleSchema = new Schema(

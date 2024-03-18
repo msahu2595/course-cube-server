@@ -52,7 +52,7 @@ class BundleAPI extends MongoDataSource {
       });
     }
     return this.model
-      .find(filter)
+      .find(filter, "-syllabus")
       .sort({ createdAt: -1 })
       .skip(offset)
       .limit(limit)
@@ -76,7 +76,15 @@ class BundleAPI extends MongoDataSource {
         match: { user: this.context?.user?._id },
       });
     }
-    return this.model.findById(bundleId).populate(populateArray).exec();
+    return this.model
+      .findById(bundleId)
+      .select("-syllabus")
+      .populate(populateArray)
+      .exec();
+  }
+
+  bundleSyllabus({ bundleId }) {
+    return this.model.findById(bundleId).select("_id syllabus").exec();
   }
 
   bundleById(id) {
@@ -95,12 +103,14 @@ class BundleAPI extends MongoDataSource {
   editBundle({ bundleId, bundleInput }) {
     return this.model
       .findByIdAndUpdate(bundleId, bundleInput, { new: true })
+      .select("-syllabus")
       .exec();
   }
 
   deleteBundle({ bundleId }) {
     return this.model
       .findByIdAndUpdate(bundleId, { enable: false }, { new: true })
+      .select("-syllabus")
       .exec();
   }
 }

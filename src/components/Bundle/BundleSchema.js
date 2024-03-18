@@ -25,6 +25,7 @@ const BundleSchema = gql`
       filter: BundlesFilterInput
     ): BundleListResponse
     bundle(bundleId: ID!): BundleResponse
+    bundleSyllabus(bundleId: ID!): SyllabusResponse
   }
 
   input BundlesFilterInput {
@@ -56,7 +57,6 @@ const BundleSchema = gql`
     subject: String!
     image: String!
     title: String!
-    syllabus: [SyllabusInput]
     type: BundleType!
     paid: Boolean!
     price: NonNegativeInt
@@ -78,7 +78,6 @@ const BundleSchema = gql`
     subject: String
     image: String
     title: String
-    syllabus: [SyllabusInput]
     type: BundleType!
     paid: Boolean
     price: NonNegativeInt
@@ -93,12 +92,6 @@ const BundleSchema = gql`
     visible: Boolean
   }
 
-  input SyllabusInput {
-    subjectId: ID
-    name: String!
-    items: [SyllabusInput]
-  }
-
   type Bundle {
     _id: ID!
     # Used for filter
@@ -109,7 +102,6 @@ const BundleSchema = gql`
     # General fields
     image: String!
     title: String!
-    syllabus: JSON
     type: BundleType!
     paid: Boolean!
     price: NonNegativeInt
@@ -151,6 +143,14 @@ const BundleSchema = gql`
     message: String!
     token: JWT
     payload: Bundle
+  }
+
+  type SyllabusResponse implements Response {
+    code: String!
+    success: Boolean!
+    message: String!
+    token: JWT
+    payload: JSON
   }
 `;
 

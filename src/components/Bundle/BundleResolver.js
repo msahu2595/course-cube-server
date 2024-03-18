@@ -46,6 +46,26 @@ const BundleResolver = {
         throw new GraphQLError(error.message);
       }
     },
+    bundleSyllabus: async (
+      _,
+      { bundleId },
+      { token, dataSources: { bundleAPI } }
+    ) => {
+      try {
+        const payload = await bundleAPI.bundleSyllabus({
+          bundleId,
+        });
+        return {
+          code: 200,
+          success: true,
+          message: "Successfully get bundle syllabus.",
+          token,
+          payload,
+        };
+      } catch (error) {
+        throw new GraphQLError(error.message);
+      }
+    },
   },
   Mutation: {
     addBundle: async (
