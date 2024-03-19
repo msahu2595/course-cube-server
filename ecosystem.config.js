@@ -4,7 +4,7 @@ module.exports = {
             name: "course-qube-server",
             script: "./src/index.js",
             watch: true,
-            env: {
+            env_development: {
                 "PORT": 4001,
                 "NODE_ENV": "development"
             },
