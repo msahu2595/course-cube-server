@@ -1,7 +1,7 @@
 module.exports = {
     apps: [
         {
-            name: "course-qube-server",
+            name: "course-qube-server-prod",
             script: "./src/index.js",
             watch: true,
             env: {
