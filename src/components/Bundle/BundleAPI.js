@@ -114,6 +114,35 @@ class BundleAPI extends MongoDataSource {
       .exec();
   }
 
+  findObjectBySubjectId(arr, subjectId) {
+    // Iterate through the array
+    for (let i = 0; i < arr.length; i++) {
+      const obj = arr[i];
+
+      // Check if the current object's subjectId matches the desired one
+      if (obj.subjectId.toString() === subjectId) {
+        return obj; // Found the object, return it
+      }
+
+      // If the current object has a 'syllabus' property and it's an array
+      // Recursively search through this nested array
+      if (obj.syllabus && Array.isArray(obj.syllabus)) {
+        const found = this.findObjectBySubjectId(obj.syllabus, subjectId);
+        if (found) {
+          return found; // If found in the nested array, return it
+        }
+      }
+    }
+
+    // If not found, return null
+    return null;
+  }
+
+  async bundleSyllabusSubjectById({ bundleId, subjectId }) {
+    const doc = await this.bundleSyllabus({ bundleId });
+    return this.findObjectBySubjectId(doc.syllabus, subjectId);
+  }
+
   getSyllabus(subjectIds, edit) {
     let syllabus = "";
     if (!subjectIds || subjectIds.length < 1) {
@@ -176,11 +205,13 @@ class BundleAPI extends MongoDataSource {
     const syllabus = this.getSyllabus(subjectIds);
     const syllabusFilter = this.getSyllabusFilter(subjectIds);
     const arrayFilters = this.getSyllabusArrayFilter(subjectIds);
+    const subject = { name: syllabusInput.subjectName };
+    if (syllabusInput?.isSection) {
+      subject["isSection"] = syllabusInput.isSection;
+    }
     return this.model.updateOne(
       { _id: bundleId, ...syllabusFilter },
-      {
-        $push: { [`syllabus${syllabus}`]: { name: syllabusInput.subjectName } },
-      },
+      { $push: { [`syllabus${syllabus}`]: subject } },
       { arrayFilters: [...arrayFilters] }
     );
   }
@@ -192,9 +223,13 @@ class BundleAPI extends MongoDataSource {
     const syllabus = this.getSyllabus(subjectIds, true);
     const syllabusFilter = this.getSyllabusFilter(subjectIds);
     const arrayFilters = this.getSyllabusArrayFilter(subjectIds);
+    const subject = { [`syllabus${syllabus}.name`]: syllabusInput.subjectName };
+    if (typeof syllabusInput?.isSection === "boolean") {
+      subject[`syllabus${syllabus}.isSection`] = syllabusInput.isSection;
+    }
     return this.model.updateOne(
       { _id: bundleId, ...syllabusFilter },
-      { $set: { [`syllabus${syllabus}.name`]: syllabusInput.subjectName } },
+      { $set: subject },
       { arrayFilters: [...arrayFilters] }
     );
   }

@@ -152,6 +152,19 @@ const BundleResolver = {
       { token, dataSources: { bundleAPI } }
     ) => {
       try {
+        const subject = await bundleAPI.bundleSyllabusSubjectById({
+          bundleId,
+          subjectId: syllabusInput.subjectIds.at(-1),
+        });
+        console.log({ subject });
+        if (!subject) {
+          throw new GraphQLError("Invalid subject id.");
+        }
+        if (!subject?.isSection) {
+          throw new GraphQLError(
+            "Please make parent a section, before adding subject."
+          );
+        }
         const payload = await bundleAPI.addBundleSyllabus({
           bundleId,
           syllabusInput,
@@ -174,6 +187,28 @@ const BundleResolver = {
       { token, dataSources: { bundleAPI } }
     ) => {
       try {
+        const subject = await bundleAPI.bundleSyllabusSubjectById({
+          bundleId,
+          subjectId: syllabusInput.subjectId,
+        });
+        console.log({ subject });
+        if (!subject) {
+          throw new GraphQLError("Invalid subject id.");
+        }
+        if (typeof syllabusInput?.isSection === "boolean") {
+          if (
+            subject?.isSection &&
+            !syllabusInput?.isSection &&
+            subject?.syllabus?.length > 0
+          ) {
+            throw new GraphQLError(
+              "Please first delete all sub-subject, before converting this section into subject."
+            );
+          } else if (!subject?.isSection && syllabusInput?.isSection) {
+            // TODO
+            // we have to check is there any bundle content reference to this subjectId If yes, then delete all bundle content before assigning isSection true.
+          }
+        }
         const payload = await bundleAPI.editBundleSyllabus({
           bundleId,
           syllabusInput,
@@ -195,6 +230,24 @@ const BundleResolver = {
       { token, dataSources: { bundleAPI } }
     ) => {
       try {
+        const subject = await bundleAPI.bundleSyllabusSubjectById({
+          bundleId,
+          subjectId: syllabusInput.subjectId,
+        });
+        console.log({ subject });
+        if (!subject) {
+          throw new GraphQLError("Invalid subject id.");
+        }
+        if (subject?.isSection) {
+          if (subject?.syllabus?.length > 0) {
+            throw new GraphQLError(
+              "Please first delete all sub-subject, before deleting this section."
+            );
+          }
+        } else {
+          // TODO
+          // we have to check is there any bundle content reference to this subjectId If yes, then delete all bundle content before assigning isSection true.
+        }
         const payload = await bundleAPI.deleteBundleSyllabus({
           bundleId,
           syllabusInput,

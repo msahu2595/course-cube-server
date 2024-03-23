@@ -63,12 +63,14 @@ const BundleSchema = gql`
   }
 
   input BundleSyllabusInput {
+    isSection: Boolean
     subjectName: String!
     subjectIds: [ID!]
   }
 
   input BundleSyllabusEditInput {
     subjectId: ID!
+    isSection: Boolean
     subjectName: String!
     subjectIds: [ID!]
   }

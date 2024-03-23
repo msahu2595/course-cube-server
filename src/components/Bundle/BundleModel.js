@@ -15,6 +15,11 @@ SyllabusSchema.add({
     minlength: 1,
     maxlength: 80,
   },
+  isSection: {
+    required: true,
+    type: Boolean,
+    default: false,
+  },
   syllabus: [SyllabusSchema],
 });
 
