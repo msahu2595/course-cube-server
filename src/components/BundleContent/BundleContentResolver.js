@@ -1,6 +1,16 @@
 const { GraphQLError } = require("graphql");
+const fileHandler = require("../../libs/fileHandler");
 
 const BundleContentResolver = {
+  BundleContent: {
+    // (parent, args, context, info)
+    bundle: async (parent, __, { dataSources: { bundleAPI } }) => {
+      const bundle = await bundleAPI.bundle({
+        bundleId: parent?.bundle,
+      });
+      return bundle;
+    },
+  },
   Query: {
     bundleContents: async (
       _,
@@ -73,24 +83,48 @@ const BundleContentResolver = {
       try {
         const bundleExists = await bundleAPI.bundleExists({ bundleId });
         if (!bundleExists) throw new GraphQLError("Bundle id does not exists.");
+        const mediaExists = await bundleContentAPI.mediaBundleContentExists({
+          bundleId,
+          media: bundleContentInput.media,
+          subjectId: bundleContentInput?.subjectId || null,
+        });
+        if (mediaExists)
+          throw new GraphQLError(
+            "Bundle content already created using this media."
+          );
         let exists = false;
-        if (bundleContentInput?.type === "Video") {
-          exists = await videoAPI.videoExists({
-            videoId: bundleContentInput?.media,
-          });
+        switch (bundleContentInput?.type) {
+          case "Video":
+            exists = await videoAPI.videoExists({
+              videoId: bundleContentInput?.media,
+            });
+            break;
+          case "Test":
+            exists = await testAPI.testExists({
+              testId: bundleContentInput?.media,
+            });
+            if (exists.questions < 5) {
+              throw new GraphQLError(
+                "Minimum 5 questions required in given test for add content."
+              );
+            }
+            break;
+          case "Document":
+            exists = await documentAPI.documentExists({
+              documentId: bundleContentInput?.media,
+            });
+            break;
+          default:
+            break;
         }
-        if (bundleContentInput?.type === "Test") {
-          exists = await testAPI.testExists({
-            testId: bundleContentInput?.media,
-          });
-        }
-        if (bundleContentInput?.type === "Document") {
-          exists = await documentAPI.documentExists({
-            documentId: bundleContentInput?.media,
-          });
-        }
-        // console.log("exists ==> ", exists);
+        console.log("exists ==> ", exists);
         if (exists) {
+          if (bundleContentInput.image) {
+            bundleContentInput.image = await fileHandler.moveFromTmp({
+              filePath: bundleContentInput.image,
+              folderName: "bundleContent",
+            });
+          }
           const payload = await bundleContentAPI.addBundleContent({
             bundleId,
             bundleContentInput,
@@ -114,31 +148,56 @@ const BundleContentResolver = {
     },
     editBundleContent: async (
       _,
-      { bundleContentId, bundleContentInput },
+      { bundleId, bundleContentId, bundleContentInput },
       {
         token,
         dataSources: { bundleContentAPI, videoAPI, testAPI, documentAPI },
       }
     ) => {
       try {
+        const mediaExists = await bundleContentAPI.mediaBundleContentExists({
+          bundleId,
+          media: bundleContentInput.media,
+          subjectId: bundleContentInput?.subjectId || null,
+        });
+        if (mediaExists && mediaExists._id.toString() !== bundleContentId)
+          throw new GraphQLError(
+            "Another bundle content already using this media."
+          );
         let exists = false;
-        if (bundleContentInput?.type === "Video") {
-          exists = await videoAPI.videoExists({
-            videoId: bundleContentInput?.media,
-          });
+        switch (bundleContentInput?.type) {
+          case "Video":
+            exists = await videoAPI.videoExists({
+              videoId: bundleContentInput?.media,
+            });
+            break;
+          case "Test":
+            exists = await testAPI.testExists({
+              testId: bundleContentInput?.media,
+            });
+            break;
+          case "Document":
+            exists = await documentAPI.documentExists({
+              documentId: bundleContentInput?.media,
+            });
+            break;
+          default:
+            break;
         }
-        if (bundleContentInput?.type === "Test") {
-          exists = await testAPI.testExists({
-            testId: bundleContentInput?.media,
-          });
-        }
-        if (bundleContentInput?.type === "Document") {
-          exists = await documentAPI.documentExists({
-            documentId: bundleContentInput?.media,
-          });
-        }
-        // console.log("exists ==> ", exists);
+        console.log("exists ==> ", exists);
         if (exists) {
+          if (bundleContentInput.image) {
+            const bundleContent = await bundleContentAPI.bundleContentById(
+              bundleContentId
+            );
+            bundleContentInput.image = await fileHandler.moveFromTmp({
+              filePath: bundleContentInput.image,
+              folderName: "bundleContent",
+            });
+            if (/^assets\/bundleContent\/.*$/gm.test(bundleContent.image)) {
+              fileHandler.remove({ filePath: bundleContent.image });
+            }
+          }
           const payload = await bundleContentAPI.editBundleContent({
             bundleContentId,
             bundleContentInput,
@@ -165,6 +224,12 @@ const BundleContentResolver = {
       { token, dataSources: { bundleContentAPI } }
     ) => {
       try {
+        const bundleContent = await bundleContentAPI.bundleContentById(
+          bundleContentId
+        );
+        if (/^assets\/bundleContent\/.*$/gm.test(bundleContent.image)) {
+          fileHandler.remove({ filePath: bundleContent.image });
+        }
         const payload = await bundleContentAPI.deleteBundleContent({
           bundleContentId,
         });

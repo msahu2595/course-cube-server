@@ -88,8 +88,9 @@ const fileHandler = {
       await unlink(`./${filePath}`);
       // console.log(`successfully deleted "./${filePath}"`);
     } catch (error) {
-      // console.log(error);
-      throw new Error(error?.message || "Got error on moving file.");
+      console.log(
+        `Got error on removing file, ${error?.message || "REASON: not found."}`
+      );
     }
   },
 };

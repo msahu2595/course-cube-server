@@ -33,8 +33,9 @@ const BundleContentSchema = gql`
       bundleContentInput: BundleContentInput!
     ): BundleContentResponse
     editBundleContent(
+      bundleId: ID!
       bundleContentId: ID!
-      bundleContentInput: BundleContentInput!
+      bundleContentInput: BundleContentEditInput!
     ): BundleContentResponse
     deleteBundleContent(bundleContentId: ID!): BundleContentResponse
   }
@@ -46,8 +47,26 @@ const BundleContentSchema = gql`
     title: String!
     media: ID!
     type: MediaType!
+    highlight: String
+    instructors: [String!]
     language: LanguageType!
+    index: String
     description: String!
+    visible: Boolean
+  }
+
+  input BundleContentEditInput {
+    subjectId: ID
+    subject: String
+    image: String
+    title: String
+    media: ID!
+    type: MediaType!
+    highlight: String
+    instructors: [String!]
+    language: LanguageType
+    index: String
+    description: String
     visible: Boolean
   }
 
@@ -61,15 +80,22 @@ const BundleContentSchema = gql`
     title: String!
     media: Media
     type: MediaType!
+    highlight: String
+    instructors: [String!]
     language: LanguageType!
+    index: String
     description: String!
     visible: Boolean!
     enable: Boolean!
     createdAt: String!
     updatedAt: String!
     # Populate fields
-    bundle: Bundle!
+    bundle: Bundle
+    likes: NonNegativeInt
+    liked: NonNegativeInt
+    views: NonNegativeInt
     purchased: NonNegativeInt
+    bookmarked: NonNegativeInt
   }
 
   type BundleContentListResponse implements ListResponse {

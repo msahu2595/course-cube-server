@@ -14,10 +14,16 @@ class BundleContentAPI extends MongoDataSource {
     subjectId,
     type,
     language,
-    visible = true,
+    visible = null,
     enable = true,
   }) {
-    const filter = { visible, enable, bundle: bundleId };
+    const filter = { bundle: bundleId, enable };
+    if (this.context?.user?.role === "USER") {
+      filter["visible"] = true;
+    }
+    if (typeof visible == "boolean" && this.context?.user?.role !== "USER") {
+      filter["visible"] = visible;
+    }
     if (subjectId) {
       filter["subjectId"] = subjectId;
     }
@@ -27,10 +33,18 @@ class BundleContentAPI extends MongoDataSource {
     if (language) {
       filter["language"] = language;
     }
-    const populateArray = ["media"];
-    if (this.context?.user?.role === "USER") {
+    const populateArray = ["media", "likes", "views"];
+    if (this.context?.user?._id) {
+      populateArray.push({
+        path: "liked",
+        match: { user: this.context?.user?._id },
+      });
       populateArray.push({
         path: "purchased",
+        match: { user: this.context?.user?._id },
+      });
+      populateArray.push({
+        path: "bookmarked",
         match: { user: this.context?.user?._id },
       });
     }
@@ -44,14 +58,26 @@ class BundleContentAPI extends MongoDataSource {
   }
 
   bundleContent({ bundleContentId }) {
-    const populateArray = ["media"];
-    if (this.context?.user?.role === "USER") {
+    const populateArray = ["media", "likes", "views"];
+    if (this.context?.user?._id) {
+      populateArray.push({
+        path: "liked",
+        match: { user: this.context?.user?._id },
+      });
       populateArray.push({
         path: "purchased",
         match: { user: this.context?.user?._id },
       });
+      populateArray.push({
+        path: "bookmarked",
+        match: { user: this.context?.user?._id },
+      });
     }
     return this.model.findById(bundleContentId).populate(populateArray).exec();
+  }
+
+  bundleContentById(id) {
+    return this.model.findById(id).exec();
   }
 
   // addBundleContent({ bundleContentInput }) {
@@ -65,14 +91,23 @@ class BundleContentAPI extends MongoDataSource {
     return this.model.exists({ _id: bundleContentId, enable: true, ...rest });
   }
 
-  mediaBundleContentExists({ media }) {
-    return this.model.exists({ media, enable: true });
+  mediaBundleContentExists({ bundleId, media, subjectId }) {
+    return this.model.exists({
+      bundle: bundleId,
+      media,
+      subjectId,
+      enable: true,
+    });
   }
 
   addBundleContent({ bundleId, bundleContentInput }) {
     return this.model
       .findOneAndUpdate(
-        { bundle: bundleId, media: bundleContentInput?.media },
+        {
+          bundle: bundleId,
+          media: bundleContentInput.media,
+          subjectId: bundleContentInput?.subjectId || null,
+        },
         bundleContentInput,
         {
           upsert: true,
