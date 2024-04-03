@@ -110,7 +110,6 @@ const ContentResolver = {
           default:
             break;
         }
-        console.log("exists ==> ", exists);
         if (exists) {
           if (contentInput.image) {
             contentInput.image = await fileHandler.moveFromTmp({
@@ -167,7 +166,6 @@ const ContentResolver = {
           default:
             break;
         }
-        console.log("exists ==> ", exists);
         if (exists) {
           if (contentInput.image) {
             const content = await contentAPI.contentById(contentId);

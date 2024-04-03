@@ -134,7 +134,6 @@ const BookmarkResolver = {
           default:
             break;
         }
-        console.log("exists ==> ", exists);
         if (exists) {
           const payload = await bookmarkAPI.bookmark({ refId, type, subType });
           return {

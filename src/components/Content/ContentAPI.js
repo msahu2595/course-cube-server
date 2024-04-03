@@ -83,13 +83,6 @@ class ContentAPI extends MongoDataSource {
     return this.model.findById(id).exec();
   }
 
-  // addContent({ contentInput }) {
-  //   const content = new this.model(contentInput);
-  //   return content.save((err, content) => {
-  //     return this.model.populate(content, { path: "media" });
-  //   });
-  // }
-
   contentExists({ contentId, ...rest }) {
     return this.model.exists({ _id: contentId, enable: true, ...rest });
   }
@@ -99,14 +92,24 @@ class ContentAPI extends MongoDataSource {
   }
 
   addContent({ contentInput }) {
-    return this.model
-      .findOneAndUpdate({ media: contentInput?.media }, contentInput, {
-        upsert: true,
-        new: true,
-      })
-      .populate("media")
-      .exec();
+    const content = new this.model(contentInput);
+    return content.save((err, content) => {
+      if (err) {
+        throw new Error("Error while adding content in DB.");
+      }
+      return this.model.populate(content, { path: "media" });
+    });
   }
+
+  // addContent({ contentInput }) {
+  //   return this.model
+  //     .findOneAndUpdate({ media: contentInput?.media }, contentInput, {
+  //       upsert: true,
+  //       new: true,
+  //     })
+  //     .populate("media")
+  //     .exec();
+  // }
 
   editContent({ contentId, contentInput }) {
     return this.model

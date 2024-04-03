@@ -14,13 +14,14 @@ const BundleContentResolver = {
   Query: {
     bundleContents: async (
       _,
-      { offset = 0, limit = 10, bundleId, filter },
+      { offset = 0, limit = 10, search, bundleId, filter },
       { token, dataSources: { bundleContentAPI } }
     ) => {
       try {
         const payload = await bundleContentAPI.bundleContents({
           offset,
           limit,
+          search,
           bundleId,
           ...filter,
         });
@@ -117,7 +118,6 @@ const BundleContentResolver = {
           default:
             break;
         }
-        console.log("exists ==> ", exists);
         if (exists) {
           if (bundleContentInput.image) {
             bundleContentInput.image = await fileHandler.moveFromTmp({
@@ -184,7 +184,6 @@ const BundleContentResolver = {
           default:
             break;
         }
-        console.log("exists ==> ", exists);
         if (exists) {
           if (bundleContentInput.image) {
             const bundleContent = await bundleContentAPI.bundleContentById(

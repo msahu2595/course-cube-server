@@ -5,6 +5,7 @@ const BundleContentSchema = gql`
     bundleContents(
       offset: Int
       limit: Int
+      search: String
       bundleId: ID!
       filter: BundleContentsFilterInput
     ): BundleContentListResponse

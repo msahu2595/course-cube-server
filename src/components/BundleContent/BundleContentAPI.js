@@ -10,6 +10,7 @@ class BundleContentAPI extends MongoDataSource {
   bundleContents({
     offset,
     limit,
+    search,
     bundleId,
     subjectId,
     type,
@@ -32,6 +33,9 @@ class BundleContentAPI extends MongoDataSource {
     }
     if (language) {
       filter["language"] = language;
+    }
+    if (search) {
+      filter["$text"] = { $search: search };
     }
     const populateArray = ["media", "likes", "views"];
     if (this.context?.user?._id) {
@@ -80,13 +84,6 @@ class BundleContentAPI extends MongoDataSource {
     return this.model.findById(id).exec();
   }
 
-  // addBundleContent({ bundleContentInput }) {
-  //   const bundleContent = new this.model(bundleContentInput);
-  //   return bundleContent.save((err, bundleContent) => {
-  //     return this.model.populate(bundleContent, { path: "media" });
-  //   });
-  // }
-
   bundleContentExists({ bundleContentId, ...rest }) {
     return this.model.exists({ _id: bundleContentId, enable: true, ...rest });
   }
@@ -101,22 +98,35 @@ class BundleContentAPI extends MongoDataSource {
   }
 
   addBundleContent({ bundleId, bundleContentInput }) {
-    return this.model
-      .findOneAndUpdate(
-        {
-          bundle: bundleId,
-          media: bundleContentInput.media,
-          subjectId: bundleContentInput?.subjectId || null,
-        },
-        bundleContentInput,
-        {
-          upsert: true,
-          new: true,
-        }
-      )
-      .populate("media")
-      .exec();
+    const bundleContent = new this.model({
+      bundle: bundleId,
+      ...bundleContentInput,
+    });
+    return bundleContent.save((err, bundleContent) => {
+      if (err) {
+        throw new Error("Error while adding bundle content in DB.");
+      }
+      return this.model.populate(bundleContent, { path: "media" });
+    });
   }
+
+  // addBundleContent({ bundleId, bundleContentInput }) {
+  //   return this.model
+  //     .findOneAndUpdate(
+  //       {
+  //         bundle: bundleId,
+  //         media: bundleContentInput.media,
+  //         subjectId: bundleContentInput?.subjectId || null,
+  //       },
+  //       bundleContentInput,
+  //       {
+  //         upsert: true,
+  //         new: true,
+  //       }
+  //     )
+  //     .populate("media")
+  //     .exec();
+  // }
 
   editBundleContent({ bundleContentId, bundleContentInput }) {
     return this.model
