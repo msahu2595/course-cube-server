@@ -5,8 +5,18 @@ const NotificationSchema = gql`
     notifications(
       offset: Int
       limit: Int
-      type: NotificationType
+      filter: NotificationsFilterInput
     ): NotificationListResponse
+  }
+
+  input NotificationsFilterInput {
+    type: NotificationType
+    read: Boolean
+  }
+
+  type NotificationsFilterType {
+    type: NotificationType
+    read: Boolean
   }
 
   extend type Mutation {
@@ -16,13 +26,13 @@ const NotificationSchema = gql`
   type Notification {
     _id: ID!
     userId: ID!
-    image: URL
-    title: String
-    message: String
-    type: NotificationType
+    title: String!
+    body: String!
+    icon: String
+    type: NotificationType!
+    alert: String
     route: String
     params: JSONObject
-    alert: String
     read: Boolean!
     createdAt: String!
     updatedAt: String!
@@ -40,8 +50,9 @@ const NotificationSchema = gql`
     success: Boolean!
     message: String!
     token: JWT
-    limit: Int!
     offset: Int!
+    limit: Int!
+    filter: NotificationsFilterType
     payload: [Notification]
   }
 

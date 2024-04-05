@@ -7,9 +7,24 @@ class NotificationAPI extends MongoDataSource {
     this.context = options.context;
   }
 
-  notifications({ offset, limit, type }) {
+  notifications({ offset, limit, type, read }) {
+    const filter = {};
+    if (type === "ADMIN") {
+      if (this.context.user?.role !== "USER") {
+        filter["type"] = "ADMIN";
+      } else {
+        filter["userId"] = this.context.user?._id;
+        filter["type"] = "USER";
+      }
+    } else {
+      filter["userId"] = this.context.user?._id;
+      filter["type"] = type || "USER";
+    }
+    if (typeof read == "boolean") {
+      filter["read"] = read;
+    }
     return this.model
-      .find({ userId: this.context.user._id, type })
+      .find(filter)
       .sort({ createdAt: -1 })
       .skip(offset)
       .limit(limit)
@@ -18,34 +33,30 @@ class NotificationAPI extends MongoDataSource {
 
   createNotification({
     userId,
-    image,
     title,
-    message,
+    body,
+    icon,
     type,
+    alert,
     route,
     params,
-    alert,
   }) {
     return this.model.create({
       userId,
-      image,
       title,
-      message,
+      body,
+      icon,
       type,
+      alert,
       route,
       params,
-      alert,
     });
   }
 
   readNotification({ notificationId }) {
-    return this.model.findOneAndUpdate(
-      {
-        _id: notificationId,
-      },
-      { read: true },
-      { new: true }
-    );
+    return this.model
+      .findByIdAndUpdate(notificationId, { read: true }, { new: true })
+      .exec();
   }
 }
 

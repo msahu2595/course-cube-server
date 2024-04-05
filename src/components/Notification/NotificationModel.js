@@ -6,19 +6,21 @@ const NotificationSchema = new Schema(
       type: Schema.Types.ObjectId,
       required: true,
     },
-    image: {
-      type: String,
-      trim: true,
-    },
     title: {
       type: String,
+      required: true,
       trim: true,
       maxlength: 80,
     },
-    message: {
+    body: {
       type: String,
+      required: true,
       trim: true,
       maxlength: 160,
+    },
+    icon: {
+      type: String,
+      trim: true,
     },
     type: {
       type: String,
@@ -26,9 +28,14 @@ const NotificationSchema = new Schema(
       enum: ["USER", "ADMIN", "CONTENT", "COMMUNITY"],
       default: "USER",
     },
+    alert: {
+      type: String,
+      trim: true,
+      lowercase: true,
+      maxlength: 80,
+    },
     route: { type: String, trim: true, maxlength: 80 },
     params: { type: Schema.Types.Mixed },
-    alert: { type: String, trim: true, lowercase: true, maxlength: 80 },
     read: { type: Boolean, required: true, default: false },
   },
   { timestamps: true, runValidators: true, runSettersOnQuery: true }

@@ -4,20 +4,23 @@ const NotificationResolver = {
   Query: {
     notifications: async (
       _,
-      { offset = 0, limit = 10, type = "USER" },
+      { offset = 0, limit = 10, filter },
       { token, dataSources: { notificationAPI } }
     ) => {
       try {
         const payload = await notificationAPI.notifications({
           offset,
           limit,
-          type,
+          ...filter,
         });
         return {
           code: "200",
           success: true,
-          message: "",
+          message: "Successfully get notifications.",
           token,
+          limit,
+          offset,
+          filter,
           payload,
         };
       } catch (error) {
@@ -38,7 +41,7 @@ const NotificationResolver = {
         return {
           code: "200",
           success: true,
-          message: "",
+          message: "Successfully read notification.",
           token,
           payload,
         };
