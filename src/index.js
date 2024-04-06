@@ -1,4 +1,4 @@
-require("dotenv").config({ path: `.env.${process.env.NODE_ENV}` });
+require("@dotenvx/dotenvx").config();
 
 const os = require("os");
 const fs = require("fs");
