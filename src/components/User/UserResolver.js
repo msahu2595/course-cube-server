@@ -1,3 +1,4 @@
+const moment = require("moment");
 const { GraphQLError } = require("graphql");
 const fileHandler = require("../../libs/fileHandler");
 const verifyIdToken = require("../../libs/verifyIdToken");
@@ -141,7 +142,7 @@ const UserResolver = {
     googleLogIn: async (
       _,
       { idToken, FCMToken, platform, acceptTnC },
-      { redis, dataSources: { userAPI } }
+      { redis, dataSources: { userAPI, notificationAPI } }
     ) => {
       try {
         if (!acceptTnC) {
@@ -160,6 +161,17 @@ const UserResolver = {
           platform,
           acceptTnC,
         });
+        if (
+          Math.abs(moment().diff(moment(payload.createdAt), "seconds")) <= 2
+        ) {
+          notificationAPI.createNotification({
+            title: "New User Registered.",
+            body: `${fullName} created his account.`,
+            type: "ADMIN",
+            route: "UserProfileScreen",
+            params: { userId: `${payload._id}` },
+          });
+        }
         const accessToken = createAccessToken(payload.toJSON());
         const refreshToken = createRefreshToken(payload.toJSON());
         redis.set(payload._id, refreshToken, "ex", 604800000);

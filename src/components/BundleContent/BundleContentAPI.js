@@ -97,17 +97,17 @@ class BundleContentAPI extends MongoDataSource {
     });
   }
 
-  addBundleContent({ bundleId, bundleContentInput }) {
-    const bundleContent = new this.model({
-      bundle: bundleId,
-      ...bundleContentInput,
-    });
-    return bundleContent.save((err, bundleContent) => {
-      if (err) {
-        throw new Error("Error while adding bundle content in DB.");
-      }
+  async addBundleContent({ bundleId, bundleContentInput }) {
+    try {
+      const newBundleContent = new this.model({
+        bundle: bundleId,
+        ...bundleContentInput,
+      });
+      const bundleContent = await newBundleContent.save();
       return this.model.populate(bundleContent, { path: "media" });
-    });
+    } catch (error) {
+      throw new Error("Error occurs while saving on DB.");
+    }
   }
 
   // addBundleContent({ bundleId, bundleContentInput }) {

@@ -79,14 +79,13 @@ class UserAPI extends MongoDataSource {
         filter["mobile"] = mobile;
       }
       const payload = await this.model
-        .findOne(filter)
+        .findOneAndUpdate(filter, rest, { upsert: false, new: true })
         .populate(["followers", "followings"])
         .exec();
       if (!payload) {
-        return this.model
-          .findOneAndUpdate(filter, rest, { upsert: true, new: true })
-          .populate(["followers", "followings"])
-          .exec();
+        const newUser = new this.model({ ...filter, ...rest });
+        const user = await newUser.save();
+        return this.model.populate(user, ["followers", "followings"]);
       }
       return payload;
     } else {

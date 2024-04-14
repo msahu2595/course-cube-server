@@ -77,7 +77,16 @@ const ContentResolver = {
     addContent: async (
       _,
       { contentInput },
-      { token, dataSources: { contentAPI, videoAPI, testAPI, documentAPI } }
+      {
+        token,
+        dataSources: {
+          contentAPI,
+          videoAPI,
+          testAPI,
+          documentAPI,
+          notificationAPI,
+        },
+      }
     ) => {
       try {
         const mediaExists = await contentAPI.mediaContentExists({
@@ -85,14 +94,17 @@ const ContentResolver = {
         });
         if (mediaExists)
           throw new GraphQLError("Content already created using this media.");
+        let route = "";
         let exists = false;
         switch (contentInput?.type) {
           case "Video":
+            route = "VideoViewScreen";
             exists = await videoAPI.videoExists({
               videoId: contentInput?.media,
             });
             break;
           case "Test":
+            route = "TestViewScreen";
             exists = await testAPI.testExists({
               testId: contentInput?.media,
             });
@@ -103,6 +115,7 @@ const ContentResolver = {
             }
             break;
           case "Document":
+            route = "DocumentViewScreen";
             exists = await documentAPI.documentExists({
               documentId: contentInput?.media,
             });
@@ -118,6 +131,15 @@ const ContentResolver = {
             });
           }
           const payload = await contentAPI.addContent({ contentInput });
+          if (payload?.visible) {
+            notificationAPI.createNotification({
+              title: `New ${contentInput?.type} Added.`,
+              body: `${contentInput?.title} is available for you.`,
+              type: "CONTENT",
+              route: route,
+              params: { contentId: payload?._id, title: payload?.title },
+            });
+          }
           return {
             code: "200",
             success: true,

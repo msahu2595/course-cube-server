@@ -42,7 +42,7 @@ class NotificationAPI extends MongoDataSource {
     params,
   }) {
     return this.model.create({
-      userId,
+      userId: userId || this.context.user?._id,
       title,
       body,
       icon,
@@ -54,15 +54,8 @@ class NotificationAPI extends MongoDataSource {
   }
 
   readNotification({ notificationId }) {
-    const filter = {};
-    if (this.context.user?.role !== "USER") {
-      filter["_id"] = notificationId;
-    } else {
-      filter["_id"] = notificationId;
-      filter["userId"] = this.context.user?._id;
-    }
     return this.model
-      .findOneAndUpdate(filter, { read: true }, { new: true })
+      .findByIdAndUpdate(notificationId, { read: true }, { new: true })
       .exec();
   }
 }

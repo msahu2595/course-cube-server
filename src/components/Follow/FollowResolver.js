@@ -95,7 +95,7 @@ const FollowResolver = {
     follow: async (
       _,
       { followingId },
-      { user, token, dataSources: { followAPI } }
+      { user, token, dataSources: { followAPI, notificationAPI } }
     ) => {
       try {
         if (!user) throw new Error("Authentication token required.");
@@ -103,6 +103,14 @@ const FollowResolver = {
           throw new GraphQLError("You can't follow or un-follow yourself.");
         }
         const payload = await followAPI.follow({ followingId });
+        notificationAPI.createNotification({
+          userId: payload?.following,
+          title: "Following you.",
+          body: "Someone is started following you.",
+          type: "USER",
+          route: "UserProfileScreen",
+          params: { userId: `${payload?.follower}` }, // JSONObject: {"JSON": "Hello, World"}
+        });
         return {
           code: "200",
           success: true,

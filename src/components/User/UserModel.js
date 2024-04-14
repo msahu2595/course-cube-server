@@ -1,4 +1,3 @@
-const moment = require("moment");
 const { Schema, model } = require("mongoose");
 
 const UserSchema = new Schema(
@@ -97,13 +96,6 @@ UserSchema.virtual("articles", {
   localField: "_id", // Find people where `localField`
   foreignField: "user", // is equal to `foreignField`
   count: true, // And only get the number of docs
-});
-
-UserSchema.post("findOneAndUpdate", (result) => {
-  // console.log("result", result);
-  if (moment(result?.createdAt).unix() === moment(result?.updatedAt).unix()) {
-    console.log("New user registered.");
-  }
 });
 
 const UserModel = model("User", UserSchema);

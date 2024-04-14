@@ -71,7 +71,7 @@ const BundleResolver = {
     addBundle: async (
       _,
       { bundleInput },
-      { token, dataSources: { bundleAPI } }
+      { token, dataSources: { bundleAPI, notificationAPI } }
     ) => {
       try {
         if (bundleInput.image) {
@@ -81,6 +81,15 @@ const BundleResolver = {
           });
         }
         const payload = await bundleAPI.addBundle({ bundleInput });
+        if (payload?.visible) {
+          notificationAPI.createNotification({
+            title: `New ${bundleInput?.type} Added.`,
+            body: `${bundleInput?.title} is available for you.`,
+            type: "CONTENT",
+            route: "CourseDetailTopTabNavigator",
+            params: { bundleId: payload?._id },
+          });
+        }
         return {
           code: "200",
           success: true,

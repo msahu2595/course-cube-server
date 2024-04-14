@@ -91,14 +91,14 @@ class ContentAPI extends MongoDataSource {
     return this.model.exists({ media, enable: true });
   }
 
-  addContent({ contentInput }) {
-    const content = new this.model(contentInput);
-    return content.save((err, content) => {
-      if (err) {
-        throw new Error("Error while adding content in DB.");
-      }
+  async addContent({ contentInput }) {
+    try {
+      const newContent = new this.model(contentInput);
+      const content = await newContent.save();
       return this.model.populate(content, { path: "media" });
-    });
+    } catch (error) {
+      throw new Error("Error occurs while saving on DB.");
+    }
   }
 
   // addContent({ contentInput }) {

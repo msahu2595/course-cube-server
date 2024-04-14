@@ -4,3 +4,4 @@ assets/
 .flaskenv*
 !.env.project
 !.env.vault
+firebase-service-account-key.json
