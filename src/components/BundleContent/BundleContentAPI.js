@@ -141,6 +141,10 @@ class BundleContentAPI extends MongoDataSource {
       .populate("media")
       .exec();
   }
+
+  deleteAllBundleContentWithSubjectId({ subjectId }) {
+    return this.model.updateMany({ subjectId }, { enable: false });
+  }
 }
 
 module.exports = BundleContentAPI;

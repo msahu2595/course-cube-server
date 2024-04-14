@@ -193,7 +193,7 @@ const BundleResolver = {
     editBundleSyllabus: async (
       _,
       { bundleId, syllabusInput },
-      { token, dataSources: { bundleAPI } }
+      { token, dataSources: { bundleAPI, bundleContentAPI } }
     ) => {
       try {
         const subject = await bundleAPI.bundleSyllabusSubjectById({
@@ -214,8 +214,9 @@ const BundleResolver = {
               "Please first delete all sub-subject, before converting this section into subject."
             );
           } else if (!subject?.isSection && syllabusInput?.isSection) {
-            // TODO
-            // we have to check is there any bundle content reference to this subjectId If yes, then delete all bundle content before assigning isSection true.
+            await bundleContentAPI.deleteAllBundleContentWithSubjectId({
+              subjectId: syllabusInput.subjectId,
+            });
           }
         }
         const payload = await bundleAPI.editBundleSyllabus({
@@ -236,7 +237,7 @@ const BundleResolver = {
     deleteBundleSyllabus: async (
       _,
       { bundleId, syllabusInput },
-      { token, dataSources: { bundleAPI } }
+      { token, dataSources: { bundleAPI, bundleContentAPI } }
     ) => {
       try {
         const subject = await bundleAPI.bundleSyllabusSubjectById({
@@ -254,8 +255,9 @@ const BundleResolver = {
             );
           }
         } else {
-          // TODO
-          // we have to check is there any bundle content reference to this subjectId If yes, then delete all bundle content before assigning isSection true.
+          await bundleContentAPI.deleteAllBundleContentWithSubjectId({
+            subjectId: syllabusInput.subjectId,
+          });
         }
         const payload = await bundleAPI.deleteBundleSyllabus({
           bundleId,
