@@ -118,6 +118,9 @@ const ContentSchema = new Schema(
   { timestamps: true, runValidators: true, runSettersOnQuery: true }
 );
 
+// Create a text index on the 'title' field
+ContentSchema.index({ title: "text" }, { language_override: "none" });
+
 ContentSchema.virtual("likes", {
   ref: "Like", // The model to use
   localField: "_id", // Find people where `localField`

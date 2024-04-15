@@ -17,6 +17,9 @@ const WebsiteSchema = new Schema(
   { timestamps: true, runValidators: true, runSettersOnQuery: true }
 );
 
+// Create a text index on the 'name' field
+WebsiteSchema.index({ name: "text" }, { language_override: "none" });
+
 const WebsiteModel = model("Website", WebsiteSchema);
 
 module.exports = WebsiteModel;

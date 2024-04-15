@@ -22,6 +22,9 @@ const DocumentSchema = new Schema(
   { timestamps: true, runValidators: true, runSettersOnQuery: true }
 );
 
+// Create a text index on the 'title' field
+DocumentSchema.index({ title: "text" }, { language_override: "none" });
+
 const DocumentModel = model("Document", DocumentSchema);
 
 module.exports = DocumentModel;

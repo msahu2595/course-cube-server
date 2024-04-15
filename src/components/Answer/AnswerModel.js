@@ -43,6 +43,9 @@ const AnswerSchema = new Schema(
   { timestamps: true, runValidators: true, runSettersOnQuery: true }
 );
 
+// Create a text index on the 'answer' field
+AnswerSchema.index({ answer: "text" }, { language_override: "none" });
+
 AnswerSchema.virtual("likes", {
   ref: "Like", // The model to use
   localField: "_id", // Find people where `localField`

@@ -70,6 +70,9 @@ const TestSchema = new Schema(
   { timestamps: true, runValidators: true, runSettersOnQuery: true }
 );
 
+// Create a text index on the 'title' field
+TestSchema.index({ title: "text" }, { language_override: "none" });
+
 const TestModel = model("Test", TestSchema);
 
 model("TestQuestion", TestQuestionSchema);

@@ -64,6 +64,12 @@ const QuestionSchema = new Schema(
   { timestamps: true, runValidators: true, runSettersOnQuery: true }
 );
 
+// Create a text index on the 'title' & 'description' field
+QuestionSchema.index(
+  { title: "text", description: "text" },
+  { language_override: "none" }
+);
+
 QuestionSchema.virtual("liked", {
   ref: "Like", // The model to use
   localField: "_id", // Find people where `localField`

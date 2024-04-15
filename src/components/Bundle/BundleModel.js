@@ -136,6 +136,9 @@ const BundleSchema = new Schema(
   { timestamps: true, runValidators: true, runSettersOnQuery: true }
 );
 
+// Create a text index on the 'title' field
+BundleSchema.index({ title: "text" }, { language_override: "none" });
+
 BundleSchema.virtual("likes", {
   ref: "Like", // The model to use
   localField: "_id", // Find people where `localField`

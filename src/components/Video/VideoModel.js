@@ -26,6 +26,9 @@ const VideoSchema = new Schema(
   { timestamps: true, runValidators: true, runSettersOnQuery: true }
 );
 
+// Create a text index on the 'title' field
+VideoSchema.index({ title: "text" }, { language_override: "none" });
+
 const VideoModel = model("Video", VideoSchema);
 
 module.exports = VideoModel;
