@@ -29,7 +29,6 @@ const BundleSchema = new Schema(
       {
         type: String,
         trim: true,
-        lowercase: true,
         minlength: 2,
         maxlength: 40,
       },
@@ -38,7 +37,6 @@ const BundleSchema = new Schema(
       {
         type: String,
         trim: true,
-        lowercase: true,
         minlength: 2,
         maxlength: 40,
       },
@@ -47,7 +45,6 @@ const BundleSchema = new Schema(
       {
         type: String,
         trim: true,
-        lowercase: true,
         minlength: 2,
         maxlength: 40,
       },
@@ -55,7 +52,6 @@ const BundleSchema = new Schema(
     subject: {
       type: String,
       trim: true,
-      lowercase: true,
       minlength: 2,
       maxlength: 40,
     },
@@ -106,7 +102,6 @@ const BundleSchema = new Schema(
       {
         type: String,
         trim: true,
-        lowercase: true,
         minlength: 2,
         maxlength: 80,
       },

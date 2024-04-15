@@ -15,7 +15,6 @@ const AnswerSchema = new Schema(
     answer: {
       type: String,
       required: true,
-      lowercase: true,
       trim: true,
       minlength: 1,
       maxlength: 1000,

@@ -6,7 +6,6 @@ const ArticleSchema = new Schema(
       {
         type: String,
         trim: true,
-        lowercase: true,
       },
     ],
     subject: {

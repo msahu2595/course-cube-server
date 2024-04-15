@@ -39,7 +39,6 @@ const QuestionSchema = new Schema(
     tags: [
       {
         type: String,
-        lowercase: true,
         trim: true,
         minlength: 2,
         maxlength: 40,
