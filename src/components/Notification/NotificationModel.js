@@ -67,14 +67,16 @@ NotificationSchema.post("save", async (doc) => {
         const context = { user: { _id: doc?.userId } };
         const userAPI = new UserAPI({ UserModel, context });
         const user = await userAPI.user();
-        const message = {
-          notification: { title: doc.title, body: doc.body },
-          data: { doc: JSON.stringify(doc) },
-          token: user.FCMToken,
-        };
-        console.log("Push notification message", message);
-        const response = await admin.messaging().send(message);
-        console.log("Push notification has been sent", response);
+        if (user?.FCMToken) {
+          const message = {
+            notification: { title: doc.title, body: doc.body },
+            data: { doc: JSON.stringify(doc) },
+            token: user.FCMToken,
+          };
+          console.log("Push notification message", message);
+          const response = await admin.messaging().send(message);
+          console.log("Push notification has been sent", response);
+        }
         break;
       }
       case "CONTENT": {

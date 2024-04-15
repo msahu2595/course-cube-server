@@ -33,7 +33,7 @@ class UserAPI extends MongoDataSource {
 
   user(props) {
     return this.model
-      .findById(props?.userId || this.context.user._id)
+      .findById(props?.userId || this.context.user?._id)
       .populate(props?.populate || [])
       .exec();
   }
@@ -41,7 +41,7 @@ class UserAPI extends MongoDataSource {
   // https://www.geeksforgeeks.org/mongoose-populate/
   statistics({ userId }) {
     return this.model
-      .findById(userId || this.context.user._id)
+      .findById(userId || this.context.user?._id)
       .select("_id")
       .populate({
         path: "videos",
@@ -93,11 +93,21 @@ class UserAPI extends MongoDataSource {
     }
   }
 
+  logout() {
+    return this.model
+      .findOneAndUpdate(
+        { _id: this.context.user?._id },
+        { FCMToken: "" },
+        { new: true }
+      )
+      .exec();
+  }
+
   createProfile({ userInput }) {
     return this.model
       .findOneAndUpdate(
         {
-          _id: this.context.user._id,
+          _id: this.context.user?._id,
           userVerified: false,
         },
         { ...userInput, userVerified: true },
@@ -110,7 +120,7 @@ class UserAPI extends MongoDataSource {
     return this.model
       .findOneAndUpdate(
         {
-          _id: this.context.user._id,
+          _id: this.context.user?._id,
           userVerified: true,
         },
         userInput,
@@ -121,20 +131,14 @@ class UserAPI extends MongoDataSource {
 
   assignRole({ userId, role }) {
     return this.model
-      .findOneAndUpdate(
-        {
-          _id: userId,
-        },
-        { role },
-        { new: true }
-      )
+      .findOneAndUpdate({ _id: userId }, { role }, { new: true })
       .exec();
   }
 
   addProfileImage({ picture }) {
     return this.model
       .findOneAndUpdate(
-        { _id: this.context.user._id },
+        { _id: this.context.user?._id },
         { picture },
         { new: true }
       )
@@ -144,7 +148,7 @@ class UserAPI extends MongoDataSource {
   removeProfileImage() {
     return this.model
       .findOneAndUpdate(
-        { _id: this.context.user._id },
+        { _id: this.context.user?._id },
         { picture: "" },
         { new: true }
       )

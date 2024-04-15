@@ -310,8 +310,9 @@ const UserResolver = {
         throw new GraphQLError(error.message);
       }
     },
-    logout: async (_, __, { user, redis }) => {
+    logout: async (_, __, { redis, dataSources: { userAPI }, user }) => {
       try {
+        await userAPI.logout();
         const res = await redis.del(user._id);
         return {
           code: "200",
