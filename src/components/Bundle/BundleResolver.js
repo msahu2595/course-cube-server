@@ -161,18 +161,20 @@ const BundleResolver = {
       { token, dataSources: { bundleAPI } }
     ) => {
       try {
-        const subject = await bundleAPI.bundleSyllabusSubjectById({
-          bundleId,
-          subjectId: syllabusInput.subjectIds.at(-1),
-        });
-        console.log({ subject });
-        if (!subject) {
-          throw new GraphQLError("Invalid subject id.");
-        }
-        if (!subject?.isSection) {
-          throw new GraphQLError(
-            "Please make parent a section, before adding subject."
-          );
+        if (syllabusInput?.subjectIds?.length) {
+          const subject = await bundleAPI.bundleSyllabusSubjectById({
+            bundleId,
+            subjectId: syllabusInput.subjectIds.at(-1),
+          });
+          console.log({ subject });
+          if (!subject) {
+            throw new GraphQLError("Invalid subject id.");
+          }
+          if (!subject?.isSection) {
+            throw new GraphQLError(
+              "Please make parent a section, before adding subject."
+            );
+          }
         }
         const payload = await bundleAPI.addBundleSyllabus({
           bundleId,
