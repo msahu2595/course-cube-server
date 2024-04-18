@@ -48,4 +48,25 @@ async function getVideoUrls(link) {
   });
 }
 
-module.exports = { getVideoData, getVideoDetails, getVideoUrls };
+function extractVideoId(link) {
+  // Pattern to match YouTube video IDs
+  const pattern =
+    /(?:youtu\.be\/|youtube\.com\/(?:[^/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=))([^&\n?#]+)/;
+
+  // Find video ID using regex
+  const match = link.match(pattern);
+
+  // Extract video ID from the match
+  if (match) {
+    return match[1];
+  } else {
+    return null;
+  }
+}
+
+module.exports = {
+  getVideoData,
+  getVideoDetails,
+  getVideoUrls,
+  extractVideoId,
+};

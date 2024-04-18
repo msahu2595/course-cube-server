@@ -1,6 +1,10 @@
+const {
+  getVideoUrls,
+  extractVideoId,
+  getVideoDetails,
+} = require("../../libs/getVideoData");
 const { GraphQLError } = require("graphql");
 const fileHandler = require("../../libs/fileHandler");
-const { getVideoDetails, getVideoUrls } = require("../../libs/getVideoData");
 
 const VideoResolver = {
   Query: {
@@ -47,8 +51,11 @@ const VideoResolver = {
         throw new GraphQLError(error.message);
       }
     },
-    fetchURL: async (_, { videoLink: link }, { token }) => {
+    fetchURL: async (_, { videoLink }, { token }) => {
       try {
+        const videoId = extractVideoId(videoLink?.toString());
+        if (!videoId) throw new GraphQLError("Link is not valid.");
+        const link = `https://youtu.be/${videoId}`;
         const output = await getVideoDetails(link);
         const [title, thumbnail, time] = output.split("\n");
         return {
@@ -90,10 +97,13 @@ const VideoResolver = {
   Mutation: {
     addVideo: async (
       _,
-      { videoLink: link },
+      { videoLink },
       { token, dataSources: { videoAPI }, user }
     ) => {
       try {
+        const videoId = extractVideoId(videoLink?.toString());
+        if (!videoId) throw new GraphQLError("Link is not valid.");
+        const link = `https://youtu.be/${videoId}`;
         const videoExists = await videoAPI.videoLinkExists({ link });
         if (videoExists) throw new GraphQLError("Video already added.");
         const output = await getVideoDetails(link);
@@ -193,10 +203,10 @@ const VideoResolver = {
             media: videoId,
           });
         if (contentExists || bundleContentExists)
-          throw new GraphQLError(
-            `${contentExists ? "Content" : "Course content"
-            } is using this video, Please remove from that before deleting this.`
-          );
+        throw new GraphQLError(
+          `${contentExists ? "Content" : "Course content"
+          } is using this video, Please remove from that before deleting this.`
+        );
         const video = await videoAPI.video({ videoId });
         if (/^assets\/video\/.*$/gm.test(video.thumbnail)) {
           fileHandler.remove({ filePath: video.thumbnail });
