@@ -30,7 +30,7 @@
   "homepage": "https://github.com/msahu2595/course-cube-server#readme",
   "dependencies": {
     "@apollo/server": "^4.2.1",
-    "@dotenvx/dotenvx": "^0.32.0",
+    "@dotenvx/dotenvx": "0.35.1",
     "apollo-datasource-mongodb": "^0.5.4",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",

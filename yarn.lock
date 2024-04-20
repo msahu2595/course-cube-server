@@ -893,10 +893,10 @@
     enabled "2.0.x"
     kuler "^2.0.0"
 
-"@dotenvx/dotenvx@^0.32.0":
-  version "0.32.0"
-  resolved "https://registry.yarnpkg.com/@dotenvx/dotenvx/-/dotenvx-0.32.0.tgz#228da34fb46f456f6807282826fc86fba9d293fb"
-  integrity sha512-QKCfitN2A3WV7QHAKlueA0Yo/85stVKANI+SxytSwNgqG6cpkLepET9vpejgcsxVhpHP/WYffKuuYnxk5n6ZHQ==
+"@dotenvx/dotenvx@0.35.1":
+  version "0.35.1"
+  resolved "https://registry.yarnpkg.com/@dotenvx/dotenvx/-/dotenvx-0.35.1.tgz#4d26f122be88a6ac4a4878a9537142e4ed3a3e51"
+  integrity sha512-ipq5DmkEG/4ixF3d7+2vC+D46UpmAlUyz5L/JM2eHx+Yc7FojJez/43yRZ9AX4s0hksF4p5R9BlJaopFNwXtNw==
   dependencies:
     "@inquirer/confirm" "^2.0.17"
     arch "^2.1.1"
