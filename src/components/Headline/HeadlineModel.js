@@ -22,6 +22,9 @@ const HeadlineSchema = new Schema(
   { timestamps: true, runValidators: true, runSettersOnQuery: true }
 );
 
+// Create a text index on the 'description' field
+HeadlineSchema.index({ description: "text" }, { language_override: "none" });
+
 const HeadlineModel = model("Headline", HeadlineSchema);
 
 module.exports = HeadlineModel;
