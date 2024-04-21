@@ -165,6 +165,7 @@ const UserResolver = {
           Math.abs(moment().diff(moment(payload.createdAt), "seconds")) <= 2
         ) {
           notificationAPI.createNotification({
+            userId: `${payload._id}`,
             title: "New User Registered.",
             body: `${fullName} created his account.`,
             type: "ADMIN",
