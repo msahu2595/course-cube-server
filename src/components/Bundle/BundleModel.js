@@ -158,7 +158,7 @@ BundleSchema.virtual("purchases", {
 BundleSchema.virtual("purchased", {
   ref: "Purchase", // The model to use
   localField: "_id", // Find people where `localField`
-  foreignField: "refId", // is equal to `foreignField`
+  foreignField: "item", // is equal to `foreignField`
   count: true, // And only get the number of docs
 });
 

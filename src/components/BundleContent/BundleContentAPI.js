@@ -45,7 +45,7 @@ class BundleContentAPI extends MongoDataSource {
       });
       populateArray.push({
         path: "purchased",
-        match: { user: this.context?.user?._id },
+        match: { user: this.context?.user?._id, status: "PAID" },
       });
       populateArray.push({
         path: "bookmarked",
@@ -70,7 +70,7 @@ class BundleContentAPI extends MongoDataSource {
       });
       populateArray.push({
         path: "purchased",
-        match: { user: this.context?.user?._id },
+        match: { user: this.context?.user?._id, status: "PAID" },
       });
       populateArray.push({
         path: "bookmarked",

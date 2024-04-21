@@ -44,7 +44,7 @@ class ContentAPI extends MongoDataSource {
       });
       populateArray.push({
         path: "purchased",
-        match: { user: this.context?.user?._id },
+        match: { user: this.context?.user?._id, status: "PAID" },
       });
       populateArray.push({
         path: "bookmarked",
@@ -69,7 +69,7 @@ class ContentAPI extends MongoDataSource {
       });
       populateArray.push({
         path: "purchased",
-        match: { user: this.context?.user?._id },
+        match: { user: this.context?.user?._id, status: "PAID" },
       });
       populateArray.push({
         path: "bookmarked",

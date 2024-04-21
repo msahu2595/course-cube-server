@@ -17,11 +17,6 @@ const PurchaseSchema = new Schema(
       type: String,
       enum: ["Bundle", "Content"],
     },
-    image: {
-      required: true,
-      type: String,
-      trim: true,
-    },
     subject: {
       required: true,
       type: String,
@@ -34,7 +29,7 @@ const PurchaseSchema = new Schema(
       type: String,
       trim: true,
       minlength: 2,
-      maxlength: 80,
+      maxlength: 200,
     },
     price: {
       required: true,
@@ -51,14 +46,15 @@ const PurchaseSchema = new Schema(
       type: String,
       enum: ["PERCENT", "AMOUNT"],
     },
-    validity: { type: String, required: true, default: "P10Y" },
+    validTill: { type: Date, required: true },
+    orderId: { type: String, required: true },
     status: {
       type: String,
       enum: [
         "CREATED",
-        "AUTHENTICATED",
+        // "AUTHENTICATED",
         "ACTIVE",
-        "PENDING",
+        // "PENDING",
         "HALTED",
         "CANCELLED",
         "PAID",
@@ -66,13 +62,29 @@ const PurchaseSchema = new Schema(
       required: true,
       default: "CREATED",
     },
-    orderIds: [{ type: String, required: true }],
-    paymentIds: [{ type: String }],
-    subscriptionId: { type: String },
-    response: { type: Schema.Types.Mixed },
+    txnAmount: { required: true, type: Number, min: 0, max: 100000 },
+    txnNote: { type: String, required: true },
+    txnId: { type: String },
+    txnInfo: { type: Schema.Types.Mixed },
+    paymentMode: {
+      type: String,
+      enum: [
+        "UPI",
+        "UPI_INTENT",
+        "CREDIT_CARD",
+        "DEBIT_CARD",
+        "NET_BANKING",
+        "EMI",
+      ],
+    },
+    paymentApp: { type: String },
+    paymentVPA: { type: String },
   },
   { timestamps: true, runValidators: true, runSettersOnQuery: true }
 );
+
+// Create a descending index on the 'validTill' field
+PurchaseSchema.index({ validTill: -1 });
 
 const PurchaseModel = model("Purchase", PurchaseSchema);
 
