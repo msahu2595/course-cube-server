@@ -57,12 +57,15 @@ const PurchaseSchema = gql`
   extend type Mutation {
     initiateTransaction(
       transactionInput: TransactionInput!
-    ): TransactionResponse
+    ): TransactionInitiateResponse
     updateTransaction(
       orderId: String!
       transactionInput: TransactionUpdateInput!
-    ): TransactionUpdateResponse
-    cancelledTransaction(orderId: String!): TransactionUpdateResponse
+    ): TransactionResponse
+    cancelTransaction(
+      orderId: String!
+      transactionInput: TransactionCancelInput!
+    ): TransactionResponse
     processTransaction(
       orderId: String!
       transactionInput: TransactionProcessInput!
@@ -80,6 +83,10 @@ const PurchaseSchema = gql`
     paymentMode: PurchaseMode!
     paymentApp: String
     paymentVPA: String
+  }
+
+  input TransactionCancelInput {
+    txnInfo: JSON
   }
 
   input TransactionProcessInput {
@@ -169,7 +176,7 @@ const PurchaseSchema = gql`
     payload: PurchaseStatus
   }
 
-  type TransactionResponse implements Response {
+  type TransactionInitiateResponse implements Response {
     code: String!
     success: Boolean!
     message: String!
@@ -178,7 +185,7 @@ const PurchaseSchema = gql`
     payload: Transaction
   }
 
-  type TransactionUpdateResponse implements Response {
+  type TransactionResponse implements Response {
     code: String!
     success: Boolean!
     message: String!

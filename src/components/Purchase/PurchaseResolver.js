@@ -124,8 +124,9 @@ const PurchaseResolver = {
         if (!item) throw new GraphQLError("Item does not exist.");
         // TODO: Add payment account details collection for admin
         const payee = {
-          payeeVPA: "9009630808@pz",
-          payeeName: "MANISH KUMAR SAHU",
+          payeeVPA: "paytmqr281005050101zr3els7iuh56@paytm",
+          payeeName: "SAMEEKSHA GAJPAL",
+          payeeMerchantCode: 5499,
         };
         if (!payee) throw new GraphQLError("Payee does not exist.");
         const transaction = await purchaseAPI.initiateTransaction({
@@ -176,14 +177,14 @@ const PurchaseResolver = {
         throw new GraphQLError(error.message);
       }
     },
-    cancelledTransaction: async (
+    cancelTransaction: async (
       _,
-      { orderId },
+      { orderId, transactionInput },
       { token, dataSources: { purchaseAPI } }
     ) => {
       try {
         // TODO: check txnToken before cancel & remove token from redis
-        await purchaseAPI.cancelledTransaction({ orderId });
+        await purchaseAPI.cancelTransaction({ orderId, ...transactionInput });
         return {
           code: "200",
           success: true,

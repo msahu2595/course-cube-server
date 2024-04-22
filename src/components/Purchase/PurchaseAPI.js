@@ -104,9 +104,13 @@ class PurchaseAPI extends MongoDataSource {
       .exec();
   }
 
-  cancelledTransaction({ orderId }) {
+  cancelTransaction({ orderId, txnInfo }) {
+    const update = { status: "CANCELLED" };
+    if (txnInfo) {
+      update["txnInfo"] = txnInfo;
+    }
     return this.model
-      .findOneAndUpdate({ orderId }, { status: "CANCELLED" }, { new: true })
+      .findOneAndUpdate({ orderId }, update, { new: true })
       .exec();
   }
 
